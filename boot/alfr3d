@@ -1,0 +1,107 @@
+#!/bin/bash
+#
+# description: alfr3d init script
+#
+### BEGIN INIT INFO
+# Provides:          alfr3d
+# Required-Start:    $local_fs $network
+# Required-Stop:     $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: alfr3d daemon
+# Description:       alfr3d daemon
+# Start the service alfr3d
+### END INIT INFO
+
+INITSAY="all alfred services have been initialized"
+ENDSAY="Stopping all alfred services"
+HOMEDIR=/home/alfr3d/Alfr3d
+
+start() {
+    echo "Starting alfr3d services: "
+    ### Create the lock file ###
+    touch /var/lock/alfr3d
+    echo
+
+    ### Mount Samba share ###
+    echo "mounting aduio shares"
+    sudo mount -t cifs -o user=alfr3d,password=alfr3d //10.0.0.3/Audio /home/alfr3d/audio/ > $HOMEDIR/log/init.log &
+
+    ### Start the daemon ###
+    echo "starting alfr3d daemon"
+    python $HOMEDIR/daemon/alfr3ddaemon.py start > $HOMEDIR/log/init.log &
+
+    ### Start Node.js server ###
+    echo "starting node server"
+    node $HOMEDIR/alfr3d.js/alfr3dServer.js > $HOMEDIR/log/init.log &
+
+    ### Initialize resftul interface ###
+    echo "initializing restful interface"
+    python $HOMEDIR/run/alfr3dBottle.py > $HOMEDIR/log/init.log &
+
+    ### Initialize Mongo Express admin UI ###
+    echo "initializing mongo admin UI"
+    node /home/alfr3d/node_modules/mongo-express/app > $HOMEDIR/log/init.log &
+
+    sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols "http://translate.google.com/translate_tts?tl=en&q=$INITSAY"
+}
+# Restart the service alfr3d
+stop() {
+    echo "Stopping alfr3d services: "
+    sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols "http://translate.google.com/translate_tts?tl=en&q=$ENDSAY"
+    python $HOMEDIR/daemon/alfr3ddaemon.py stop > $HOMEDIR/log/init.log &
+    killproc -TERM /home/alfr3d/Alfr3d-MKIII/run/alfr3dBottle.py
+    killproc -TERM /home/alfr3d/Alfr3d-MKIII/alfr3d.js/alfr3dServer.js
+    umount /home/alfr3d/audio
+    ### Now, delete the lock file ###
+    rm -f /var/lock/alfr3d
+    echo
+}
+status() {
+    echo "Checking Alfr3d services"
+    if [ -z "`ps axf | grep alfr3ddaemon.py | grep -v grep`" ];
+    then
+       echo "Alfr3d Daemon is dead"
+    else
+       echo "Alfr3d Daemon is running"
+    fi
+    if [ -z "`ps axf | grep alfr3dServer.js | grep -v grep`" ];
+    then
+       echo "Alfr3d Node Server is dead"
+    else
+       echo "Alfr3d Node Server is running"
+    fi
+    if [ -z "`ps axf | grep alfr3dBottle.py | grep -v grep`" ];
+    then
+       echo "Alfr3d Restful Interface is dead"
+    else
+       echo "Alfr3d Restful Interface is running"
+    fi
+    if [ -z "`ps axf | grep /home/alfr3d/node_modules/mongo-express/app | grep -v grep`" ];
+    then
+       echo "Mongo Admin UI is dead"
+    else
+       echo "Mongo Admin UI is running"
+    fi
+}
+### main logic ###
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  status)
+        status alfr3d
+        ;;
+  restart|reload|condrestart)
+        stop
+        start
+        ;;
+  *)
+        echo $"Usage: $0 {start|stop|restart|reload|status}"
+        exit 1
+esac
+exit 0
+
