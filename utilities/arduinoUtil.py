@@ -36,6 +36,9 @@ import os
 import logging
 from time import strftime, sleep
 
+# current path from which python is executed
+CURRENT_PATH = os.path.dirname(__file__)
+
 # set up logging 
 logger = logging.getLogger("ArduinoLog")
 logger.setLevel(logging.DEBUG)
