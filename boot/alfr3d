@@ -27,6 +27,10 @@ start() {
     touch /var/lock/alfr3d
     echo
 
+    ### Start the daemon ###
+    echo "starting alfr3d daemon"
+    python $HOMEDIR/daemon/alfr3ddaemon.py start > $HOMEDIR/log/init.log &
+
     ### Initialize resftul interface ###
     if [ -f /var/run/$BOTTLEPIDNAME ] && kill -0 $(cat /var/run/$BOTTLEPIDNAME);
     then
@@ -50,8 +54,8 @@ stop() {
     pico2wave -w "$HOMEDIR/end.wav" "$ENDSAY"
     mplayer -ao alsa:device=default -really-quiet -noconsolecontrols "$HOMEDIR/soundbites/end.wav"    
 
-    # stop daemon
-    #python $HOMEDIR/daemon/alfr3ddaemon.py stop > $HOMEDIR/log/init.log &
+    ### Stop the daemon ###
+    python $HOMEDIR/daemon/alfr3ddaemon.py stop > $HOMEDIR/log/init.log &
     
     # stop python bottle server
     if [ ! -f "$BOTTLEPIDFILE" ] || ! kill -0 $(cat "$BOTTLEPIDFILE");
