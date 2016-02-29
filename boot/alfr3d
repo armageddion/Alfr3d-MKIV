@@ -43,7 +43,7 @@ start() {
     fi
 
     echo "speaking init greeting"
-    pico2wave -w "$HOMEDIR/init.wav" "$INITSAY"
+    pico2wave -w "$HOMEDIR/soundbites/init.wav" "$INITSAY"
     mplayer -ao alsa:device=default -really-quiet -noconsolecontrols "$HOMEDIR/soundbites/init.wav"
 }
 # Restart the service alfr3d
@@ -51,7 +51,7 @@ stop() {
     echo "Stopping alfr3d services: "
     
     echo "speaking end greeting"
-    pico2wave -w "$HOMEDIR/end.wav" "$ENDSAY"
+    pico2wave -w "$HOMEDIR/soundbites/end.wav" "$ENDSAY"
     mplayer -ao alsa:device=default -really-quiet -noconsolecontrols "$HOMEDIR/soundbites/end.wav"    
 
     ### Stop the daemon ###
