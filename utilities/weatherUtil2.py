@@ -82,7 +82,7 @@ def getWeather2(city="Toronto",country="CA"):
 	logger.info("Today's Low:                    "+str(KtoC(weatherData['main']['temp_min']))+"\n")
 	logger.info("Today's High:                   "+str(KtoC(weatherData['main']['temp_max']))+"\n")
 	logger.info("Description:                    "+str(weatherData['weather'][0]['description'])+"\n")
-	logger.info("Current Temperature:            "+str(weatherData['main']['temp'])+"\n")		
+	logger.info("Current Temperature:            "+str(KtoC(weatherData['main']['temp']))+"\n")
 
 	logger.info("Parsed weather data\n")
 
