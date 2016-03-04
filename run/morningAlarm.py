@@ -52,6 +52,7 @@ if (strftime("%p",localtime()) == "AM"):
 	unread_count = utilities.getUnreadCount()
 	if unread_count > 1:
 		utilities.speakString("While you were sleeping "+str(unread_count)+" emails flooded your inbox")
+	sys.exit(1)
 
 else:
 	utilities.speakTime()
@@ -67,4 +68,4 @@ else:
 	greeting += "perhaps you should consider getting some rest."
 
 	utilities.speakString(greeting)
-	
+	sys.exit(1)	
