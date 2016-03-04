@@ -115,7 +115,10 @@ def getWeather2(city="Toronto",country="CA"):
 	random = ["Weather patterns ", "My scans "]
 	greeting += random[randint(0,len(random)-1)]	
 
-	global hour
+	# Time variables
+	hour=strftime("%I", localtime())
+	minute=strftime("%M", localtime())
+	ampm=strftime("%p",localtime())
 
 	if badDay[0]:
 		speakString("I am afraid I don't have good news sir.")
