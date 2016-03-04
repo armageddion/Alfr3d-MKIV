@@ -109,6 +109,8 @@ def arduino(command):
 	else:
 		logger.error("Failed to connect to Arduino")
 
+	return template('<b>Roger that {{name}}</b>!', name=command)
+
 
 @route('/<command>')
 def processCommand(command):
@@ -116,6 +118,10 @@ def processCommand(command):
 	if command == "reboot":
 		logger.info("Rebooting")
 		os.system('sudo reboot')
+
+	if command == "morningAlarm":
+		logger.info('Rise and shine... time for alarm')
+		os.system("python run/morningAlarm.py")
 
 	return template('<b>Processed Request {{name}}</b>!', name=command)
 
