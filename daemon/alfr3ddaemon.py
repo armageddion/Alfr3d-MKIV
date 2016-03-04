@@ -91,6 +91,12 @@ class MyDaemon(Daemon):
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 				Block to check unread emails (gMail)
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+			try:
+				logger.info("Checking Gmail")
+				checkGmail()
+			except Exception, e:
+				logger.error("Failed to check Gmail")
+				logger.error("Traceback "+str(e))	
 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 				Check online members
