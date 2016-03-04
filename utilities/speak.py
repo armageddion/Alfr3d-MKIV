@@ -77,7 +77,7 @@ def speakString(stringToSpeak):
 	logger.info("Speaking "+stringToSpeak+"\n")
 
 	os.system("pico2wave -w SpeakUtil.wav \""+stringToSpeak+"\"")
-	os.system("sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols SpeakUtil.wav"
+	os.system("sudo mplayer -ao alsa:device=default -really-quiet -noconsolecontrols SpeakUtil.wav")
 	os.system("rm SpeakUtil.wav")
 
 def speakGreeting():
