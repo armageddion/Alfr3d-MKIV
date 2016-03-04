@@ -47,7 +47,7 @@ if (strftime("%p",localtime()) == "AM"):
 	utilities.speakDate()
 
 	loc = utilities.getLocation()
-	utilities.speakWeather2(loc[1],loc[2])
+	utilities.getWeather2(loc[1],loc[2])
 
 	unread_count = utilities.getUnreadCount()
 	if unread_count > 1:
