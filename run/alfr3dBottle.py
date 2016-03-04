@@ -121,7 +121,8 @@ def processCommand(command):
 
 	if command == "morningAlarm":
 		logger.info('Rise and shine... time for alarm')
-		os.system("python run/morningAlarm.py")
+		alarm = os.path.join(CURRENT_PATH,"../run/morningAlarm.py")
+		os.system("python "+alarm)
 
 	return template('<b>Processed Request {{name}}</b>!', name=command)
 
