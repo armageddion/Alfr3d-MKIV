@@ -134,6 +134,14 @@ class MyDaemon(Daemon):
 		if (unread_Count < unread_Count_new):
 			logger.info("a new email has arrived")
 
+			logger.info("Speaking email notification")
+			emailQuips = [
+			"Yet another email",
+			"Pardon the interruption sir. Another email has arrived for you to ignore."]
+
+			tempint = randint(1,len(emailQuips))
+			utilities.SpeakString(emailQuips[tempint-1])
+
 		if (unread_Count_new != 0):
 			logger.info("unread Count: "+str(unread_Count_new))
 
