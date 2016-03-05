@@ -93,7 +93,7 @@ class MyDaemon(Daemon):
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 			try:
 				logger.info("Checking Gmail")
-				checkGmail()
+				self.checkGmail()
 			except Exception, e:
 				logger.error("Failed to check Gmail")
 				logger.error("Traceback "+str(e))	
