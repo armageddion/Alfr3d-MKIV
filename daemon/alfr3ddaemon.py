@@ -139,7 +139,7 @@ class MyDaemon(Daemon):
 			"Pardon the interruption sir. Another email has arrived for you to ignore."]
 
 			tempint = randint(1,len(emailQuips))
-			utilities.SpeakString(emailQuips[tempint-1])
+			utilities.speakString(emailQuips[tempint-1])
 
 		if (unread_Count_new != 0):
 			logger.info("unread Count: "+str(unread_Count_new))
