@@ -41,6 +41,7 @@ from time import strftime, localtime, time
 
 from deviceClass import Device
 from userClass import User
+from speak import *
 
 # current path from which python is executed
 CURRENT_PATH = os.path.dirname(__file__)
@@ -119,9 +120,15 @@ def checkLANMembers():
 
 		#if device exists in the DB update it
 		if exists:
-			logger.info("Updating device with MAC: "+member)
+			logger.info("Updating device with MAC: "+member)			
 			device.IP = netClients2[member]
+			time_away = device.last_online - time.time()
 			device.update()
+
+			# if user is gone for more than 5 minutes... 
+			if time_away > (5*60):
+				speakWelcome(device.user, time_away)
+
 		#otherwise, create and add it. 
 		else:
 			logger.info("Creating a new DB entry for device with MAC: "+member)
