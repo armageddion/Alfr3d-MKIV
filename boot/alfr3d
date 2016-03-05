@@ -28,21 +28,21 @@ start() {
     echo
 
     ### Start the daemon ###
-    echo "starting alfr3d daemon"
+    echo "Starting alfr3d daemon"
     python $HOMEDIR/daemon/alfr3ddaemon.py start > $HOMEDIR/log/init.log &
 
     ### Initialize resftul interface ###
     if [ -f /var/run/$BOTTLEPIDNAME ] && kill -0 $(cat /var/run/$BOTTLEPIDNAME);
     then
-    echo 'restful interface already running' >&2
+    echo 'Restful interface already running' >&2
     else
-    echo "initializing restful interface" >&2
+    echo "Initializing restful interface" >&2
     local CMD="python $HOMEDIR/run/alfr3dBottle.py > $HOMEDIR/log/init.log & echo \$!"
     su -c "$CMD" $RUNAS > "$BOTTLEPIDFILE"
-    echo "restful interface started" >&2
+    echo "Restful interface started" >&2
     fi
 
-    echo "speaking init greeting"
+    echo "Speaking init greeting"
     pico2wave -w "$HOMEDIR/soundbites/init.wav" "$INITSAY"
     mplayer -ao alsa:device=default -really-quiet -noconsolecontrols "$HOMEDIR/soundbites/init.wav"
 }
@@ -50,21 +50,22 @@ start() {
 stop() {
     echo "Stopping alfr3d services: "
     
-    echo "speaking end greeting"
+    echo "Speaking end greeting"
     pico2wave -w "$HOMEDIR/soundbites/end.wav" "$ENDSAY"
     mplayer -ao alsa:device=default -really-quiet -noconsolecontrols "$HOMEDIR/soundbites/end.wav"    
 
     ### Stop the daemon ###
+    echo "Starting alfr3d daemon"
     python $HOMEDIR/daemon/alfr3ddaemon.py stop > $HOMEDIR/log/init.log &
     
     # stop python bottle server
     if [ ! -f "$BOTTLEPIDFILE" ] || ! kill -0 $(cat "$BOTTLEPIDFILE");
     then
-    echo "restful interface is not running" >&2
+    echo "Restful interface is not running" >&2
     else
-    echo "stopping restful interface..." >&2
+    echo "Stopping restful interface..." >&2
     kill -15 $(cat "$BOTTLEPIDFILE") && rm -f "$BOTTLEPIDFILE"
-    echo "restful interface stopped"
+    echo "Restful interface stopped"
     fi
 
     ### Now, delete the lock file ###
