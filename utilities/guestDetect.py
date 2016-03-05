@@ -122,7 +122,7 @@ def checkLANMembers():
 		if exists:
 			logger.info("Updating device with MAC: "+member)			
 			device.IP = netClients2[member]
-			time_away = device.last_online - time.time()
+			time_away = device.last_online - time()
 			device.update()
 
 			# if user is gone for more than 5 minutes... 
