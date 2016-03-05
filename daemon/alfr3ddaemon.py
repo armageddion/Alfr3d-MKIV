@@ -41,6 +41,7 @@ import ConfigParser								# used to parse alfr3ddaemon.conf
 from pymongo import MongoClient					# database link 
 from threading import Thread
 from daemon import Daemon
+from random import randint
 
 # current path from which python is executed
 CURRENT_PATH = os.path.dirname(__file__)
@@ -120,8 +121,6 @@ class MyDaemon(Daemon):
 			Description:
 				Checks the unread count in gMail
 		"""
-		logger.info("checking Gmail")
-
 		global unread_Count
 		global unread_Count_new
 		try:
