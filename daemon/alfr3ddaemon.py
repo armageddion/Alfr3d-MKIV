@@ -41,6 +41,7 @@ import ConfigParser								# used to parse alfr3ddaemon.conf
 from pymongo import MongoClient					# database link 
 from threading import Thread
 from daemon import Daemon
+from random import randint
 
 # current path from which python is executed
 CURRENT_PATH = os.path.dirname(__file__)
@@ -92,7 +93,12 @@ class MyDaemon(Daemon):
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 				Block to check unread emails (gMail)
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-			self.checkGmail()
+			try:
+				logger.info("Checking Gmail")
+				self.checkGmail()
+			except Exception, e:
+				logger.error("Failed to check Gmail")
+				logger.error("Traceback "+str(e))	
 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 				Check online members
@@ -116,8 +122,6 @@ class MyDaemon(Daemon):
 			Description:
 				Checks the unread count in gMail
 		"""
-		logger.info("checking Gmail")
-
 		global unread_Count
 		global unread_Count_new
 		try:
@@ -129,8 +133,14 @@ class MyDaemon(Daemon):
 
 		if (unread_Count < unread_Count_new):
 			logger.info("a new email has arrived")
-			utilities.speakString("Pardon the interruption.")
-			utilities.speakString("Another email has arrived for you to ignore.")
+			
+			logger.info("Speaking email notification")
+			emailQuips = [
+			"Yet another email",
+			"Pardon the interruption sir. Another email has arrived for you to ignore."]
+
+			tempint = randint(1,len(emailQuips))
+			utilities.speakString(emailQuips[tempint-1])
 
 		if (unread_Count_new != 0):
 			logger.info("unread Count: "+str(unread_Count_new))

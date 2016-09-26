@@ -117,9 +117,9 @@ def getLocation():
 				raise Exception("Unable to get geo info based on IP")
 
 	except Exception, e:
-			logger.error("Error getting my location")
-			logger.error("Traceback: "+str(e))
-			return [False,0,0]
+		logger.error("Error getting my location")
+		logger.error("Traceback: "+str(e))
+		return [False,0,0]
 
 
 	logger.info("IP:"+str(ip_new))

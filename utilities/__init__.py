@@ -8,9 +8,11 @@
 #############################################################################
 
 
-from gmail import *
+from arduinoUtil import *
 from deviceClass import *
-from userClass import *
+from gmail import *
 from guestDetect import *
 from location import *
 from speak import *
+from userClass import *
+from weatherUtil import *
