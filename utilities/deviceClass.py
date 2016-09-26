@@ -52,7 +52,8 @@ CURRENT_PATH = os.path.dirname(__file__)
 logger = logging.getLogger("DevicesLog")
 logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/devices.log"))
+#handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/devices.log"))
+handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/total.log"))
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
@@ -195,4 +196,18 @@ class Device:
 		print result 
 		return result
 
-	
+	def refreshAll(self):
+		logger.info("Refreshing device list")
+
+		client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
+		db = client['Alfr3d_DB']
+		devicesCollection = db['devices']
+
+		# get all devices for that user
+		for device in devicesCollection.find():
+			if time.time() - float(device['last_online']) < 300: # 5 minutes
+				# set online
+				devicesCollection.update({"MAC":device['MAC']},{"$set":{'state':'online'}})	
+			else:
+				# set offline
+				devicesCollection.update({"MAC":device['MAC']},{"$set":{'state':'offline'}})	

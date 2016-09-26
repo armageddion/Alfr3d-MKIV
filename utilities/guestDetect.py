@@ -49,7 +49,8 @@ CURRENT_PATH = os.path.dirname(__file__)
 logger = logging.getLogger("NetworkLog")
 logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/localnet.log"))
+#handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/localnet.log"))
+handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/total.log"))
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
@@ -132,10 +133,14 @@ def checkLANMembers():
 	logger.info("Updating users")
 	user = User()
 	user.refreshAll()
+	logger.info("Updating devices")
+	device = Device()
+	device.refreshAll()
 
 	logger.info("Cleaning up temporary files")
 	os.system('rm -rf '+netclientsfile)
 	os.system('rm -rf '+nethostsfile)
+
 
 # Main - only really used for testing
 if __name__ == '__main__':

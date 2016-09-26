@@ -64,7 +64,8 @@ unread_Count_new = 0
 logger = logging.getLogger("DaemonLog")
 logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/alfr3ddaemon.log"))
+#handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/alfr3ddaemon.log"))
+handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/total.log"))
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
@@ -91,6 +92,7 @@ class MyDaemon(Daemon):
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 				Block to check unread emails (gMail)
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+			self.checkGmail()
 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 				Check online members
@@ -127,6 +129,8 @@ class MyDaemon(Daemon):
 
 		if (unread_Count < unread_Count_new):
 			logger.info("a new email has arrived")
+			utilities.speakString("Pardon the interruption.")
+			utilities.speakString("Another email has arrived for you to ignore.")
 
 		if (unread_Count_new != 0):
 			logger.info("unread Count: "+str(unread_Count_new))

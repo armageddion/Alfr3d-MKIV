@@ -13,3 +13,4 @@ from deviceClass import *
 from userClass import *
 from guestDetect import *
 from location import *
+from speak import *

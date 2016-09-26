@@ -45,7 +45,8 @@ CURRENT_PATH = os.path.dirname(__file__)
 logger = logging.getLogger("LocLog")
 logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/location.log"))
+#handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/location.log"))
+handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/total.log"))
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
@@ -75,7 +76,7 @@ def getLocation():
 
 	# get API key for db-ip.com
 	config = ConfigParser.RawConfigParser()
-	config.read(os.path.join(os.path.dirname(__file__),'../config/apikeys.conf'))
+	config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
 	apikey = config.get("API KEY", "dbip")
 
 	# get my geo info
@@ -95,6 +96,7 @@ def getLocation():
 	try:
 		# try to get our info based on IPV4
 		info4 = json.loads(urllib.urlopen(url4).read().decode('utf-8'))
+		print info4
 
 		if info4['city']:
 			country_new = info4['country']

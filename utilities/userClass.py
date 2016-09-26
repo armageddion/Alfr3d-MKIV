@@ -39,12 +39,17 @@
 #      or in part) from, or statically or dynamically links against any
 #      software/component specified under (i).
 
-import time
 import os
 import logging
+import ConfigParser
 from pymongo import MongoClient
+from time import time
 
 from deviceClass import Device
+from speak import speakWelcome
+
+# we'll want to send notifications to me
+from pushbullet import Pushbullet
 
 # current path from which python is executed
 CURRENT_PATH = os.path.dirname(__file__)
@@ -53,9 +58,17 @@ CURRENT_PATH = os.path.dirname(__file__)
 logger = logging.getLogger("UsersLog")
 logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/users.log"))
+#handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/users.log"))
+handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/total.log"))
 handler.setFormatter(formatter)
 logger.addHandler(handler)
+
+# get API key for pushbullet
+config = ConfigParser.RawConfigParser()
+config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
+apikey = config.get("API KEY", "pushbullet")
+
+pb = Pushbullet(apikey)
 
 class User:
 	"""
@@ -63,7 +76,7 @@ class User:
 	"""
 	name = 'unknown'
 	state = 'offline'
-	last_online = time.time()
+	last_online = time()
 	location = [0,0]
 	userType = 'guest'
 
@@ -85,7 +98,7 @@ class User:
 		newUser = {
 			'name': name,
 			'state' : self.state,
-			'last_online' : time.time(),
+			'last_online' : time(),
 			'location' : self.location,
 			'type' : self.type}
 
@@ -123,7 +136,7 @@ class User:
 		try:
 			usersCollection.update({"name":self.name},{"$set":{"name":self.name,
 															   "state":self.state,
-															   "last_online":str(time.time()),
+															   "last_online":str(time()),
 															   "location":self.location,
 															   "type":self.userType}})
 		except Exception, e:
@@ -146,7 +159,7 @@ class User:
 			userDetails = usersCollection.find_one({"name":self.name})
 			historyDetails = {	"user":userDetails['name'],
 								"location":userDetails['location'],
-								"time":int(time.time())}
+								"time":int(time())}
 
 			historyCollection.insert(historyDetails)
 		except Exception, e:
@@ -205,16 +218,17 @@ class User:
 														{'type':{'$ne':'HW'}}
 													]}):
 				# update last_online time for that user
-				if device['last_online'] > user['last_online']:
+				if float(device['last_online']) > float(user['last_online']):
 					logger.info("Updating user "+user['name'])
-					self.last_online = device['last_online']
+					usersCollection.update({"name":user['name']},{"$set":{'last_online':device['last_online']}})	
 
-
-			if time.time() - float(self.last_online) < 300:	#5minutes...
-				self.state = "online" 	# not carring what the current value is
+			if time() - float(self.last_online) < 300:	#5minutes...
+				if self.state == "offline":
+				 	#speak welcome
+				 	speakWelcome(user['name'], time() - float(self.last_online))
+				 	pb.push_note("Alfr3d", user['name']+" just came online")
+				usersCollection.update({"name":user['name']},{"$set":{'state':'online'}})	
 			else:
-				self.state = "offline"	# not carring what the current value is
-
-			self.update()
+				usersCollection.update({"name":user['name']},{"$set":{'state':'offline'}})	
 
 		return True
