@@ -60,28 +60,28 @@ def lighting_init():
 
 	logger.info("looking for devices")
 	for device in devicesCollection.find({"name":'hue'}):
-		logger.info("device found: ", device)
+		logger.info("device found: "+ str(device))
 
 		logger.info("looking for apikeys")
 		username = config.get("HUE dev", str(device['MAC']).replace(':',''))
-		logger.info("found key: ", username)
+		logger.info("found key: "+ str(username))
 
 		bridge = Bridge(device['IP'], username)
 		
-		logger.info(bridge.lights())
+		logger.info(str(bridge.lights()))
 		lights_data = json.loads(json.dumps(bridge.lights()))
 
 		for light in lights_data:
 			logger.info("init check; all lights off")
 			bridge.lights[light].state(on=False)
 
-		time.sleep(5)
+		time.sleep(2)
 
 		for light in lights_data:
 			logger.info("init check; all lights on")
 			bridge.lights[light].state(on=True)	
 
-		time.sleep(5)
+		time.sleep(2)
 
 		for light in lights_data:
 			logger.info("init check; all lights off")

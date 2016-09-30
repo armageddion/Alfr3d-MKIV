@@ -173,26 +173,36 @@ class MyDaemon(Daemon):
 		"""
 		logger.info("playing a tune")
 
+def init_daemon():
+	utilities.speakString("Initializing systems check")
+	# initial geo check
+	try:
+		utilities.speakString("Running geo scan")
+		logger.info("Running a geoscan")
+		utilities.getLocation("freegeoip")
+		utilities.speakString("geo scan complete")
+	except Exception, e:
+		utilities.speakString("Failed to complete geo scan")
+		logger.error("Failed to complete geoscan scan")
+		logger.error("Traceback "+str(e))			
+	#initial lighting check
+	try:
+		utilities.speakString("Running lighting check")
+		logger.info("Running a lighting check")
+		utilities.lighting_init()
+		utilities.speakString("lighting check complete")
+	except Exception, e:
+		utilities.speakString("Failed to complete lighting check")
+		logger.error("Failed to complete lighting check")
+		logger.error("Traceback "+str(e))	
+
 if __name__ == "__main__":
 	daemon = MyDaemon('/var/run/alfr3ddaemon/alfr3ddaemon.pid',stderr='/dev/null')
 	#daemon = MyDaemon('/var/run/alfr3ddaemon/alfr3ddaemon.pid',stderr='/dev/stderr')
 	if len(sys.argv) == 2:
 		if 'start' == sys.argv[1]:
 			logger.info("Alfr3d Daemon starting...")
-			# initial geo check
-			try:
-				logger.info("Running a geoscan")
-				utilities.getLocation("freegeoip")
-			except Exception, e:
-				logger.error("Failed to complete geoscan scan")
-				logger.error("Traceback "+str(e))			
-			#initial lighting check
-			try:
-				logger.info("Running a lighting check")
-				utilities.lighting_init()
-			except Exception, e:
-				logger.error("Failed to complete lighting check")
-				logger.error("Traceback "+str(e))
+			init_daemon()
 			daemon.start()
 		elif 'stop' == sys.argv[1]:
 			logger.info("Alfr3d Daemon stopping...")			
