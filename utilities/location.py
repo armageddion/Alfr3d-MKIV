@@ -36,13 +36,17 @@ import socket
 import urllib
 import json
 import logging
+from pymongo import MongoClient
+from speak import speakString
 from time import strftime, localtime
 
 # current path from which python is executed
 CURRENT_PATH = os.path.dirname(__file__)
 
+from weatherUtil import getWeather
+
 # set up logging 
-logger = logging.getLogger("LocLog")
+logger = logging.getLogger("GeoLog")
 logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 #handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/location.log"))
@@ -51,10 +55,37 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 
-def getLocation():
+def getLocation(method="dbip"):
 	# placeholders for my ip
 	myipv4 = None
 	myipv6 = None
+
+	# get latest DB environment info
+	# Initialize the database
+	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
+	db = client['Alfr3d_DB']
+	collection_env = db['environment']
+
+	logger.info("Getting environment info from DB")
+	try:
+		cur_env = collection_env.find_one({"name":socket.gethostname()})
+		country = cur_env['country']
+		state = cur_env['state']
+		city = cur_env['city']
+		ip = cur_env['IP']
+	except Exception, e:
+		logger.error("Couldn't get geo data from database")
+		logger.error("Traceback "+str(e))
+
+		country = 'unknown'
+		state = 'unknown'
+		city = 'unknown'
+		ip = 'unknown'	
+
+	logger.info("IP:"+str(ip))
+	logger.info("City:"+str(city))
+	logger.info("Sate/Prov:"+str(state))
+	logger.info("Country:"+str(country))	
 
 	# get my current ip
 	logger.info("Getting my IP")
@@ -74,57 +105,107 @@ def getLocation():
 		if not myipv6 and not myipv4:
 			return [False,0,0]
 
-	# get API key for db-ip.com
-	config = ConfigParser.RawConfigParser()
-	config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
-	apikey = config.get("API KEY", "dbip")
+	country_new = country
+	state_new = state
+	city_new = city
+	ip_new = ip
 
-	# get my geo info
-	if myipv6:
-		url6 = "http://api.db-ip.com/addrinfo?addr="+myipv6+"&api_key="+apikey
-	elif myipv4:
-		url4 = "http://api.db-ip.com/addrinfo?addr="+myipv4+"&api_key="+apikey
+	if method == "dbip":
+		# get API key for db-ip.com
+		config = ConfigParser.RawConfigParser()
+		config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
+		apikey = config.get("API KEY", "dbip")
 
-	country_new = ''
-	state_new = ''
-	city_new = ''
-	ip_new = ''
+		# get my geo info
+		if myipv6:
+			url6 = "http://api.db-ip.com/addrinfo?addr="+myipv6+"&api_key="+apikey
+		elif myipv4:
+			url4 = "http://api.db-ip.com/addrinfo?addr="+myipv4+"&api_key="+apikey
 
+		logger.info("Getting my location")
 
-	logger.info("Getting my location")
+		try:
+			# try to get our info based on IPV4
+			info4 = json.loads(urllib.urlopen(url4).read().decode('utf-8'))
+			#print info4
 
-	try:
-		# try to get our info based on IPV4
-		info4 = json.loads(urllib.urlopen(url4).read().decode('utf-8'))
-		print info4
+			if info4['city']:
+				country_new = info4['country']
+				state_new = info4['stateprov']
+				city_new = info4['city']
+				ip_new = info4['address']
 
-		if info4['city']:
-			country_new = info4['country']
-			state_new = info4['stateprov']
-			city_new = info4['city']
-			ip_new = info4['address']
+			# if that fails, try the IPV6 way
+			else:
+				info6 = json.loads(urllib.urlopen(url6).read().decode('utf-8'))
+				if info6['country']:
+					country_new = info6['country']
+					state_new = info6['stateprov']
+					city_new = info6['city']
+					ip_new = info6['address']		
 
-		# if that fails, try the IPV6 way
-		else:
-			info6 = json.loads(urllib.urlopen(url6).read().decode('utf-8'))
-			if info6['country']:
-				country_new = info6['country']
-				state_new = info6['stateprov']
-				city_new = info6['city']
-				ip_new = info6['address']		
+				else: 
+					raise Exception("Unable to get geo info based on IP")
 
-			else: 
-				raise Exception("Unable to get geo info based on IP")
+		except Exception, e:
+			logger.error("Error getting my location")
+			logger.error("Traceback: "+str(e))
+			return [False,0,0]
 
-	except Exception, e:
-		logger.error("Error getting my location")
-		logger.error("Traceback: "+str(e))
+	elif method == "freegeoip":
+		if myipv4:			
+			url4 = "http://freegeoip.net/json/"+myipv4
+
+			try:
+				# try to get our info based on IPV4
+				info4 = json.loads(urllib.urlopen(url4).read().decode('utf-8'))
+				#print info4
+
+				if info4['city']:
+					country_new = info4['country_name']
+					state_new = info4['region_name']
+					city_new = info4['city']
+					ip_new = info4['ip']			
+
+			except Exception, e:
+				logger.error("Error getting my location")
+				logger.error("Traceback: "+str(e))
+				return [False,0,0]
+
+	else:
+		logger.warning("Unable to obtain geo info - invalid method specified.")
 		return [False,0,0]
-
 
 	logger.info("IP:"+str(ip_new))
 	logger.info("City:"+str(city_new))
 	logger.info("Sate/Prov:"+str(state_new))
-	logger.info("Country:"+str(country_new))	
+	logger.info("Country:"+str(country_new))
+
+	if city_new == city:
+		#print "still in the same place"
+		logger.info("You are still in the same location")
+	else: 
+		logger.info("Oh hello! Welcome to "+city_new)
+		speakString("Welcome to "+city_new+" sir")
+		speakString("I trust you enjoyed your travels")
+
+		# get latest weather info for new location
+		getWeather(city_new, country_new)
+
+	try:
+		logger.info("Updating environment databse")
+		collection_env.update({"name":socket.gethostname()},{"$set":{
+					  		   "country":country_new,
+							   "state":state_new,
+							   "city":city_new,
+							   "IP":ip_new}})
+	except Exception, e:
+		logger.error("Failed to update the database")
+		logger.error("Traceback: "+str(e))
 
 	return [True, city_new, country_new]
+
+
+# purely for testing purposes
+if __name__ == "__main__":	
+	getLocation("freegeoip")

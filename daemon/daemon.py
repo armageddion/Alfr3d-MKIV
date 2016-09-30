@@ -10,7 +10,7 @@ class Daemon:
     def __init__(self, pidfile, stdin='/dev/stdin', stdout='/dev/stdout', stderr='/dev/stderr'):
         self.stdin = stdin
         self.stdout = stdout
-        self.stderr = stderr
+        self.stderr = stderr        
         self.pidfile = pidfile
 
     def daemonize(self):

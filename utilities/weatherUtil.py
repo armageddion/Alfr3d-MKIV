@@ -3,7 +3,7 @@
 """
 This file is used for all weather related functions.
 """
-# Copyright (c) 2010-2014 LiTtl3.1 Industries (LiTtl3.1).
+# Copyright (c) 2010-2016 LiTtl3.1 Industries (LiTtl3.1).
 # All rights reserved.
 # This source code and any compilation or derivative thereof is the
 # proprietary information of LiTtl3.1 Industries and is
@@ -51,16 +51,16 @@ handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/weather.log"))
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-def getWeather2(city="Toronto",country="CA"):
+def getWeather(city="Toronto",country="CA"):
 	"""
         Description:
             This function gets weather data and parses it. 
         Return:
             Boolean; True if successful, False if not.
     """
-	# get API key for db-ip.com
+	# get API key for openWeather 
 	config = ConfigParser.RawConfigParser()
-	config.read(os.path.join(os.path.dirname(__file__),'../config/apikeys.conf'))
+	config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
 	apikey = config.get("API KEY", "openWeather")
 
 	weatherData = None
@@ -72,17 +72,17 @@ def getWeather2(city="Toronto",country="CA"):
 		logger.error("Failed to get weather data\n")	
 		return False, weatherData
 
-	logger.info("got weather data\n")
+	logger.info("got weather data for "+city+","+country)
 
 	#log current conditions
-	logger.info("City:                           "+str(weatherData['name'])+"\n")
-	logger.info("Wind Speed:                     "+str(weatherData['wind']['speed'])+"\n")
-	logger.info("Atmospheric Pressure            "+str(weatherData['main']['pressure'])+"\n")
-	logger.info("Humidity                        "+str(weatherData['main']['humidity'])+"\n")
-	logger.info("Today's Low:                    "+str(KtoC(weatherData['main']['temp_min']))+"\n")
-	logger.info("Today's High:                   "+str(KtoC(weatherData['main']['temp_max']))+"\n")
-	logger.info("Description:                    "+str(weatherData['weather'][0]['description'])+"\n")
-	logger.info("Current Temperature:            "+str(KtoC(weatherData['main']['temp']))+"\n")
+	logger.info("City:                           "+str(weatherData['name']))
+	logger.info("Wind Speed:                     "+str(weatherData['wind']['speed']))
+	logger.info("Atmospheric Pressure            "+str(weatherData['main']['pressure']))
+	logger.info("Humidity                        "+str(weatherData['main']['humidity']))
+	logger.info("Today's Low:                    "+str(KtoC(weatherData['main']['temp_min'])))
+	logger.info("Today's High:                   "+str(KtoC(weatherData['main']['temp_max'])))
+	logger.info("Description:                    "+str(weatherData['weather'][0]['description']))
+	logger.info("Current Temperature:            "+str(KtoC(weatherData['main']['temp'])))
 
 	logger.info("Parsed weather data\n")
 
@@ -96,7 +96,7 @@ def getWeather2(city="Toronto",country="CA"):
 	if weatherData['weather'][0]['main'] in ['Thunderstorm','Drizzle','Rain','Snow','Atmosphere','Exreeme']:
 		badDay[0] = True
 		badDay[1].append(weatherData['weather'][0]['description'])
-	elif weatherData['main']['humidity'] > 50:
+	elif weatherData['main']['humidity'] > 65:
 		badDay[0] = True
 		badDay[1].append(weatherData['main']['humidity'])
 	if KtoC(weatherData['main']['temp_max']) > 27:
@@ -121,11 +121,11 @@ def getWeather2(city="Toronto",country="CA"):
 	ampm=strftime("%p",localtime())
 
 	if badDay[0]:
-		speakString("I am afraid I don't have good news sir.")
+		speakString("I am afraid I don't have good news.")
 		greeting+="indicate "
 
 		for i in range(len(badDay[1])):
-			if badDay[1][i] == weatherData['weather'][0]['main']:
+			if badDay[1][i] == weatherData['weather'][0]['description']:
 				greeting += badDay[1][i]
 			elif badDay[1][i] == weatherData['main']['humidity']:
 				greeting += "humidity of a steam bath"
@@ -164,3 +164,7 @@ def KtoC(tempK):
 		converts temperature in kelvin to celsius
 	"""
 	return math.trunc(int(tempK)-273.15)
+
+# purely for testing purposes
+if __name__ == "__main__":	
+	getWeather()

@@ -210,6 +210,7 @@ class User:
 
 			# get current details for each user
 			self.getDetails(user['name'])
+			last_online=self.last_online
 
 			# get all devices for that user
 			for device in devicesCollection.find({"$and":
@@ -220,9 +221,10 @@ class User:
 				# update last_online time for that user
 				if float(device['last_online']) > float(user['last_online']):
 					logger.info("Updating user "+user['name'])
-					usersCollection.update({"name":user['name']},{"$set":{'last_online':device['last_online']}})	
+					usersCollection.update({"name":user['name']},{"$set":{'last_online':device['last_online']}})
+					last_online = device['last_online']
 
-			if time() - float(self.last_online) < 300:	#5minutes...
+			if time() - float(last_online) < 600:	#10 minutes...
 				if self.state == "offline":
 				 	#speak welcome
 				 	speakWelcome(user['name'], time() - float(self.last_online))
