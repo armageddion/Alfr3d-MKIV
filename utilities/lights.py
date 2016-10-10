@@ -144,7 +144,7 @@ def lighting_off():
 			hue.username = username
 
 			logger.info("all lights off")
-			hue.hue_off
+			hue.hue_off()
 
 # turns all hue lights off
 def lighting_on():
@@ -172,7 +172,7 @@ def lighting_on():
 			hue.username = username
 
 			logger.info("all lights on")
-			hue.hue_on
+			hue.hue_on()
 
 # purely for testing purposes
 if __name__ == "__main__":	
