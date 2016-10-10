@@ -101,13 +101,19 @@ def speakString(command):
 @route('/arduino/<command>')
 def arduino(command):
 	logger.info("Received request: /arduino/"+command)
-	arduino = utilities.Arduino()
-	logger.info("Connecting to Arduino")
-	if arduino.connect():
-		logger.info("Sending command to Arduino "+command)
-		arduino.write(command+"\n")
+
+	if command == "LightsOn":
+		utilities.lighting_on()
+	elif command == "LightsOff":
+		utilities.lighting_off()
 	else:
-		logger.error("Failed to connect to Arduino")
+		arduino = utilities.Arduino()
+		logger.info("Connecting to Arduino")
+		if arduino.connect():
+			logger.info("Sending command to Arduino "+command)
+			arduino.write(command+"\n")
+		else:
+			logger.error("Failed to connect to Arduino")
 
 	return template('<b>Roger that {{name}}</b>!', name=command)
 
