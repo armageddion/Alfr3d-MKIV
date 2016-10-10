@@ -102,21 +102,21 @@ def lighting_init():
 			hue.username = username
 
 			logger.info("init check; all lights off")
-			hue.hue_off
+			hue.hue_off()
 
 		time.sleep(2)
 
 		for light in lights_data:
 			logger.info("init check; all lights on")
 			#bridge.lights[light].state(on=True)	
-			hue.hue_on
+			hue.hue_on()
 
 		time.sleep(2)
 
 		for light in lights_data:
 			logger.info("init check; all lights off")
 			#bridge.lights[light].state(on=False)					
-			hue.hue_off
+			hue.hue_off()
 
 # turns all hue lights off
 def lighting_off():
