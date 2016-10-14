@@ -231,6 +231,8 @@ class User:
 				 	pb.push_note("Alfr3d", user['name']+" just came online")
 				usersCollection.update({"name":user['name']},{"$set":{'state':'online'}})	
 			else:
+				if self.state == "online":
+					pb.push_note("Alfr3d", user['name']+" went offline")
 				usersCollection.update({"name":user['name']},{"$set":{'state':'offline'}})	
 
 		return True
