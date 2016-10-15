@@ -66,9 +66,11 @@ logger.addHandler(handler)
 # get API key for pushbullet
 config = ConfigParser.RawConfigParser()
 config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
-apikey = config.get("API KEY", "pushbullet")
+apikeys = config.get("API KEY", "pushbullets").split(',')
 
-pb = Pushbullet(apikey)
+pb = []
+for i in range(len(apikeys)):
+	pb.append(Pushbullet(apikeys[i]))
 
 class User:
 	"""
@@ -228,11 +230,13 @@ class User:
 				if self.state == "offline":
 				 	#speak welcome
 				 	speakWelcome(user['name'], time() - float(self.last_online))
-				 	pb.push_note("Alfr3d", user['name']+" just came online")
+				 	for i in range(len(pb)):
+					 	pb[i].push_note("Alfr3d", user['name']+" just came online")
 				usersCollection.update({"name":user['name']},{"$set":{'state':'online'}})	
 			else:
 				if self.state == "online":
-					pb.push_note("Alfr3d", user['name']+" went offline")
+					for i in range(len(pb)):
+						pb[i].push_note("Alfr3d", user['name']+" went offline")
 				usersCollection.update({"name":user['name']},{"$set":{'state':'offline'}})	
 
 		return True
