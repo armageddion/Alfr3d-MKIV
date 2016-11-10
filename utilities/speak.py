@@ -183,7 +183,7 @@ def speakRandom():
 		"You look pretty today. ",
 		"Still plenty of time to save the day. Make the most of it. ",
 		"I hope you are using your time wisely. ",
-		"Unfortunately, we can not ignore the inevitable or the persistent. ",
+		"Unfortunately, we cannot ignore the inevitable or the persistent. ",
 		"I hope I wasn't designed simply for one's own amusement",
 		"This is your life and its ending one moment at a time.",
 		"I can name fingers and point names.",
