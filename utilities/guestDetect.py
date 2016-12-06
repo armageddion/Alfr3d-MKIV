@@ -73,7 +73,8 @@ def checkLANMembers():
 	# depending on where the daemon is running....
 	# find out who is online
 	if socket.gethostname() == 'psamathe':
-		os.system("sudo arp-scan --interface=p1p1 --localnet > "+ netclientsfile)	#PSAMATHE
+		#os.system("sudo arp-scan --interface=p1p1 --localnet > "+ netclientsfile)	#PSAMATHE
+		os.system("sudo arp-scan --localnet > "+ netclientsfile)	#PSAMATHE
 	else:
 		os.system("sudo arp-scan --localnet > "+ netclientsfile)
 

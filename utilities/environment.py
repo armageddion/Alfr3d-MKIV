@@ -161,4 +161,3 @@ def checkLocation():
 # Main - only really used for testing
 if __name__ == '__main__':
 	checkLocation()	
-0

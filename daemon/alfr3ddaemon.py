@@ -217,8 +217,9 @@ if __name__ == "__main__":
 	#daemon = MyDaemon('/var/run/alfr3ddaemon/alfr3ddaemon.pid',stderr='/dev/stderr')
 	if len(sys.argv) == 2:
 		if 'start' == sys.argv[1]:
-			logger.info("Alfr3d Daemon starting...")
+			logger.info("Alfr3d Daemon initializing")
 			init_daemon()
+			logger.info("Alfr3d Daemon starting...")
 			daemon.start()
 		elif 'stop' == sys.argv[1]:
 			logger.info("Alfr3d Daemon stopping...")			
