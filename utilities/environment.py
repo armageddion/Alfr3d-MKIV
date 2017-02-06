@@ -38,6 +38,7 @@ import urllib
 import json
 import speak
 import logging
+import weatherUtil
 from pymongo import MongoClient
 from time import strftime, localtime
 
@@ -99,7 +100,7 @@ def checkLocation():
 
 	# get API key for db-ip.com
 	config = ConfigParser.RawConfigParser()
-	config.read(os.path.join(os.path.dirname(__file__),'../config/apikeys.conf'))
+	config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
 	apikey = config.get("API KEY", "dbip")
 
 	# get my geo info
@@ -155,8 +156,6 @@ def checkLocation():
 						   "state":state_new,
 						   "city":city_new,
 						   "IP":ip_new}})
-
-	log.close()
 
 # Main - only really used for testing
 if __name__ == '__main__':
