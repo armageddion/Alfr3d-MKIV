@@ -180,7 +180,7 @@ class MyDaemon(Daemon):
 		# consider making Alfr3d speak if anyone is there....??
 		owner = utilities.User()
 		owner.getDetails("armageddion")
-		ishome = owner.state
+		ishome = owner.state 			# error?
 
 		if((int(time.strftime("%H", time.localtime()))>7)and(int(time.strftime("%H", time.localtime()))<21) and ishome):
 			if(time.time()-quipStartTime>(waittime_quip*60)):
