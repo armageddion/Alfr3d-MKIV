@@ -98,16 +98,20 @@ class MyDaemon(Daemon):
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 			block to blur out quips once in a while 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-			if((int(time.strftime("%H", time.localtime()))>7)and(int(time.strftime("%H", time.localtime()))<21) and ishome):
-				if(time.time()-quipStartTime>(waittime_quip*60)):
-					logger.info("time to be a smart ass ")
-					self.beSmart()
+			try:
+				if((int(time.strftime("%H", time.localtime()))>7)and(int(time.strftime("%H", time.localtime()))<21) and ishome):
+					if(time.time()-quipStartTime>(waittime_quip*60)):
+						logger.info("time to be a smart ass ")
+						self.beSmart()
 
-					quipStartTime = time.time()
-					waittime_quip = random.randint(10,50)
-					print "Timme until next quip: ", waittime_quip
-					logger.info("quipStartTime and waittime_quip have been reset")
-					logger.info("next quip will be shouted in "+str(waittime_quip)+" minutes.")
+						quipStartTime = time.time()
+						waittime_quip = random.randint(10,50)
+						print "Timme until next quip: ", waittime_quip
+						logger.info("quipStartTime and waittime_quip have been reset")
+						logger.info("next quip will be shouted in "+str(waittime_quip)+" minutes.")
+			except Exception, e:
+				logger.error("Failed to complete the quip block")
+				logger.error("Traceback "+str(e))
 
 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
