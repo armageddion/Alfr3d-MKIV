@@ -74,13 +74,26 @@ def getLocation(method="dbip"):
 		city = cur_env['city']
 		ip = cur_env['IP']
 	except Exception, e:
-		logger.error("Couldn't get geo data from database")
+		logger.error("Failed to find environment configuration for this host")
 		logger.error("Traceback "+str(e))
-
+		logger.info("Creating environment configuration for this host")
+		
 		country = 'unknown'
 		state = 'unknown'
 		city = 'unknown'
-		ip = 'unknown'	
+		ip = 'unknown'
+
+
+		# Add DB insert of new data!!!!!
+		new_environment = {
+			'name':socket.gethostname(),
+			'country':country,
+			'state':state,
+			'city':city,
+			'IP':ip
+		}
+		collection_env.insert(new_environment)
+		logger.info("new engironment created")
 
 	logger.info("IP:"+str(ip))
 	logger.info("City:"+str(city))

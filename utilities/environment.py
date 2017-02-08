@@ -76,9 +76,8 @@ def checkLocation():
 		city = 'unknown'
 		ip = 'unknown'
 
-		"""
-			TODO:: Add DB insert of new data!!!!!
-		"""
+
+		# Add DB insert of new data!!!!!
 		new_environment = {
 			'name':socket.gethostname(),
 			'country':country,
@@ -87,6 +86,7 @@ def checkLocation():
 			'IP':ip
 		}
 		collection_env.insert(new_environment)
+		logger.info("new engironment created")
 
 	# placeholders for my ip
 	myipv4 = None
