@@ -76,6 +76,10 @@ def checkLocation():
 		city = 'unknown'
 		ip = 'unknown'
 
+		"""
+			TODO:: Add DB insert of new data!!!!!
+		"""
+
 	# placeholders for my ip
 	myipv4 = None
 	myipv6 = None
