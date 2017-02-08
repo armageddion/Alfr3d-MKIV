@@ -33,6 +33,7 @@ import ConfigParser
 import os
 import sys
 import logging
+from threading import Thread
 from time import strftime, localtime, time, sleep
 
 # import my own utilities
@@ -55,6 +56,70 @@ logger.addHandler(handler)
 config = ConfigParser.RawConfigParser()
 config.read(os.path.join(CURRENT_PATH,'../conf/apikeys.conf'))
 apikey = config.get("API KEY", "voicerss")
+
+# NOT AT ALL TESTED!!!!!~
+class Speaker:
+	"""
+		class which defines an agent which will be doing all the speaking
+	"""
+	queue = []
+
+	def __init__(self):
+		# create a thread which will constantly monitor the queue
+		logger.info("starting speaker agent on another thread")
+		agent=Thread(target=self.processQueue)
+		try:
+			agent.start()
+		except:
+			logger.error("Failed to start speaker agent thread")
+
+	def close(self):
+		print "closing agent"
+		### FIND OUT HOW TO CLOSE THREAD!!!!
+
+	# whenever a request to speak is received,
+	# the new item is simply added to the queue
+	def SpeakString(self, stringToSpeak):
+		self.queue.append(stringToSpeak)
+
+	# speaking happens heare
+	def speak(self,string):
+		logger.info("Speaking "+str(string))
+
+		try:
+			voice = third_party.speech({
+			    'key': apikey,
+			    'hl': 'en-gb',
+			    'src': string,
+			    'r': '0',
+			    'c': 'mp3',
+			    'f': '44khz_16bit_stereo',
+			    'ssml': 'false',
+			    'b64': 'false'
+			})
+		except Exception, e:
+			logger.error("Failed to get TTS sound file")
+			logger.error("Traceback: "+str(e))
+
+		try:
+			outfile = open(os.path.join(CURRENT_PATH,'../tmp/audio.mp3'),"w")
+			outfile.write(voice['response'])
+			outfile.close()
+		except Exception, e:
+			logger.error("Failed to write sound file to temporary directory")
+			logger.error("Traceback: "+str(e))
+
+		try:
+			os.system('mplayer -really-quiet -noconsolecontrols '+os.path.join(CURRENT_PATH,'../tmp/audio.mp3'))
+		except Exception, e:
+			logger.error("Failed to play the sound file")
+			logger.error("Traceback: "+str(e))		
+
+	def processQueue(self):
+		while True:
+			while len(self.queue)>0:
+				self.speak(self.queue[0])	# speak the first item in the list
+				self.queue = self.queue[1:]		# delete the first item in the list
 
 def speakString(string="Hello, world"):
 	"""
