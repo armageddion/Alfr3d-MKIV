@@ -99,6 +99,7 @@ class MyDaemon(Daemon):
 			block to blur out quips once in a while 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 			try:
+				logger.info("being a smartass")
 				self.beSmart()
 			except Exception, e:
 				logger.error("Failed to complete the quip block")
@@ -174,7 +175,7 @@ class MyDaemon(Daemon):
 			Description:
 				speak a quip
 		"""
-		logger.info("being a smartass")
+		global quipStartTime
 
 		# speak only if armageddion is at home... 
 		# consider making Alfr3d speak if anyone is there....??

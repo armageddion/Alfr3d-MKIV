@@ -82,9 +82,9 @@ class User:
 	location = [0,0]
 	userType = 'guest'
 
-	def newUser(self, name):
+	def newUser(self):
 		try:
-			exists = self.getDetails(name)
+			exists = self.getDetails(self.name)
 		except:
 			exists = False
 		if exists:
@@ -99,11 +99,11 @@ class User:
 		usersCollection = db['users']
 
 		newUser = {
-			'name': name,
+			'name': self.name,
 			'state' : self.state,
 			'last_online' : time(),
 			'location' : self.location,
-			'type' : self.type}
+			'type' : self.userType}
 
 		usersCollection.insert(newUser)
 		

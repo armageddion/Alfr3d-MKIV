@@ -76,7 +76,7 @@ class Speaker:
 
 	def close(self):
 		print "closing agent"
-		### FIND OUT HOW TO CLOSE THREAD!!!!
+		self.stop = True
 
 	# whenever a request to speak is received,
 	# the new item is simply added to the queue
