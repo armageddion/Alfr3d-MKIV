@@ -63,6 +63,7 @@ class Speaker:
 		class which defines an agent which will be doing all the speaking
 	"""
 	queue = []
+	stop = False
 
 	def __init__(self):
 		# create a thread which will constantly monitor the queue
@@ -117,6 +118,8 @@ class Speaker:
 
 	def processQueue(self):
 		while True:
+			if self.stop:
+				return
 			while len(self.queue)>0:
 				self.speak(self.queue[0])	# speak the first item in the list
 				self.queue = self.queue[1:]		# delete the first item in the list
