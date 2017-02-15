@@ -58,7 +58,7 @@ def checkLocation():
 	# get latest DB environment info
 	# Initialize the database
 	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-	client.Alfr3d_DB.authenticate("alfr3d","qweQWE123!@#")
+	client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
 	db = client['Alfr3d_DB']
 	collection_env = db['environment']
 

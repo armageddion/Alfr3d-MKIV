@@ -79,7 +79,7 @@ class light_hue():
 
 def lighting_init():
 	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-	client.Alfr3d_DB.authenticate("alfr3d","qweQWE123!@#")
+	client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
 	db = client['Alfr3d_DB']
 	devicesCollection = db['devices']
 
@@ -122,7 +122,7 @@ def lighting_init():
 # turns all hue lights off
 def lighting_off():
 	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-	client.Alfr3d_DB.authenticate("alfr3d","qweQWE123!@#")
+	client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
 	db = client['Alfr3d_DB']
 	devicesCollection = db['devices']
 
@@ -151,7 +151,7 @@ def lighting_off():
 # turns all hue lights off
 def lighting_on():
 	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-	client.Alfr3d_DB.authenticate("alfr3d","qweQWE123!@#")
+	client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
 	db = client['Alfr3d_DB']
 	devicesCollection = db['devices']
 

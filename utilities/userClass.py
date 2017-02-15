@@ -94,7 +94,7 @@ class User:
 		logger.info("Creating a new user")
 
 		client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123!@#")
+		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
 		db = client['Alfr3d_DB']
 		usersCollection = db['users']
 
@@ -111,7 +111,7 @@ class User:
 
 	def getDetails(self, name):
 		client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123!@#")
+		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
 		db = client['Alfr3d_DB']
 		usersCollection = db['users']
 		userDetails = usersCollection.find_one({"name":name})
@@ -123,7 +123,7 @@ class User:
 
 	def setDetails(self, details):
 		client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123!@#")
+		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
 		db = client['Alfr3d_DB']
 		usersCollection = db['users']
 
@@ -132,7 +132,7 @@ class User:
 
 	def update(self):
 		client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123!@#")
+		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
 		db = client['Alfr3d_DB']
 		usersCollection = db['users']
 
@@ -157,7 +157,7 @@ class User:
 	def updateHistory(self):
 		logger.info("Updating user history")
 		client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123!@#")
+		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
 		db = client['Alfr3d_DB']
 		usersCollection = db['users']
 		historyCollection = db['users.history']
@@ -193,7 +193,7 @@ class User:
 
 	def displayDevices(self):
 		client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123!@#")
+		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
 		db = client['Alfr3d_DB']
 		devicesCollection = db['devices']
 
@@ -209,7 +209,7 @@ class User:
 	# refreshes state and last_online for all users
 	def refreshAll(self):		
 		client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123!@#")
+		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
 		db = client['Alfr3d_DB']
 		devicesCollection = db['devices']
 		usersCollection = db['users']
