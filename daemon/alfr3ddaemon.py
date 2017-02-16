@@ -37,6 +37,7 @@ import os										# used to allow execution of system level commands
 import re
 import sys
 import random									# used for random number generator
+import schedule									# 3rd party lib used for alarm clock managment. 
 import ConfigParser								# used to parse alfr3ddaemon.conf
 from pymongo import MongoClient					# database link 
 from threading import Thread
@@ -74,6 +75,9 @@ handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/total.log"))
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
+# schedule morning alarm
+schedule.every().day.at("8:30").do(morningAlarm)
+
 class MyDaemon(Daemon):		
 	def run(self):
 		while True:
@@ -96,7 +100,7 @@ class MyDaemon(Daemon):
 			# 	logger.error("Traceback "+str(e))
 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-			block to blur out quips once in a while 
+				block to blur out quips once in a while 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 			try:
 				logger.info("being a smartass")
@@ -127,8 +131,13 @@ class MyDaemon(Daemon):
 				logger.error("Traceback "+str(e))			
 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-				Check to see if Armageddion is at home
+				Run morning alarm
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""				
+			try:
+				schedule.run_pending()
+			except Exception, e:
+				logger.error("Failed to check the morning alarm schedule")
+				logger.error("Traceback "+str(e))
 
 			# OK Take a break 
 			time.sleep(10)
@@ -201,6 +210,47 @@ class MyDaemon(Daemon):
 				pick a random song from current weather category and play it
 		"""
 		logger.info("playing a tune")
+
+def morningAlarm():
+	"""
+		Description:
+			morning alarm function.
+	"""
+	logger.info("Time to ring morning alarm")
+	try:
+		utilities.speakGreeting()
+		if (time.strftime("%p",localtime()) == "AM"):
+			utilities.speakString("your time to rest has come to an end")
+			utilities.speakTime()
+			utilities.speakDate()
+
+			loc = utilities.getLocation()
+			utilities.getWeather(loc[1],loc[2])
+
+			unread_count = utilities.getUnreadCount()
+			if unread_count > 1:
+				utilities.speakString("While you were sleeping "+str(unread_count)+" emails flooded your inbox")
+			return
+
+		else:
+			utilities.speakTime()
+
+			random = [
+				"Unless we are burning the midnight oil, ",
+				"If you are going to invent something new tomorrow, ",
+				"If you intend on being charming tomorrow, "]
+
+			tempint = random.randint(1,len(random))
+
+			greeting = random[tempint-1]
+			greeting += "perhaps you should consider getting some rest."
+
+			utilities.speakString(greeting)		
+			return
+
+	except Exception, e:
+		logger.error("Failed to ring the morning alarm")
+		logger.error("Traceback "+str(e))
 
 def init_daemon():
 	utilities.speakString("Initializing systems check")
