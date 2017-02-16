@@ -76,7 +76,7 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 # schedule morning alarm
-schedule.every().day.at("8:30").do(morningAlarm)
+schedule.every().day.at("8:30").do(utilities.morningAlarm)
 
 class MyDaemon(Daemon):		
 	def run(self):
@@ -211,47 +211,6 @@ class MyDaemon(Daemon):
 				pick a random song from current weather category and play it
 		"""
 		logger.info("playing a tune")
-
-def morningAlarm():
-	"""
-		Description:
-			morning alarm function.
-	"""
-	logger.info("Time to ring morning alarm")
-	try:
-		utilities.speakGreeting()
-		if (time.strftime("%p",localtime()) == "AM"):
-			utilities.speakString("your time to rest has come to an end")
-			utilities.speakTime()
-			utilities.speakDate()
-
-			loc = utilities.getLocation()
-			utilities.getWeather(loc[1],loc[2])
-
-			unread_count = utilities.getUnreadCount()
-			if unread_count > 1:
-				utilities.speakString("While you were sleeping "+str(unread_count)+" emails flooded your inbox")
-			return
-
-		else:
-			utilities.speakTime()
-
-			random = [
-				"Unless we are burning the midnight oil, ",
-				"If you are going to invent something new tomorrow, ",
-				"If you intend on being charming tomorrow, "]
-
-			tempint = random.randint(1,len(random))
-
-			greeting = random[tempint-1]
-			greeting += "perhaps you should consider getting some rest."
-
-			utilities.speakString(greeting)		
-			return
-
-	except Exception, e:
-		logger.error("Failed to ring the morning alarm")
-		logger.error("Traceback "+str(e))
 
 def init_daemon():
 	utilities.speakString("Initializing systems check")
