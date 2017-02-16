@@ -36,13 +36,12 @@ import time
 import os										# used to allow execution of system level commands
 import re
 import sys
-import random									# used for random number generator
 import schedule									# 3rd party lib used for alarm clock managment. 
 import ConfigParser								# used to parse alfr3ddaemon.conf
 from pymongo import MongoClient					# database link 
 from threading import Thread
 from daemon import Daemon
-from random import randint
+from random import randint						# used for random number generator
 
 # current path from which python is executed
 CURRENT_PATH = os.path.dirname(__file__)
@@ -64,7 +63,7 @@ unread_Count_new = 0
 
 # various counters to be used for pacing spreadout functions
 quipStartTime = time.time()
-waittime_quip = random.randint(5,10)
+waittime_quip = randint(5,10)
 
 # set up logging 
 logger = logging.getLogger("DaemonLog")
@@ -200,7 +199,7 @@ class MyDaemon(Daemon):
 				utilities.speakRandom()
 
 				quipStartTime = time.time()
-				waittime_quip = random.randint(10,50)
+				waittime_quip = randint(10,50)
 				print "Timme until next quip: ", waittime_quip
 				logger.info("quipStartTime and waittime_quip have been reset")
 				logger.info("next quip will be shouted in "+str(waittime_quip)+" minutes.")		
