@@ -185,6 +185,7 @@ class MyDaemon(Daemon):
 				speak a quip
 		"""
 		global quipStartTime
+		global waittime_quip
 
 		# speak only if armageddion is at home... 
 		# consider making Alfr3d speak if anyone is there....??
