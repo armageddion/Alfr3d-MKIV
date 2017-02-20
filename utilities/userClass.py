@@ -71,7 +71,10 @@ apikeys = config.get("API KEY", "pushbullets").split(',')
 
 pb = []
 for i in range(len(apikeys)):
-	pb.append(Pushbullet(apikeys[i]))
+	try:
+		pb.append(Pushbullet(apikeys[i]))
+	except:
+		logger.error("failed to set up pushbullet")
 
 class User:
 	"""
