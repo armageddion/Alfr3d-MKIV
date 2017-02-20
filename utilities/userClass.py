@@ -136,15 +136,20 @@ class User:
 		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
 		db = client['Alfr3d_DB']
 		usersCollection = db['users']
+		collection_env = db['environment']		
 
 		if self.location != usersCollection.find_one({"name":self.name})['location']:
 			self.updateHistory()
 
 		try:
+			cur_env = collection_env.find_one({"name":socket.gethostname()})
 			usersCollection.update({"name":self.name},{"$set":{"name":self.name,
 															   "state":self.state,
 															   "last_online":str(time()),
-															   "location":self.location,
+															   "location":{"name":cur_env['name'],
+																		   "city":cur_env['city'],
+																		   "state":cur_env['state'],
+																		   "country":cur_env['country']},
 															   "type":self.userType}})
 		except Exception, e:
 			logger.error("Failed up update user: "+self.name)
@@ -214,9 +219,6 @@ class User:
 		db = client['Alfr3d_DB']
 		devicesCollection = db['devices']
 		usersCollection = db['users']
-		collection_env = db['environment']
-
-		cur_env = collection_env.find_one({"name":socket.gethostname()})
 
 		# cycle through all users
 		for user in usersCollection.find():
@@ -243,8 +245,7 @@ class User:
 				 	speakWelcome(user['name'], time() - float(self.last_online))
 				 	for i in range(len(pb)):
 					 	pb[i].push_note("Alfr3d", user['name']+" just came online")
-				usersCollection.update({"name":user['name']},{"$set":{'state':'online',
-																	  'location':cur_env['_id']}})
+				usersCollection.update({"name":user['name']},{"$set":{'state':'online'}})
 			else:
 				if self.state == "online":
 					for i in range(len(pb)):

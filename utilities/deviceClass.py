@@ -143,14 +143,19 @@ class Device:
 		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
 		db = client['Alfr3d_DB']
 		devicesCollection = db['devices']
+		collection_env = db['environment']
 
 		try:
+			cur_env = collection_env.find_one({"name":socket.gethostname()})
 			devicesCollection.update({"MAC":self.MAC},{"$set":{"name":self.name,
 															   "IP":self.IP,
 															   "MAC":self.MAC,
 															   "type":self.type,
 															   "state":self.state,
-															   "location":socket.gethostname(),
+															   "location":{"name":cur_env['name'],
+																		   "city":cur_env['city'],
+																		   "state":cur_env['state'],
+																		   "country":cur_env['country']},
 															   "last_online":int(time.time()),
 															   "user":self.user}})
 		except Exception, e:
