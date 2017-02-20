@@ -37,6 +37,7 @@ import os										# used to allow execution of system level commands
 import sys
 import socket
 from bottle import route, run, template
+from pymongo import MongoClient
 
 # current path from which python is executed
 CURRENT_PATH = os.path.dirname(__file__)
@@ -122,7 +123,7 @@ def arduino(command):
 def whosthere():
 	logger.info("Received a 'whosthere' requet")
 
-	client = MongoClient('mongodb://localhost:27017/')
+	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
 	client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
 	db = client['Alfr3d_DB']
 	usersCollection = db['users']
