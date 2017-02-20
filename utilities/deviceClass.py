@@ -170,11 +170,16 @@ class Device:
 		db = client['Alfr3d_DB']
 		devicesCollection = db['devices']
 		historyCollection = db['devices.history']
+		collection_env = db['environment']
 		
 		try:
 			deviceDetails = devicesCollection.find_one({"MAC":self.MAC})
+			cur_env = collection_env.find_one({"name":socket.gethostname()})
 			historyDetails = {	"device":deviceDetails['_id'],
-								"location":deviceDetails['location'],
+								"location":{"name":cur_env['name'],
+											"city":cur_env['city'],
+											"state":cur_env['state'],
+											"country":cur_env['country']},
 								"time":int(time.time())}
 
 			historyCollection.insert(historyDetails)
