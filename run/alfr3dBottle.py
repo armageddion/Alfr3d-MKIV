@@ -118,20 +118,6 @@ def arduino(command):
 	return template('<b>Roger that {{name}}</b>!', name=command)
 
 
-@route('/<command>')
-def processCommand(command):
-	logger.info("Received request:/"+command)
-	if command == "reboot":
-		logger.info("Rebooting")
-		os.system('sudo reboot')
-
-	if command == "morningAlarm":
-		logger.info('Rise and shine... time for alarm')
-		alarm = os.path.join(CURRENT_PATH,"../run/morningAlarm.py")
-		os.system("python "+alarm)
-
-	return template('<b>Processed Request {{name}}</b>!', name=command)
-
 @route('/whosthere')
 def whosthere():
 	logger.info("Received a 'whosthere' requet")
@@ -151,5 +137,19 @@ def whosthere():
 			users += user['name']+'\n'
 
 	return 'online users '+str(count)+' :\n '+users
+
+@route('/<command>')
+def processCommand(command):
+	logger.info("Received request:/"+command)
+	if command == "reboot":
+		logger.info("Rebooting")
+		os.system('sudo reboot')
+
+	if command == "morningAlarm":
+		logger.info('Rise and shine... time for alarm')
+		alarm = os.path.join(CURRENT_PATH,"../run/morningAlarm.py")
+		os.system("python "+alarm)
+
+	return template('<b>Processed Request {{name}}</b>!', name=command)
 
 run(host=my_ip,port=8080)
