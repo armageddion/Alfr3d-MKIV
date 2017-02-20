@@ -85,9 +85,9 @@ def whosthere():
 	for user in usersCollection.find():
 		if user['state'] == 'online':
 			count +=1
-			users += user['name']+' '
+			users += user['name']+'\n'
 
-	return 'online users '+str(count)+' : '+users
+	return 'online users '+str(count)+' :\n '+users
 
 # /user/get?name=<name>
 @route('/user/<command>')
