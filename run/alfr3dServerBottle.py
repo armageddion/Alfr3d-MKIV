@@ -36,6 +36,7 @@ import socket
 import logging
 from bottle import route, run, template, request, redirect
 from time import gmtime, strftime, localtime, sleep, time		# needed to obtain time
+from pymongo import MongoClient
 
 # current path from which python is executed
 CURRENT_PATH = os.path.dirname(__file__)
@@ -65,8 +66,29 @@ except:
 
 @route('/')
 def index(name="guest"):
-	log.write(strftime("%H:%M:%S: ")+"Received request:/hello/"+name)
+	logger.info("Received request:/hello/"+name)
 	return template('<b>Hello {{name}}</b>!', name=name)
+
+@route('/whosthere')
+def whosthere():
+	logger.info("Received a 'whosthere' requet")
+
+	client = MongoClient('mongodb://localhost:27017/')
+	client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
+	db = client['Alfr3d_DB']
+	usersCollection = db['users']
+
+	count = 0
+	users = ""
+
+	# cycle through all users
+	for user in usersCollection.find():
+		if user['state'] == 'online':
+			user.diplay()
+			count +1
+			users+="<p>"+user['name']+"</p>"
+
+	return template('<p>online users '+str(count)+' : '+users+'</p>!')
 
 # /user/get?name=<name>
 @route('/user/<command>')
