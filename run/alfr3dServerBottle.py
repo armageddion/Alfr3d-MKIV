@@ -84,10 +84,10 @@ def whosthere():
 	# cycle through all users
 	for user in usersCollection.find():
 		if user['state'] == 'online':
-			count +1
-			users+="<p>"+user['name']+"</p>"
+			count +=1
+			users += user['name']+' '
 
-	return template('<p>online users '+str(count)+' : '+users+'</p>')
+	return 'online users '+str(count)+' : '+users
 
 # /user/get?name=<name>
 @route('/user/<command>')
