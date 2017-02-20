@@ -132,4 +132,24 @@ def processCommand(command):
 
 	return template('<b>Processed Request {{name}}</b>!', name=command)
 
+@route('/whosthere')
+def whosthere():
+	logger.info("Received a 'whosthere' requet")
+
+	client = MongoClient('mongodb://localhost:27017/')
+	client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
+	db = client['Alfr3d_DB']
+	usersCollection = db['users']
+
+	count = 0
+	users = ""
+
+	# cycle through all users
+	for user in usersCollection.find():
+		if user['state'] == 'online':
+			count +=1
+			users += user['name']+'\n'
+
+	return 'online users '+str(count)+' :\n '+users
+
 run(host=my_ip,port=8080)
