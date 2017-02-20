@@ -43,6 +43,7 @@
 import time
 import os
 import logging
+import socket
 from pymongo import MongoClient
 
 # current path from which python is executed
@@ -149,7 +150,7 @@ class Device:
 															   "MAC":self.MAC,
 															   "type":self.type,
 															   "state":self.state,
-															   "location":self.location,
+															   "location":socket.gethostname(),
 															   "last_online":int(time.time()),
 															   "user":self.user}})
 		except Exception, e:
