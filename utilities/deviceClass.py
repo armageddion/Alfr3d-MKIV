@@ -198,7 +198,8 @@ class Device:
 	def display(self):
 		result = ""
 		result += "==========DEVICE DETAILS============"	+"\n"
-		result += "IP: 		"+str(self.IP)					+"\n"
+		result += "Name: 		"+str(self.name)			+"\n"
+		result += "IP: 			"+str(self.IP)				+"\n"
 		result += "MAC: 		"+str(self.MAC)				+"\n"
 		result += "state: 		"+self.state				+"\n"
 		result += "last online:	"+str(self.last_online)		+"\n"
