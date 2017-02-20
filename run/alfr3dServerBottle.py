@@ -84,7 +84,6 @@ def whosthere():
 	# cycle through all users
 	for user in usersCollection.find():
 		if user['state'] == 'online':
-			user.display()
 			count +1
 			users+="<p>"+user['name']+"</p>"
 
