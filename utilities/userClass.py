@@ -192,8 +192,7 @@ class User:
 		result+= "state: 		"+self.state				+"\n"
 		result+= "last online:	"+str(self.last_online)		+"\n"
 		result+= "location: 	"							+"\n"
-		result+= "	latitue:	"+str(self.location[0]) 	+"\n"	# Latitude
-		result+= "	longitude:	"+str(self.location[1])		+"\n"	# Longitude
+		result+= "		"+str(self.location) 				+"\n"	
 		result+= "type: 		"+self.userType				+"\n"
 		result+= "===================================="		+"\n"
 
@@ -251,7 +250,8 @@ class User:
 				 	speakWelcome(user['name'], time() - float(self.last_online))
 				 	for i in range(len(pb)):
 					 	pb[i].push_note("Alfr3d", user['name']+" just came online")
-				usersCollection.update({"name":user['name']},{"$set":{'state':'online',															   "location":{"name":cur_env['name'],
+				usersCollection.update({"name":user['name']},{"$set":{'state':'online',	"location":{
+																		   "name":cur_env['name'],
 																		   "city":cur_env['city'],
 																		   "state":cur_env['state'],
 																		   "country":cur_env['country']}}})
