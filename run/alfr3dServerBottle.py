@@ -87,7 +87,7 @@ def whosthere():
 			count +1
 			users+="<p>"+user['name']+"</p>"
 
-	return template('<p>online users '+str(count)+' : '+users+'</p>!')
+	return template('<p>online users '+str(count)+' : '+users+'</p>')
 
 # /user/get?name=<name>
 @route('/user/<command>')
