@@ -192,7 +192,7 @@ class User:
 		result+= "state: 		"+self.state				+"\n"
 		result+= "last online:	"+str(self.last_online)		+"\n"
 		result+= "location: 	"							+"\n"
-		result+= "		"+str(self.location) 				+"\n"	
+		result+= "				"+str(self.location)		+"\n"	
 		result+= "type: 		"+self.userType				+"\n"
 		result+= "===================================="		+"\n"
 
