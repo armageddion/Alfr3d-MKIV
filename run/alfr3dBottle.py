@@ -146,7 +146,7 @@ def whosthere():
 
 	# cycle through all users
 	for user in usersCollection.find():
-		if user['state'] == 'online':
+		if user['state'] == 'online' and user['location']['name'] == socket.gethostname():
 			count +=1
 			users += user['name']+'\n'
 
