@@ -213,6 +213,9 @@ class User:
 		db = client['Alfr3d_DB']
 		devicesCollection = db['devices']
 		usersCollection = db['users']
+		collection_env = db['environment']
+
+		cur_env = collection_env.find_one({"name":socket.gethostname()})
 
 		# cycle through all users
 		for user in usersCollection.find():
@@ -239,7 +242,8 @@ class User:
 				 	speakWelcome(user['name'], time() - float(self.last_online))
 				 	for i in range(len(pb)):
 					 	pb[i].push_note("Alfr3d", user['name']+" just came online")
-				usersCollection.update({"name":user['name']},{"$set":{'state':'online'}})	
+				usersCollection.update({"name":user['name']},{"$set":{'state':'online',
+																	  'location':cur_env['_id']}})
 			else:
 				if self.state == "online":
 					for i in range(len(pb)):
