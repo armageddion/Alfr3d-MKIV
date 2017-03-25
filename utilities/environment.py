@@ -53,12 +53,19 @@ handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/total.log"))
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
+config = ConfigParser.RawConfigParser()
+config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
+
+db_user = config.get("Alfr3d DB", "user")
+db_pass = config.get("Alfr3d DB", "password")
+
+
 def checkLocation():
 
 	# get latest DB environment info
 	# Initialize the database
 	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-	client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
+	client.Alfr3d_DB.authenticate(db_user,db_pass)
 	db = client['Alfr3d_DB']
 	collection_env = db['environment']
 
@@ -112,8 +119,6 @@ def checkLocation():
 			return
 
 	# get API key for db-ip.com
-	config = ConfigParser.RawConfigParser()
-	config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
 	apikey = config.get("API KEY", "dbip")
 
 	# get my geo info

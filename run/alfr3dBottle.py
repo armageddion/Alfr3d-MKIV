@@ -36,6 +36,8 @@ import time
 import os										# used to allow execution of system level commands
 import sys
 import socket
+import requests	
+import ConfigParser
 from bottle import route, run, template
 from pymongo import MongoClient
 
@@ -53,6 +55,13 @@ formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(messag
 handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/total.log"))
 handler.setFormatter(formatter)
 logger.addHandler(handler)
+
+# load up all the configs
+config = ConfigParser.RawConfigParser()
+config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
+# get main DB credentials
+db_user = config.get("Alfr3d DB", "user")
+db_pass = config.get("Alfr3d DB", "password")
 
 # get our own IP
 try:
@@ -124,7 +133,7 @@ def whosthere():
 	logger.info("Received a 'whosthere' requet")
 
 	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-	client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
+	client.Alfr3d_DB.authenticate(db_user,db_pass)
 	db = client['Alfr3d_DB']
 	usersCollection = db['users']
 
@@ -138,6 +147,19 @@ def whosthere():
 			users += user['name']+'\n'
 
 	return 'online users '+str(count)+' :\n '+users
+
+@route('/make_coffee')
+def make_coffee():
+	# IFTTT https://maker.ifttt.com/use/cKPaEEmi5bh7AY_H16g3Ff
+	# https://maker.ifttt.com/trigger/make_coffee/with/key/cKPaEEmi5bh7AY_H16g3Ff
+
+	secret = config.get("API KEY", "ifttt_hook")
+
+	coffe_request = requests.post("https://maker.ifttt.com/trigger/make_coffee/with/key/"+str(secret))
+	if coffe_request.status_code == 200:
+		return "coffee is being made"
+	else:
+		return "something went wrong.. no coffee for you..."
 
 @route('/<command>')
 def processCommand(command):

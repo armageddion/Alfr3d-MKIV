@@ -58,6 +58,13 @@ handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/total.log"))
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
+# load up all the configs
+config = ConfigParser.RawConfigParser()
+config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
+# get main DB credentials
+db_user = config.get("Alfr3d DB", "user")
+db_pass = config.get("Alfr3d DB", "password")
+
 class Device:
 	"""
 		Device Class for Alfr3d Users' devices
@@ -81,7 +88,7 @@ class Device:
 		logger.info("Creating a new device")
 
 		client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
+		client.Alfr3d_DB.authenticate(db_user,db_pass)
 		db = client['Alfr3d_DB']
 		devicesCollection = db['devices']
 
@@ -101,7 +108,7 @@ class Device:
 	def getDetails(self,mac):
 		logger.info("Looking for device with MAC: " + mac)
 		client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
+		client.Alfr3d_DB.authenticate(db_user,db_pass)
 		db = client['Alfr3d_DB']
 		devicesCollection = db['devices']
 
@@ -128,7 +135,7 @@ class Device:
 	# Device.setDetails({detail:value, detail2:value2,...})
 	def setDetails(self, details):
 		client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
+		client.Alfr3d_DB.authenticate(db_user,db_pass)
 		db = client['Alfr3d_DB']
 		devicesCollection = db['devices']
 
@@ -140,7 +147,7 @@ class Device:
 	# update entire object in DB with latest values
 	def update(self):
 		client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
+		client.Alfr3d_DB.authenticate(db_user,db_pass)
 		db = client['Alfr3d_DB']
 		devicesCollection = db['devices']
 		collection_env = db['environment']
@@ -171,7 +178,7 @@ class Device:
 	def updateHistory(self):
 		logger.info("Updating device history")
 		client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
+		client.Alfr3d_DB.authenticate(db_user,db_pass)
 		db = client['Alfr3d_DB']
 		devicesCollection = db['devices']
 		historyCollection = db['devices.history']
@@ -216,7 +223,7 @@ class Device:
 		logger.info("Refreshing device list")
 
 		client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
+		client.Alfr3d_DB.authenticate(db_user,db_pass)
 		db = client['Alfr3d_DB']
 		devicesCollection = db['devices']
 
