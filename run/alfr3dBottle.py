@@ -141,12 +141,15 @@ def whosthere():
 	users = ""
 
 	# cycle through all users
-	for user in usersCollection.find():
-		if user['state'] == 'online' and user['location']['name'] == socket.gethostname():
+	#for user in usersCollection.find():
+	for user in usersCollection.find({"$and":[
+											{"state":'online'},
+											{"location.name":socket.gethostname()}
+										]}):
 			count +=1
 			users += user['name']+'\n'
 
-	return 'online users '+str(count)+' :\n '+users
+	return 'online users '+str(count)+' :\n'+users
 
 @route('/make_coffee')
 def make_coffee():
