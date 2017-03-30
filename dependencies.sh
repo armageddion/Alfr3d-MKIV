@@ -1,0 +1,30 @@
+echo "installing dependencies for alfr3d"
+echo "installing pip"
+sudo apt install -y python-pip
+
+echo "installing pymongo"
+sudo pip install pymongo
+
+echo "installing pyserial"
+sudo pip install pyserial
+
+echo "installing httplib2"
+sudo pip install httplib2
+
+echo "installing google library for python"
+sudo pip install --upgrade google-api-python-client
+
+echo "install pushbullet library"
+sudo pip install pushbullet.py
+
+echo "installing Philips HUE library"
+sudo pip install qhue
+
+echo "installing bottle server"
+sudo pip install bottle
+
+echo "installing schedule library"
+sudo pip install schedule
+
+echo "installing config parser"
+sudo pip install ConfigParser
