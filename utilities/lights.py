@@ -135,7 +135,7 @@ def lighting_off():
 	devicesCollection = db['devices']
 
 	logger.info("looking for devices")
-	for device in devicesCollection.find({"name":'hue'}):devicesCollection.find({"$and":[
+	for device in devicesCollection.find({"$and":[
 											{"name":'hue'},
 											{"location.name":socket.gethostname()}
 										]}):
