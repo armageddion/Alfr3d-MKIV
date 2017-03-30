@@ -34,6 +34,7 @@ import os
 import json
 import time
 import logging
+import socket
 import ConfigParser
 from qhue import Bridge
 from pymongo import MongoClient
@@ -49,9 +50,12 @@ handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/total.log"))
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-# get username key for the hue
+# load up all the configs
 config = ConfigParser.RawConfigParser()
 config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
+# get main DB credentials
+db_user = config.get("Alfr3d DB", "user")
+db_pass = config.get("Alfr3d DB", "password")
 
 class light_hue():
 	"""
@@ -79,12 +83,16 @@ class light_hue():
 
 def lighting_init():
 	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-	client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
+	client.Alfr3d_DB.authenticate(db_user,db_pass)
 	db = client['Alfr3d_DB']
 	devicesCollection = db['devices']
 
 	logger.info("looking for devices")
-	for device in devicesCollection.find({"name":'hue'}):
+	#for device in devicesCollection.find({"name":'hue'}):
+	for device in devicesCollection.find({"$and":[
+											{"name":'hue'},
+											{"location.name":socket.gethostname()}
+										]}):
 		logger.info("device found: "+ str(device))
 
 		logger.info("looking for apikeys")
@@ -122,12 +130,15 @@ def lighting_init():
 # turns all hue lights off
 def lighting_off():
 	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-	client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
+	client.Alfr3d_DB.authenticate(db_user,db_pass)
 	db = client['Alfr3d_DB']
 	devicesCollection = db['devices']
 
 	logger.info("looking for devices")
-	for device in devicesCollection.find({"name":'hue'}):
+	for device in devicesCollection.find({"name":'hue'}):devicesCollection.find({"$and":[
+											{"name":'hue'},
+											{"location.name":socket.gethostname()}
+										]}):
 		logger.info("device found: "+ str(device))
 
 		logger.info("looking for apikeys")
@@ -151,12 +162,15 @@ def lighting_off():
 # turns all hue lights off
 def lighting_on():
 	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-	client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
+	client.Alfr3d_DB.authenticate(db_user,db_pass)
 	db = client['Alfr3d_DB']
 	devicesCollection = db['devices']
 
 	logger.info("looking for devices")
-	for device in devicesCollection.find({"name":'hue'}):
+	for device in devicesCollection.find({"$and":[
+											{"name":'hue'},
+											{"location.name":socket.gethostname()}
+										]}):
 		logger.info("device found: "+ str(device))
 
 		logger.info("looking for apikeys")
