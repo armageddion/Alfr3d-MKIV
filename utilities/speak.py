@@ -33,6 +33,7 @@ import ConfigParser
 import os
 import sys
 import logging
+import socket
 from random import randint						# used for random number generator
 from threading import Thread
 from time import strftime, localtime, time, sleep
