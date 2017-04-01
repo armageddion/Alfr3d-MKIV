@@ -157,7 +157,10 @@ def speakString(string="Hello, world"):
 		logger.error("Traceback: "+str(e))
 
 	try:
-		os.system('mplayer -really-quiet -noconsolecontrols '+os.path.join(CURRENT_PATH,'../tmp/audio.mp3'))
+		if socket.gethostname() == "Alfr3d-MKV":
+			os.system('omsplayer -o local '+os.path.join(CURRENT_PATH,'../tmp/audio.mp3'))			# RPI3
+		else:
+			os.system('mplayer -really-quiet -noconsolecontrols '+os.path.join(CURRENT_PATH,'../tmp/audio.mp3')) 	# old alfr3d on RPI2
 	except Exception, e:
 		logger.error("Failed to play the sound file")
 		logger.error("Traceback: "+str(e))
