@@ -33,6 +33,7 @@ import ConfigParser
 import os
 import sys
 import logging
+from random import randint						# used for random number generator
 from threading import Thread
 from time import strftime, localtime, time, sleep
 
@@ -246,7 +247,7 @@ def speakRandom():
 	
 	greeting = ""
 
-	random = [
+	quips = [
 		"It is good to see you. ", 
 		"You look pretty today. ",
 		"Still plenty of time to save the day. Make the most of it. ",
@@ -259,9 +260,9 @@ def speakRandom():
 		"To err is human and to blame it on a computer is even more so.",
 		"As always. It is a pleasure watching you work."]
 
-	tempint = randint(1, len(random))
+	tempint = randint(1, len(quips))
 
-	greeting += random[tempint-1]
+	greeting += quips[tempint-1]
 
 	speakString(greeting)
 
