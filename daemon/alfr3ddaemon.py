@@ -102,7 +102,7 @@ class MyDaemon(Daemon):
 				block to blur out quips once in a while 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 			try:
-				logger.info("being a smartass")
+				logger.info("is it time for a smartass quip?")
 				self.beSmart()
 			except Exception, e:
 				logger.error("Failed to complete the quip block")
