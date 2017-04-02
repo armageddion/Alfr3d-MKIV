@@ -250,6 +250,7 @@ class User:
 
 			if time() - float(last_online) < 600:	#10 minutes...
 				if self.state == "offline":
+					logger.info(user['name']+" just came online")
 				 	#speak welcome
 				 	speakWelcome(user['name'], time() - float(self.last_online))
 				 	for i in range(len(pb)):
@@ -261,6 +262,7 @@ class User:
 																		   "country":cur_env['country']}}})
 			else:
 				if self.state == "online":
+					logger.info(user['name']+" went offline")
 					for i in range(len(pb)):
 						pb[i].push_note("Alfr3d", user['name']+" went offline")
 				usersCollection.update({"name":user['name']},{"$set":{'state':'offline'}})	

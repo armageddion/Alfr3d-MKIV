@@ -28,3 +28,6 @@ sudo pip install schedule
 
 echo "installing config parser"
 sudo pip install ConfigParser
+
+echo "installing Spotipy"
+sudo pip install spotipy
