@@ -31,6 +31,7 @@
 
 import ConfigParser
 import os
+import re
 import sys
 import socket
 import urllib
@@ -189,6 +190,10 @@ def getLocation(method="dbip"):
 	else:
 		logger.warning("Unable to obtain geo info - invalid method specified.")
 		return [False,0,0]
+
+	# by this point we got our geo info... 
+	# just gotta clean it up because sometimes we get garbage in the city name
+	city_new = re.sub('[^A-Za-z]+',"",city_new)
 
 	logger.info("IP:"+str(ip_new))
 	logger.info("City:"+str(city_new))
