@@ -34,7 +34,8 @@ import os
 import sys
 import logging
 from random import randint
-from time import time, strftime, localtime
+#from time import time, strftime, localtime
+import time
 
 import speak
 import location
@@ -59,7 +60,7 @@ def morningAlarm():
 	logger.info("Time to ring morning alarm")
 	try:
 		speak.speakGreeting()
-		if (strftime("%p",localtime()) == "AM"):
+		if (time.strftime("%p",time.localtime()) == "AM"):
 			speak.speakString("your time to rest has come to an end")
 			speak.speakTime()
 			speak.speakDate()
