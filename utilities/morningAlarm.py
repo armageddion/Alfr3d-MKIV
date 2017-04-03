@@ -59,7 +59,7 @@ def morningAlarm():
 	logger.info("Time to ring morning alarm")
 	try:
 		speak.speakGreeting()
-		if (time.strftime("%p",localtime()) == "AM"):
+		if (strftime("%p",localtime()) == "AM"):
 			speak.speakString("your time to rest has come to an end")
 			speak.speakTime()
 			speak.speakDate()
