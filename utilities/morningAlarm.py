@@ -34,7 +34,6 @@ import os
 import sys
 import logging
 from random import randint
-#from time import time, strftime, localtime
 import time
 
 import speak
@@ -76,14 +75,14 @@ def morningAlarm():
 		else:
 			speak.speakTime()
 
-			random = [
+			quips = [
 				"Unless we are burning the midnight oil, ",
 				"If you are going to invent something new tomorrow, ",
 				"If you intend on being charming tomorrow, "]
 
-			tempint = random.randint(1,len(random))
+			tempint = randint(1,len(quips))
 
-			greeting = random[tempint-1]
+			greeting = quips[tempint-1]
 			greeting += "perhaps you should consider getting some rest."
 
 			speak.speakString(greeting)		
