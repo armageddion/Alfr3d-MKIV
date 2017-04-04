@@ -26,7 +26,7 @@ void setup()
      .setPosition(20,50)
      .setSize(20,200)
      .setRange(0,255)
-     .setVisible(false)
+     .setLabelVisible(false)
      ;     
 
   cp5.addSlider("slider2")
