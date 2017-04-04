@@ -192,7 +192,7 @@ class MyDaemon(Daemon):
 		owner.getDetails("armageddion")
 		ishome = owner.state
 
-		if((int(time.strftime("%H", time.localtime()))>7)and(int(time.strftime("%H", time.localtime()))<21) and ishome):
+		if((int(time.strftime("%H", time.localtime()))>6)and(int(time.strftime("%H", time.localtime()))<23) and ishome):
 			if(time.time()-quipStartTime>(waittime_quip*60)):
 				logger.info("time to be a smart ass ")
 				
