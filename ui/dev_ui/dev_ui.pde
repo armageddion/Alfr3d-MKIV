@@ -35,6 +35,7 @@ void setup()
      .setSize(40,40)
      ;        
 
+   //button callbacks
    bt_exit.addCallback(new CallbackListener() {
       public void controlEvent(CallbackEvent theEvent) {
          switch(theEvent.getAction()) {
