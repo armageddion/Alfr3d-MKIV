@@ -234,6 +234,8 @@ def init_daemon():
 		logger.error("Failed to complete lighting check")
 		logger.error("Traceback "+str(e))	
 
+	utilities.speakString("Systems check complete")
+
 if __name__ == "__main__":
 	daemon = MyDaemon('/var/run/alfr3ddaemon/alfr3ddaemon.pid',stderr='/dev/null')
 	#daemon = MyDaemon('/var/run/alfr3ddaemon/alfr3ddaemon.pid',stderr='/dev/stderr')
@@ -242,6 +244,7 @@ if __name__ == "__main__":
 			logger.info("Alfr3d Daemon initializing")
 			init_daemon()
 			logger.info("Alfr3d Daemon starting...")
+			utilities.speakString("All systems are up and operational")
 			daemon.start()
 		elif 'stop' == sys.argv[1]:
 			logger.info("Alfr3d Daemon stopping...")			
