@@ -87,11 +87,13 @@ def sendReport():
 				"city":city,
 				"ip":ip
 			}
-		if latitude:
+		try:
 			data['environment']['lat_long']={
 				"latitude":latitude,
 				"longitude":longitude
 			}
+		except:
+			print "lat/long info is not available"		
 
 	print data
 
