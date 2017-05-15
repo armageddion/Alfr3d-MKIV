@@ -198,7 +198,7 @@ class Device:
 			historyCollection.insert(historyDetails)
 		except Exception, e:
 			logger.error("Failed up update history for device with MAC: "+self.MAC)
-			logger.error("Traceback: "+e)
+			logger.error("Traceback: "+str(e))
 			return False
 		
 		return True
