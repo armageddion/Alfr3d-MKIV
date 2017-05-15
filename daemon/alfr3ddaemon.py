@@ -227,7 +227,7 @@ def init_daemon():
 	try:
 		utilities.speakString("Running geo scan")
 		logger.info("Running a geoscan")
-		utilities.getLocation("dbip")
+		utilities.getLocation("freegeoip")
 		utilities.speakString("geo scan complete")
 	except Exception, e:
 		utilities.speakString("Failed to complete geo scan")
