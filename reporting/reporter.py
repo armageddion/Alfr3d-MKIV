@@ -34,12 +34,17 @@ import json
 import requests
 import psutil
 import socket
+import ConfigParser
 
 from pymongo import MongoClient
 
+# load up all the configs
+config = ConfigParser.RawConfigParser()
+config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
 # get main DB credentials
 db_user = config.get("Alfr3d DB", "user")
 db_pass = config.get("Alfr3d DB", "password")
+
 
 # get system level info
 cpu = psutil.cpu_percent()
