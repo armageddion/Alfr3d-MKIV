@@ -49,6 +49,7 @@ CURRENT_PATH = os.path.dirname(__file__)
 # import my own utilities
 sys.path.append(os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../"))
 import utilities
+import reporting
 
 # set up daemon things
 os.system('sudo mkdir -p /var/run/alfr3ddaemon')
@@ -137,6 +138,15 @@ class MyDaemon(Daemon):
 			except Exception, e:
 				logger.error("Failed to check the morning alarm schedule")
 				logger.error("Traceback "+str(e))
+
+			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+				Send a report out
+			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""				
+			try:
+				reporting.sendReport()
+			except Exception, e:
+				logger.error("Failed to send report")
+				logger.error("Traceback "+str(e))				
 
 			# OK Take a break 
 			time.sleep(10)
