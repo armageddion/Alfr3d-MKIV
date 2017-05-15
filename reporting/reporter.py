@@ -57,6 +57,8 @@ def sendReport():
 	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
 	client.Alfr3d_DB.authenticate(db_user,db_pass)
 	db = client['Alfr3d_DB']
+
+	# get location info
 	collection_env = db['environment']
 
 	try:
@@ -95,8 +97,34 @@ def sendReport():
 		except:
 			print "lat/long info is not available"		
 
-	print data
+	# get devices info
+	devicesCollection = db['devices']
 
+	try:
+		online_devices = devicesCollection.count({"state":"online"})
+	except Exception, e:
+		print "failed to find number of online devices"
+
+	try: 
+		data['online_devices']={"devices":online_devices}
+	except Exception, e:
+		print "failed to report number of online devices"
+
+	# get users info
+	usersCollection = db['users']
+
+	try:
+		online_users = usersCollection.count({"state":"online"})
+	except Exception, e:
+		print "failed to find number of online users"
+
+	try:
+		data['online_users']={"users":online_users}
+	except Exception, e:
+		print "failed to report number of online users"
+
+
+	# push data out to freeboard
 	host = "http://dweet.io/dweet/for/alfr3d.mkv?"
 	headers = {"content-type":"application/json","Accept":"text/plain"}
 
