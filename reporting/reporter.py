@@ -119,7 +119,11 @@ def sendReport():
 		print "failed to find number of online users"
 
 	try:
-		data['online_users']={"users":online_users}
+		data['online_users']={"online_users":online_users}
+		users=[]
+		for user in usersCollection.find({"state":"online"}):
+			users.append(user['name'])
+		data['online_users']['users']={'users':users}
 	except Exception, e:
 		print "failed to report number of online users"
 

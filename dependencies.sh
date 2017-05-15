@@ -1,4 +1,8 @@
 echo "installing dependencies for alfr3d"
+
+echo "isntalling python-dev"
+sudo apt install python-dev
+
 echo "installing pip"
 sudo apt install -y python-pip
 
@@ -28,6 +32,9 @@ sudo pip install schedule
 
 echo "installing config parser"
 sudo pip install ConfigParser
+
+echo "installing psutil"
+sudo pip install psutil
 
 #echo "installing Spotipy"
 #sudo pip install spotipy
