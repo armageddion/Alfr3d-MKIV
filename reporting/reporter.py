@@ -33,17 +33,52 @@ This file is used for all arduino related functions.
 import json
 import requests
 import psutil
+import socket
 
+from pymongo import MongoClient
+
+# get main DB credentials
+db_user = config.get("Alfr3d DB", "user")
+db_pass = config.get("Alfr3d DB", "password")
+
+# get system level info
 cpu = psutil.cpu_percent()
 disks = psutil.disk_usage('/')
 memory = psutil.virtual_memory()
 
+# get latest DB environment info
+# Initialize the database
+client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
+client.Alfr3d_DB.authenticate(db_user,db_pass)
+db = client['Alfr3d_DB']
+collection_env = db['environment']
+
+try:
+	cur_env = collection_env.find_one({"name":socket.gethostname()})
+	country = cur_env['country']
+	state = cur_env['state']
+	city = cur_env['city']
+	ip = cur_env['IP']
+except Exception, e:
+	print "unable to retreive geo info"	
+
 data = {
-	"status": "online",
+	"status": 1,
 	"cpu": cpu,
 	"disks":disks.percent,
 	"memory":memory.percent
 }
+
+if cur_env:
+	data {'environment':{
+			"country":country,
+			"state":state,
+			"city":city,
+			"ip":ip
+		}
+	}
+
+print data
 
 host = "http://dweet.io/dweet/for/alfr3d.mkv?"
 headers = {"content-type":"application/json","Accept":"text/plain"}
