@@ -30,6 +30,7 @@ This file is used for all arduino related functions.
 #      software/component specified under (i).
 #
 
+import os
 import json
 import requests
 import psutil
