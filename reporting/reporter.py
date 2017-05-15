@@ -70,13 +70,13 @@ data = {
 }
 
 if cur_env:
-	data {'environment':{
+	data['environment']={
 			"country":country,
 			"state":state,
 			"city":city,
 			"ip":ip
 		}
-	}
+	
 
 print data
 
