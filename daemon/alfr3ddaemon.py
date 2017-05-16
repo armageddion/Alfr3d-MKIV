@@ -223,26 +223,41 @@ class MyDaemon(Daemon):
 
 def init_daemon():
 	utilities.speakString("Initializing systems check")
+	
 	# initial geo check
 	try:
 		utilities.speakString("Running geo scan")
 		logger.info("Running a geoscan")
-		utilities.getLocation("freegeoip")
+		ret = utilities.getLocation("freegeoip")
+		if not ret[0]:
+			raise Exception("geoscan failed")
 		utilities.speakString("geo scan complete")
 	except Exception, e:
 		utilities.speakString("Failed to complete geo scan")
 		logger.error("Failed to complete geoscan scan")
 		logger.error("Traceback "+str(e))			
+	
 	#initial lighting check
 	try:
 		utilities.speakString("Running lighting check")
 		logger.info("Running a lighting check")
-		utilities.lighting_init()
+		utilities.lightingInit()
 		utilities.speakString("lighting check complete")
 	except Exception, e:
 		utilities.speakString("Failed to complete lighting check")
 		logger.error("Failed to complete lighting check")
-		logger.error("Traceback "+str(e))	
+		logger.error("Traceback "+str(e))
+
+	#initial coffee check
+	try:
+		utilities.speakString("Looking for a source of coffee")
+		logger.info("Running a coffee check")
+		utilities.coffeeCheck()
+		utilities.speakString("Brew check complete")
+	except Exception, e:
+		utilities.speakString("Failed to find a source of coffee")
+		logger.error("Failed to complete coffee check")
+		logger.error("Traceback "+str(e))
 
 	utilities.speakString("Systems check complete")
 
