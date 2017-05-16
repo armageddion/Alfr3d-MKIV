@@ -130,6 +130,8 @@ def sendReport():
 		print "failed to report number of online users"
 
 	# get alfr3d devices info
+	peripherals = 0
+	data['alfr3d']={"peripherals":peripherals}		
 	try:
 		light_count = devicesCollection.count({"$and":[
 												{"name":'hue'},
@@ -138,11 +140,12 @@ def sendReport():
 												{"location.name":socket.gethostname()}
 											]})		
 		if light_count != 0:
+			peripherals += light_count
 			data['alfr3d']['lights']={"status": 1,
 									  "count":light_count}
 		else:
 			data['alfr3d']['lights']={"status": 0,
-									  "count":light_count}			
+									  "count":light_count}	
 	except Exception, e:
 		print "failed to report on lights"
 
@@ -154,6 +157,7 @@ def sendReport():
 												{"location.name":socket.gethostname()}
 											]})
 		if coffee_count != 0:
+			peripherals += coffee_count
 			data['alfr3d']['coffee']={"status": 1,
 									  "count":coffee_count}
 		else:
@@ -161,6 +165,8 @@ def sendReport():
 									  "count":coffee_count}
 	except Exception, e:
 		print "failed to report on lights"
+
+	data['alfr3d']={"peripherals":peripherals}		
 
 	# push data out to freeboard
 	host = "http://dweet.io/dweet/for/alfr3d.mkv?"
