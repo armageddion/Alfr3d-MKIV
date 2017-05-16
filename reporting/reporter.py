@@ -47,9 +47,6 @@ db_user = config.get("Alfr3d DB", "user")
 db_pass = config.get("Alfr3d DB", "password")
 
 def sendReport():
-	usersCollection = db['users']
-	collection_env = db['environment']
-	devicesCollection = db['devices']
 	
 	# get system level info
 	cpu = psutil.cpu_percent()
@@ -62,6 +59,10 @@ def sendReport():
 	client.Alfr3d_DB.authenticate(db_user,db_pass)
 	db = client['Alfr3d_DB']
 
+	usersCollection = db['users']
+	collection_env = db['environment']
+	devicesCollection = db['devices']
+	
 	# get location info
 
 	try:
