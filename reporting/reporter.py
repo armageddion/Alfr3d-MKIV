@@ -47,6 +47,10 @@ db_user = config.get("Alfr3d DB", "user")
 db_pass = config.get("Alfr3d DB", "password")
 
 def sendReport():
+	usersCollection = db['users']
+	collection_env = db['environment']
+	devicesCollection = db['devices']
+	
 	# get system level info
 	cpu = psutil.cpu_percent()
 	disks = psutil.disk_usage('/')
@@ -59,7 +63,6 @@ def sendReport():
 	db = client['Alfr3d_DB']
 
 	# get location info
-	collection_env = db['environment']
 
 	try:
 		cur_env = collection_env.find_one({"name":socket.gethostname()})
@@ -98,7 +101,6 @@ def sendReport():
 			print "lat/long info is not available"		
 
 	# get devices info
-	devicesCollection = db['devices']
 
 	try:
 		online_devices = devicesCollection.count({"state":"online"})
@@ -111,7 +113,6 @@ def sendReport():
 		print "failed to report number of online devices"
 
 	# get users info
-	usersCollection = db['users']
 
 	try:
 		online_users = usersCollection.count({"state":"online"})
@@ -127,6 +128,38 @@ def sendReport():
 	except Exception, e:
 		print "failed to report number of online users"
 
+	# get alfr3d devices info
+	try:
+		light_count = devicesCollection.count({"$and":[
+												{"name":'hue'},
+												{"state":'online'},
+												{"user":'alfr3d'},
+												{"location.name":socket.gethostname()}
+											]})		
+		if light_count != 0:
+			data['alfr3d']['lights']={"status": 1,
+									  "count":light_count}
+		else:
+			data['alfr3d']['lights']={"status": 0,
+									  "count":light_count}			
+	except Exception, e:
+		print "failed to report on lights"
+
+	try:
+		coffee_count = devicesCollection.count({"$and":[
+												{"name":'coffee'},
+												{"state":'online'},
+												{"user":'alfr3d'},
+												{"location.name":socket.gethostname()}
+											]})
+		if coffee_count != 0:
+			data['alfr3d']['coffee']={"status": 1,
+									  "count":coffee_count}
+		else:
+			data['alfr3d']['coffee']={"status": 0,
+									  "count":coffee_count}
+	except Exception, e:
+		print "failed to report on lights"
 
 	# push data out to freeboard
 	host = "http://dweet.io/dweet/for/alfr3d.mkv?"

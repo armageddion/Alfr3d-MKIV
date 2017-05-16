@@ -92,6 +92,7 @@ def lightingInit():
 	light_count = devicesCollection.count({"$and":[
 											{"name":'hue'},
 											{"state":'online'},
+											{"user":'alfr3d'},
 											{"location.name":socket.gethostname()}
 										]})
 	if light_count != 0:
