@@ -166,7 +166,7 @@ def sendReport():
 	except Exception, e:
 		print "failed to report on lights"
 
-	data['alfr3d']={"peripherals":peripherals}		
+	data['alfr3d']["peripherals"]=peripherals
 
 	# push data out to freeboard
 	host = "http://dweet.io/dweet/for/alfr3d.mkv?"

@@ -107,7 +107,7 @@ class MyDaemon(Daemon):
 				self.beSmart()
 			except Exception, e:
 				logger.error("Failed to complete the quip block")
-				logger.error("Traceback "+str(e))
+				logger.error("Traceback: "+str(e))
 
 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -118,7 +118,7 @@ class MyDaemon(Daemon):
 				self.checkGmail()
 			except Exception, e:
 				logger.error("Failed to check Gmail")
-				logger.error("Traceback "+str(e))	
+				logger.error("Traceback: "+str(e))	
 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 				Check online members
@@ -128,7 +128,7 @@ class MyDaemon(Daemon):
 				utilities.checkLANMembers()
 			except Exception, e:
 				logger.error("Failed to complete network scan")
-				logger.error("Traceback "+str(e))			
+				logger.error("Traceback: "+str(e))			
 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 				Run morning alarm
@@ -137,7 +137,7 @@ class MyDaemon(Daemon):
 				schedule.run_pending()
 			except Exception, e:
 				logger.error("Failed to check the morning alarm schedule")
-				logger.error("Traceback "+str(e))
+				logger.error("Traceback: "+str(e))
 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 				Send a report out
@@ -147,7 +147,7 @@ class MyDaemon(Daemon):
 				reporting.sendReport()
 			except Exception, e:
 				logger.error("Failed to send report")
-				logger.error("Traceback "+str(e))				
+				logger.error("Traceback: "+str(e))				
 
 			# OK Take a break 
 			time.sleep(10)
@@ -236,7 +236,7 @@ def init_daemon():
 	except Exception, e:
 		utilities.speakString("Failed to complete geo scan")
 		logger.error("Failed to complete geoscan scan")
-		logger.error("Traceback "+str(e))			
+		logger.error("Traceback: "+str(e))			
 	
 	#initial lighting check
 	try:
@@ -247,7 +247,7 @@ def init_daemon():
 	except Exception, e:
 		utilities.speakString("Failed to complete lighting check")
 		logger.error("Failed to complete lighting check")
-		logger.error("Traceback "+str(e))
+		logger.error("Traceback: "+str(e))
 
 	#initial coffee check
 	try:
@@ -258,7 +258,7 @@ def init_daemon():
 	except Exception, e:
 		utilities.speakString("Failed to find a source of coffee")
 		logger.error("Failed to complete coffee check")
-		logger.error("Traceback "+str(e))
+		logger.error("Traceback: "+str(e))
 
 	utilities.speakString("Systems check complete")
 
