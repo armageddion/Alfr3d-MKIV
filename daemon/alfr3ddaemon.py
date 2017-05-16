@@ -143,6 +143,7 @@ class MyDaemon(Daemon):
 				Send a report out
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""				
 			try:
+				logger.info("Creating a system report")
 				reporting.sendReport()
 			except Exception, e:
 				logger.error("Failed to send report")
