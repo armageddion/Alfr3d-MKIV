@@ -248,7 +248,7 @@ class User:
 					usersCollection.update({"name":user['name']},{"$set":{'last_online':device['last_online']}})
 					last_online = device['last_online']
 
-			if time() - float(last_online) < 600:	#10 minutes...
+			if time() - float(last_online) < 60:	#10 minutes...
 				if self.state == "offline":
 					logger.info(user['name']+" just came online")
 				 	#speak welcome

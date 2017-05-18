@@ -131,6 +131,8 @@ def getLocation(method="dbip"):
 	state_new = state
 	city_new = city
 	ip_new = ip
+	lat_new = "n/a"
+	long_new = "n/a"
 
 	if method == "dbip":
 		# get API key for db-ip.com
@@ -202,7 +204,7 @@ def getLocation(method="dbip"):
 
 	# by this point we got our geo info... 
 	# just gotta clean it up because sometimes we get garbage in the city name
-	city_new = re.sub('[^A-Za-z]+',"",city_new)
+	city_new = re.sub('[^A-Za-z]+',"",city_new)	
 
 	logger.info("IP:"+str(ip_new))
 	logger.info("City:"+str(city_new))
