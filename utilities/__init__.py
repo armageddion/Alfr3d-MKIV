@@ -20,3 +20,4 @@ from lights import *
 from morningAlarm import *
 from music import *
 from coffee import *
+from audio import *

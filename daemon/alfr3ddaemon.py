@@ -100,27 +100,6 @@ class MyDaemon(Daemon):
 			# 	logger.error("Traceback "+str(e))
 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-				block to blur out quips once in a while 
-			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-			try:
-				logger.info("is it time for a smartass quip?")
-				self.beSmart()
-			except Exception, e:
-				logger.error("Failed to complete the quip block")
-				logger.error("Traceback: "+str(e))
-
-
-			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-				Block to check unread emails (gMail)
-			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-			try:
-				logger.info("Checking Gmail")
-				self.checkGmail()
-			except Exception, e:
-				logger.error("Failed to check Gmail")
-				logger.error("Traceback: "+str(e))	
-
-			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 				Check online members
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 			try:
@@ -131,15 +110,6 @@ class MyDaemon(Daemon):
 				logger.error("Traceback: "+str(e))			
 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-				Run morning alarm
-			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""				
-			try:
-				schedule.run_pending()
-			except Exception, e:
-				logger.error("Failed to check the morning alarm schedule")
-				logger.error("Traceback: "+str(e))
-
-			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 				Send a report out
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""				
 			try:
@@ -147,7 +117,46 @@ class MyDaemon(Daemon):
 				reporting.sendReport()
 			except Exception, e:
 				logger.error("Failed to send report")
-				logger.error("Traceback: "+str(e))				
+				logger.error("Traceback: "+str(e))	
+
+			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+			blocks to check only if armageddion is at home
+			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+			owner = utilities.User()
+			owner.getDetails("armageddion")
+			ishome = owner.state
+
+			if (ishome == 'online'):
+				"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+					block to blur out quips once in a while 
+				"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+				try:
+					logger.info("is it time for a smartass quip?")
+					self.beSmart()
+				except Exception, e:
+					logger.error("Failed to complete the quip block")
+					logger.error("Traceback: "+str(e))
+
+
+				"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+					Block to check unread emails (gMail)
+				"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+				try:
+					logger.info("Checking Gmail")
+					self.checkGmail()
+				except Exception, e:
+					logger.error("Failed to check Gmail")
+					logger.error("Traceback: "+str(e))	
+
+				"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+					Run morning alarm
+				"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""				
+				try:
+					schedule.run_pending()
+				except Exception, e:
+					logger.error("Failed to check the morning alarm schedule")
+					logger.error("Traceback: "+str(e))
+
 
 			# OK Take a break 
 			time.sleep(10)
@@ -159,6 +168,7 @@ class MyDaemon(Daemon):
 		"""
 		global unread_Count
 		global unread_Count_new
+
 		try:
 			unread_Count_new = utilities.getUnreadCount()
 			logger.info("Gmail check successful")
@@ -197,13 +207,7 @@ class MyDaemon(Daemon):
 		global quipStartTime
 		global waittime_quip
 
-		# speak only if armageddion is at home... 
-		# consider making Alfr3d speak if anyone is there....??
-		owner = utilities.User()
-		owner.getDetails("armageddion")
-		ishome = owner.state
-
-		if((int(time.strftime("%H", time.localtime()))>7)and(int(time.strftime("%H", time.localtime()))<22) and ishome):
+		if((int(time.strftime("%H", time.localtime()))>7)and(int(time.strftime("%H", time.localtime()))<22)):
 			if(time.time()-quipStartTime>(waittime_quip*60)):
 				logger.info("time to be a smart ass ")
 				
