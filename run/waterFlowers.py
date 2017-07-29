@@ -67,16 +67,27 @@ db_pass = config.get("Alfr3d DB", "password")
 logger.info("Received request to water the flowers")
 secret = config.get("API KEY", "ifttt_hook")
 
-flower_on_request = requests.post("https://maker.ifttt.com/trigger/water_flowers/with/key/"+str(secret))
-if flower_on_request.status_code == 200:
-	logger.info("successfully turned on the irrigation system")
+def water_flowers(timeout=10):
+	flower_on_request = requests.post("https://maker.ifttt.com/trigger/water_flowers/with/key/"+str(secret))
+	if flower_on_request.status_code == 200:
+		logger.info("successfully turned on the irrigation system")
 
-	time.sleep(10)
-	
-	flower_off_request = requests.post("https://maker.ifttt.com/trigger/water_flowers_end/with/key/"+str(secret))
-	if flower_off_request.status_code == 200:
-		logger.info("successfully turned off the irrigation system")
+		time.sleep(timeout)
+		
+		flower_off_request = requests.post("https://maker.ifttt.com/trigger/water_flowers_end/with/key/"+str(secret))
+		if flower_off_request.status_code == 200:
+			logger.info("successfully turned off the irrigation system")
+		else:
+			logger.error("something went wrong. unable to turn off the irrigation system")
 	else:
 		logger.error("something went wrong. unable to turn off the irrigation system")
-else:
-	logger.error("something went wrong. unable to turn off the irrigation system")
+
+if __name__ == "__main__":
+	if len(sys.argv) == 2:
+		try:
+			water_flowers(sys.argv[1])
+		except Exception, e:
+			logger.error("Failed to water flowers")
+			logger.error("Traceback: "+str(e))
+	else:
+		water_flowers()	

@@ -168,8 +168,8 @@ def make_coffee():
 		logger.error("something went wrong... cannot make coffee")
 		return "something went wrong.. no coffee for you..."
 
-@route('/water_flowers')
-def water_flowers():
+@route('/water_flowers/<timeout>')
+def water_flowers(timeout=30):
 	logger.info("Received request to water the flowers")
 	secret = config.get("API KEY", "ifttt_hook")
 
@@ -177,7 +177,7 @@ def water_flowers():
 	if flower_on_request.status_code == 200:
 		logger.info("successfully turned on the irrigation system")
 
-		time.sleep(10)
+		time.sleep(timeout)
 		
 		flower_off_request = requests.post("https://maker.ifttt.com/trigger/water_flowers_end/with/key/"+str(secret))
 		if flower_off_request.status_code == 200:
