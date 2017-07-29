@@ -156,31 +156,41 @@ def make_coffee():
 	# IFTTT https://maker.ifttt.com/use/cKPaEEmi5bh7AY_H16g3Ff
 	# https://maker.ifttt.com/trigger/make_coffee/with/key/cKPaEEmi5bh7AY_H16g3Ff
 
+	logger.info("Received a request to make coffee")
+
 	secret = config.get("API KEY", "ifttt_hook")
 
 	coffe_request = requests.post("https://maker.ifttt.com/trigger/make_coffee/with/key/"+str(secret))
 	if coffe_request.status_code == 200:
+		logger.info("coffee is being made")
 		return "coffee is being made"
 	else:
+		logger.error("something went wrong... cannot make coffee")
 		return "something went wrong.. no coffee for you..."
 
 @route('/water_flowers')
 def water_flowers():
+	logger.info("Received request to water the flowers")
 	secret = config.get("API KEY", "ifttt_hook")
 
 	flower_on_request = requests.post("https://maker.ifttt.com/trigger/water_flowers/with/key/"+str(secret))
 	if flower_on_request.status_code == 200:
-		return "flower_on done successfully"
+		logger.info("successfully turned on the irrigation system")
+		print "flower_on done successfully"
+
+		time.sleep(10000)
+		
+		flower_off_request = requests.post("https://maker.ifttt.com/trigger/water_flowers_end/with/key/"+str(secret))
+		if flower_off_request.status_code == 200:
+			logger.info("successfully turned off the irrigation system")
+			return "flower_off done successfully"
+		else:
+			logger.error("something went wrong. unable to turn off the irrigation system")
+			return "something went wrong... no bueno"
 	else:
 		return "something went wrong... no bueno"
 
-	time.sleep(10000)
 
-	flower_off_request = requests.post("https://maker.ifttt.com/trigger/water_flowers_end/with/key/"+str(secret))
-	if flower_off_request.status_code == 200:
-		return "flower_off done successfully"
-	else:
-		return "something went wrong... no bueno"
 
 @route('/<command>')
 def processCommand(command):
