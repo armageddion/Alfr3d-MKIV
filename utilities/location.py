@@ -55,6 +55,13 @@ handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/total.log"))
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
+# load up all the configs
+config = ConfigParser.RawConfigParser()
+config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
+# get main DB credentials
+db_user = config.get("Alfr3d DB", "user")
+db_pass = config.get("Alfr3d DB", "password")
+
 
 def getLocation(method="dbip"):
 	# placeholders for my ip
@@ -64,7 +71,7 @@ def getLocation(method="dbip"):
 	# get latest DB environment info
 	# Initialize the database
 	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-	client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
+	client.Alfr3d_DB.authenticate(db_user,db_pass)
 	db = client['Alfr3d_DB']
 	collection_env = db['environment']
 
@@ -124,6 +131,8 @@ def getLocation(method="dbip"):
 	state_new = state
 	city_new = city
 	ip_new = ip
+	lat_new = "n/a"
+	long_new = "n/a"
 
 	if method == "dbip":
 		# get API key for db-ip.com
@@ -180,7 +189,9 @@ def getLocation(method="dbip"):
 					country_new = info4['country_name']
 					state_new = info4['region_name']
 					city_new = info4['city']
-					ip_new = info4['ip']			
+					ip_new = info4['ip']	
+					lat_new = info4['latitude']
+					long_new = info4['longitude']
 
 			except Exception, e:
 				logger.error("Error getting my location")
@@ -193,12 +204,14 @@ def getLocation(method="dbip"):
 
 	# by this point we got our geo info... 
 	# just gotta clean it up because sometimes we get garbage in the city name
-	city_new = re.sub('[^A-Za-z]+',"",city_new)
+	city_new = re.sub('[^A-Za-z]+',"",city_new)	
 
 	logger.info("IP:"+str(ip_new))
 	logger.info("City:"+str(city_new))
 	logger.info("Sate/Prov:"+str(state_new))
 	logger.info("Country:"+str(country_new))
+	logger.info("Longitude: "+str(long_new))
+	logger.info("Latitude: "+str(lat_new))
 
 	if city_new == city:
 		#print "still in the same place"
@@ -217,7 +230,9 @@ def getLocation(method="dbip"):
 					  		   "country":country_new,
 							   "state":state_new,
 							   "city":city_new,
-							   "IP":ip_new}})
+							   "IP":ip_new,
+							   "latitude":lat_new,
+							   "longitude":long_new}})
 	except Exception, e:
 		logger.error("Failed to update the database")
 		logger.error("Traceback: "+str(e))

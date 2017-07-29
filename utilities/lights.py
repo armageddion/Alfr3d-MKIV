@@ -81,7 +81,7 @@ class light_hue():
 		else:
 			self.hue_on()
 
-def lighting_init():
+def lightingInit():
 	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
 	client.Alfr3d_DB.authenticate(db_user,db_pass)
 	db = client['Alfr3d_DB']
@@ -89,6 +89,18 @@ def lighting_init():
 
 	logger.info("looking for devices")
 	#for device in devicesCollection.find({"name":'hue'}):
+	light_count = devicesCollection.count({"$and":[
+											{"name":'hue'},
+											{"state":'online'},
+											{"user":'alfr3d'},
+											{"location.name":socket.gethostname()}
+										]})
+	if light_count != 0:
+		logger.info("found "+str(light_count)+" lights")
+	else:
+		logger.warn("unable to find any lights.. :(")
+		raise Exception("no lights online")
+
 	for device in devicesCollection.find({"$and":[
 											{"name":'hue'},
 											{"location.name":socket.gethostname()}
@@ -193,4 +205,4 @@ def lighting_on():
 
 # purely for testing purposes
 if __name__ == "__main__":	
-	lighting_init()
+	lightingInit()
