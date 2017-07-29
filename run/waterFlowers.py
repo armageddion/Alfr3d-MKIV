@@ -72,6 +72,9 @@ def water_flowers(timeout=10):
 	if flower_on_request.status_code == 200:
 		logger.info("successfully turned on the irrigation system")
 
+		print ("going to sleep for ")
+		print timeout
+		
 		time.sleep(timeout)
 		
 		flower_off_request = requests.post("https://maker.ifttt.com/trigger/water_flowers_end/with/key/"+str(secret))

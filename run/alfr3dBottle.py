@@ -169,7 +169,7 @@ def make_coffee():
 		return "something went wrong.. no coffee for you..."
 
 @route('/water_flowers/<timeout>')
-def water_flowers(timeout=30):
+def water_flowers(timeout):
 	logger.info("Received request to water the flowers")
 	secret = config.get("API KEY", "ifttt_hook")
 
