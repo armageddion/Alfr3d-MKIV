@@ -75,7 +75,9 @@ def water_flowers(timeout=10):
 		print ("going to sleep for ")
 		print timeout
 		
-		time.sleep(timeout)
+		time.sleep(int(timeout))
+
+		print "done sleeping"
 		
 		flower_off_request = requests.post("https://maker.ifttt.com/trigger/water_flowers_end/with/key/"+str(secret))
 		if flower_off_request.status_code == 200:
