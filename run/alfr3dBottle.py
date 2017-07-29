@@ -164,6 +164,24 @@ def make_coffee():
 	else:
 		return "something went wrong.. no coffee for you..."
 
+@route('/water_flowers')
+def water_flowers():
+	secret = config.get("API KEY", "ifttt_hook")
+
+	flower_on_request = requests.post("https://maker.ifttt.com/trigger/water_flowers/with/key/"+str(secret))
+	if flower_on_request.status_code == 200:
+		return "flower_on done successfully"
+	else:
+		return "something went wrong... no bueno"
+
+	time.sleep(10000)
+
+	flower_off_request = requests.post("https://maker.ifttt.com/trigger/water_flowers_end/with/key/"+str(secret))
+	if flower_off_request.status_code == 200:
+		return "flower_off done successfully"
+	else:
+		return "something went wrong... no bueno"
+
 @route('/<command>')
 def processCommand(command):
 	logger.info("Received request:/"+command)
