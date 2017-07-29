@@ -187,6 +187,7 @@ def water_flowers():
 			logger.error("something went wrong. unable to turn off the irrigation system")
 			return "something went wrong... no bueno"
 	else:
+		logger.error("something went wrong. unable to turn off the irrigation system")
 		return "something went wrong... no bueno"
 
 
