@@ -35,6 +35,7 @@ import json
 import time
 import logging
 import socket
+import requests			
 import ConfigParser
 from qhue import Bridge
 from pymongo import MongoClient
@@ -90,7 +91,7 @@ def lightingInit():
 	logger.info("looking for devices")
 	#for device in devicesCollection.find({"name":'hue'}):
 	light_count = devicesCollection.count({"$and":[
-											{"name":'hue'},
+											{"type":'lights'},
 											{"state":'online'},
 											{"user":'alfr3d'},
 											{"location.name":socket.gethostname()}
@@ -102,42 +103,50 @@ def lightingInit():
 		raise Exception("no lights online")
 
 	for device in devicesCollection.find({"$and":[
-											{"name":'hue'},
+											{"type":'lights'},
 											{"location.name":socket.gethostname()}
 										]}):
 		logger.info("device found: "+ str(device))
 
 		logger.info("looking for apikeys")
-		username = config.get("HUE dev", str(device['MAC']).replace(':',''))
-		logger.info("found key: "+ str(username))
+		if device['name'].startswith("hue"):
+			username = config.get("HUE dev", str(device['MAC']).replace(':',''))
+			logger.info("found key: "+ str(username))
 
-		bridge = Bridge(device['IP'], username)
-		
-		logger.info(str(bridge.lights()))
-		lights_data = json.loads(json.dumps(bridge.lights()))
+			bridge = Bridge(device['IP'], username)
+			
+			logger.info(str(bridge.lights()))
+			lights_data = json.loads(json.dumps(bridge.lights()))
 
-		for light in lights_data:
-			hue = light_hue()
-			hue.number=light
-			hue.ip = device['IP']
-			hue.username = username
+			for light in lights_data:
+				hue = light_hue()
+				hue.number=light
+				hue.ip = device['IP']
+				hue.username = username
 
-			logger.info("init check; all lights off")
-			hue.hue_off()
+				logger.info("init check; all lights off")
+				hue.hue_off()
 
-		time.sleep(2)
+			time.sleep(2)
 
-		for light in lights_data:
-			logger.info("init check; all lights on")
-			#bridge.lights[light].state(on=True)	
-			hue.hue_on()
+			for light in lights_data:
+				logger.info("init check; all lights on")
+				#bridge.lights[light].state(on=True)	
+				hue.hue_on()
 
-		time.sleep(2)
+			time.sleep(2)
 
-		for light in lights_data:
-			logger.info("init check; all lights off")
-			#bridge.lights[light].state(on=False)					
-			hue.hue_off()
+			for light in lights_data:
+				logger.info("init check; all lights off")
+				#bridge.lights[light].state(on=False)					
+				hue.hue_off()
+
+		if device['name'].startswith("Lifx"):
+			lifx_token = config.get("Lifx", "token")
+
+			headers = {"Authorization": "Bearer %s" % lifx_token,}
+			response = requests.get('https://api.lifx.com/v1/lights/all', headers=headers).json() 
+			### TODO
 
 # turns all hue lights off
 def lighting_off():
