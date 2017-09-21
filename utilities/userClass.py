@@ -67,7 +67,8 @@ logger.addHandler(handler)
 # get API key for pushbullet
 config = ConfigParser.RawConfigParser()
 config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
-apikeys = config.get("API KEY", "pushbullets").split(',')
+#apikeys = config.get("API KEY", "pushbullets").split(',')	# for when there are multiples
+apikeys = config.get("API KEY", "pushbullet")
 # get main DB credentials
 db_user = config.get("Alfr3d DB", "user")
 db_pass = config.get("Alfr3d DB", "password")
