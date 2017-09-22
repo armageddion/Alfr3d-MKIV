@@ -107,9 +107,11 @@ def lightingInit():
 											{"location.name":socket.gethostname()}
 										]}):
 		logger.info("device found: "+ str(device))
-
-		logger.info("looking for apikeys")
+		
 		if device['name'].startswith("hue"):
+			logger.info("initialising all Hue lights")
+			
+			logger.info("looking for apikeys")
 			username = config.get("HUE dev", str(device['MAC']).replace(':',''))
 			logger.info("found key: "+ str(username))
 
@@ -142,10 +144,32 @@ def lightingInit():
 				hue.hue_off()
 
 		if device['name'].startswith("Lifx"):
+			logger.info("initialising all Lifx lights")
 			lifx_token = config.get("Lifx", "token")
 
 			headers = {"Authorization": "Bearer %s" % lifx_token,}
-			response = requests.get('https://api.lifx.com/v1/lights/all', headers=headers).json() 
+			response = requests.get('https://api.lifx.com/v1/lights/all', headers=headers)
+			if response.status_code != 200:
+				logger.error("failed to authenticate with Lifx subsystems")
+			else:
+				logger.info("successfully authenticated with Lifx subsystems")
+				for bulb in response.json():
+					bulb_label = bulb[u'label']
+					if bulb[u'connected'] != True:
+						logger.warn("bulb "+str(bulb_label)+" i not online")
+					else:
+						if bulb[u'power'] != u'off':
+							response = requests.put('https://api.lifx.com/v1/lights/label:'+bulb_label+'/state', data={"power": "off"}, headers=headers)
+							if response.status_code != 200:
+								logger.error("failed to turn off the bulb "+str(bulb_label))
+							time.sleep(2)
+						response = requests.put('https://api.lifx.com/v1/lights/label:'+bulb_label+'/state', data={"power": "on"}, headers=headers)
+						if response.status_code != 200:
+							logger.error("failed to turn on the bulb "+str(bulb_label))						
+						time.sleep(2)
+						response = requests.put('https://api.lifx.com/v1/lights/label:'+bulb_label+'/state', data={"power": "off"}, headers=headers)
+						if response.status_code != 200:
+							logger.error("failed to turn off the bulb "+str(bulb_label))						
 			### TODO
 
 # turns all hue lights off
