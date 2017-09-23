@@ -160,21 +160,15 @@ def lightingInit():
 					else:
 						if bulb[u'power'] != u'off':
 							response = requests.put('https://api.lifx.com/v1/lights/label:'+bulb_label+'/state', data={"power": "off"}, headers=headers)
-							print response.status_code
-							print response.json()
-							if response.status_code != 200:
+							if response.json()[u'results'][0][u'status'] != u'ok':
 								logger.error("failed to turn off the bulb "+str(bulb_label))
 							time.sleep(2)
 						response = requests.put('https://api.lifx.com/v1/lights/label:'+bulb_label+'/state', data={"power": "on"}, headers=headers)
-						print response.status_code
-						print response.json()
-						if response.status_code != 200:
+						if response.json()[u'results'][0][u'status'] != u'ok':
 							logger.error("failed to turn on the bulb "+str(bulb_label))						
 						time.sleep(2)
 						response = requests.put('https://api.lifx.com/v1/lights/label:'+bulb_label+'/state', data={"power": "off"}, headers=headers)
-						print response.status_code
-						print response.json()
-						if response.status_code != 200:
+						if response.json()[u'results'][0][u'status'] != u'ok':
 							logger.error("failed to turn off the bulb "+str(bulb_label))						
 			### TODO
 
