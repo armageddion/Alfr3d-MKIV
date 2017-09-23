@@ -75,17 +75,17 @@ db_pass = config.get("Alfr3d DB", "password")
 
 
 pb = []
-for i in range(len(apikeys)):
-	try:
+try:
+	for i in range(len(apikeys)):
 		pb.append(Pushbullet(apikeys[i]))
-	except:
+except:
+	logger.error("failed to set up pushbullet")
+	logger.warn("trying again")
+	try:
+		pb.append(Pushbullet(apikeys))
+	except Exception, e:
 		logger.error("failed to set up pushbullet")
-		logger.warn("trying again")
-		try:
-			pb.append(Pushbullet(apikeys))
-		except Exception, e:
-			logger.error("failed to set up pushbullet")
-			logger.error("Traceback: "+str(e))
+		logger.error("Traceback: "+str(e))
 
 class User:
 	"""

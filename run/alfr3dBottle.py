@@ -190,7 +190,11 @@ def water_flowers(timeout):
 		logger.error("something went wrong. unable to turn off the irrigation system")
 		return "something went wrong... no bueno"
 
+@route('/lights/<command>')
+def lights(command):
+	logger.info("Received request to command the lights"+str(command))
 
+	return "lighting command processed"
 
 @route('/<command>')
 def processCommand(command):

@@ -181,28 +181,40 @@ def lighting_off():
 
 	logger.info("looking for devices")
 	for device in devicesCollection.find({"$and":[
-											{"name":'hue'},
+											{"type":'lights'},
 											{"location.name":socket.gethostname()}
 										]}):
 		logger.info("device found: "+ str(device))
 
-		logger.info("looking for apikeys")
-		username = config.get("HUE dev", str(device['MAC']).replace(':',''))
-		logger.info("found key: "+ str(username))
+		if device['name'].startswith("hue"):
+			logger.info("looking for apikeys")
+			username = config.get("HUE dev", str(device['MAC']).replace(':',''))
+			logger.info("found key: "+ str(username))
 
-		bridge = Bridge(device['IP'], username)
-		
-		logger.info(str(bridge.lights()))
-		lights_data = json.loads(json.dumps(bridge.lights()))
+			bridge = Bridge(device['IP'], username)
+			
+			logger.info(str(bridge.lights()))
+			lights_data = json.loads(json.dumps(bridge.lights()))
 
-		for light in lights_data:
-			hue = light_hue()
-			hue.number=light
-			hue.ip = device['IP']
-			hue.username = username
+			for light in lights_data:
+				hue = light_hue()
+				hue.number=light
+				hue.ip = device['IP']
+				hue.username = username
 
-			logger.info("all lights off")
-			hue.hue_off()
+				logger.info("all lights off")
+				hue.hue_off()
+
+		elif device['name'].startswith("Lifx"):
+			bulb_label = device['name']
+			logger.info("looking for apikeys")
+			lifx_token = config.get("Lifx", "token")
+			logger.info("found key: "+ str(lifx_token))
+
+			headers = {"Authorization": "Bearer %s" % lifx_token,}
+			response = requests.put('https://api.lifx.com/v1/lights/label:'+bulb_label+'/state', data={"power": "off"}, headers=headers)
+			if response.json()[u'results'][0][u'status'] != u'ok':
+				logger.error("failed to turn off the bulb "+str(bulb_label))			
 
 # turns all hue lights off
 def lighting_on():
@@ -213,28 +225,40 @@ def lighting_on():
 
 	logger.info("looking for devices")
 	for device in devicesCollection.find({"$and":[
-											{"name":'hue'},
+											{"type":'lights'},
 											{"location.name":socket.gethostname()}
 										]}):
 		logger.info("device found: "+ str(device))
 
-		logger.info("looking for apikeys")
-		username = config.get("HUE dev", str(device['MAC']).replace(':',''))
-		logger.info("found key: "+ str(username))
+		if device['name'].startswith("hue"):
+			logger.info("looking for apikeys")
+			username = config.get("HUE dev", str(device['MAC']).replace(':',''))
+			logger.info("found key: "+ str(username))
 
-		bridge = Bridge(device['IP'], username)
-		
-		logger.info(str(bridge.lights()))
-		lights_data = json.loads(json.dumps(bridge.lights()))
+			bridge = Bridge(device['IP'], username)
+			
+			logger.info(str(bridge.lights()))
+			lights_data = json.loads(json.dumps(bridge.lights()))
 
-		for light in lights_data:
-			hue = light_hue()
-			hue.number=light
-			hue.ip = device['IP']
-			hue.username = username
+			for light in lights_data:
+				hue = light_hue()
+				hue.number=light
+				hue.ip = device['IP']
+				hue.username = username
 
-			logger.info("all lights on")
-			hue.hue_on()
+				logger.info("all lights on")
+				hue.hue_on()
+
+		elif device['name'].startswith("Lifx"):
+			bulb_label = device['name']
+			logger.info("looking for apikeys")
+			lifx_token = config.get("Lifx", "token")
+			logger.info("found key: "+ str(lifx_token))
+
+			headers = {"Authorization": "Bearer %s" % lifx_token,}
+			response = requests.put('https://api.lifx.com/v1/lights/label:'+bulb_label+'/state', data={"power": "on"}, headers=headers)
+			if response.json()[u'results'][0][u'status'] != u'ok':
+				logger.error("failed to turn off the bulb "+str(bulb_label))				
 
 # purely for testing purposes
 if __name__ == "__main__":	
