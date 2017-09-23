@@ -156,18 +156,21 @@ def lightingInit():
 				for bulb in response.json():
 					bulb_label = bulb[u'label']
 					if bulb[u'connected'] != True:
-						logger.warn("bulb "+str(bulb_label)+" i not online")
+						logger.warn("bulb "+str(bulb_label)+" is not online")
 					else:
 						if bulb[u'power'] != u'off':
 							response = requests.put('https://api.lifx.com/v1/lights/label:'+bulb_label+'/state', data={"power": "off"}, headers=headers)
+							print response.status_code
 							if response.status_code != 200:
 								logger.error("failed to turn off the bulb "+str(bulb_label))
 							time.sleep(2)
 						response = requests.put('https://api.lifx.com/v1/lights/label:'+bulb_label+'/state', data={"power": "on"}, headers=headers)
+						print response.status_code
 						if response.status_code != 200:
 							logger.error("failed to turn on the bulb "+str(bulb_label))						
 						time.sleep(2)
 						response = requests.put('https://api.lifx.com/v1/lights/label:'+bulb_label+'/state', data={"power": "off"}, headers=headers)
+						print response.status_code
 						if response.status_code != 200:
 							logger.error("failed to turn off the bulb "+str(bulb_label))						
 			### TODO
