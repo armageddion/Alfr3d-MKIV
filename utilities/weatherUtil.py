@@ -37,6 +37,7 @@ import math											# used to round numbers
 import logging										# needed for useful logs
 import socket
 import ConfigParser
+from pymongo import MongoClient						# database link 
 from time import gmtime, strftime, localtime		# needed to obtain time
 from speak import speakString
 from random import randint
