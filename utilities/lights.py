@@ -283,7 +283,7 @@ def nighttime_auto():
 	env = envCollection.find_one({"name":socket.gethostname()})
 	try:
 		sunset = env['weather']['sunset']
-		sunset_time = datetime.datetime.now().replace(hour=int(time.strftime('%H',time.localtime(sunset))), minute=int(time.strftime("%M",time.localtime(sunset))))
+		sunset_time = datetime.datetime.now().replace(hour=int(time.strftime('%H',time.localtime(int(sunset))), minute=int(time.strftime("%M",time.localtime(int(sunset))))))
 	except Exception, e:
 		logger.error("Failed to find out the time of sunset")
 		logger.error("Traceback: "+str(e))						
