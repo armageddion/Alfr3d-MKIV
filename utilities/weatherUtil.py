@@ -52,9 +52,6 @@ handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/weather.log"))
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-db_user = config.get("Alfr3d DB", "user")
-db_pass = config.get("Alfr3d DB", "password")
-
 def getWeather(city="Toronto",country="CA"):
 	"""
         Description:
@@ -66,6 +63,9 @@ def getWeather(city="Toronto",country="CA"):
 	config = ConfigParser.RawConfigParser()
 	config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
 	apikey = config.get("API KEY", "openWeather")
+
+	db_user = config.get("Alfr3d DB", "user")
+	db_pass = config.get("Alfr3d DB", "password")
 
 	weatherData = None
 
