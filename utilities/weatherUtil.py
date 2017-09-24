@@ -35,6 +35,7 @@ import urllib										# used to make calls to www
 import os											# used to allow execution of system level commands
 import math											# used to round numbers
 import logging										# needed for useful logs
+import stocket
 import ConfigParser
 from time import gmtime, strftime, localtime		# needed to obtain time
 from speak import speakString
@@ -50,6 +51,9 @@ formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(messag
 handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/weather.log"))
 handler.setFormatter(formatter)
 logger.addHandler(handler)
+
+db_user = config.get("Alfr3d DB", "user")
+db_pass = config.get("Alfr3d DB", "password")
 
 def getWeather(city="Toronto",country="CA"):
 	"""
@@ -83,8 +87,26 @@ def getWeather(city="Toronto",country="CA"):
 	logger.info("Today's High:                   "+str(KtoC(weatherData['main']['temp_max'])))
 	logger.info("Description:                    "+str(weatherData['weather'][0]['description']))
 	logger.info("Current Temperature:            "+str(KtoC(weatherData['main']['temp'])))
+	ligger.info("Sunrise:                        "+str(time.strftime('%H:%M', time.localtime(weatherData['sunrise'])))
+	ligger.info("Sunset:                         "+str(time.strftime('%H:%M', time.localtime(weatherData['sunset'])))
 
 	logger.info("Parsed weather data\n")
+
+	# Initialize the database
+	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
+	client.Alfr3d_DB.authenticate(db_user,db_pass)
+	db = client['Alfr3d_DB']
+	collection_env = db['environment']	
+
+	logger.info("Updating weather data in DB")
+	collection_env.update({"name":socket.gethostname()},{"$set":{
+						   "weather":{
+							   "sunrise":str(time.strftime('%H:%M', time.localtime(weatherData['sunrise']))),
+							   "sunset":str(time.strftime('%H:%M', time.localtime(weatherData['sunset']))),
+							   "todays_high":str(KtoC(weatherData['main']['temp_max'])),
+							   "todays_low":str(KtoC(weatherData['main']['temp_min']))}
+						   }})
+
 
 	# Subjective weather 
 	badDay = []

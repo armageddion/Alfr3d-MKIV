@@ -36,6 +36,7 @@ import time
 import os										# used to allow execution of system level commands
 import re
 import sys
+import socket
 import schedule									# 3rd party lib used for alarm clock managment. 
 import ConfigParser								# used to parse alfr3ddaemon.conf
 from pymongo import MongoClient					# database link 
@@ -55,8 +56,12 @@ import reporting
 os.system('sudo mkdir -p /var/run/alfr3ddaemon')
 #os.system('sudo chown alfr3d:alfr3d /var/run/alfr3ddaemon')
 
-# Initialize configuration parser
+# load up all the configs
 config = ConfigParser.RawConfigParser()
+config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
+# get main DB credentials
+db_user = config.get("Alfr3d DB", "user")
+db_pass = config.get("Alfr3d DB", "password")
 
 # gmail unread count
 unread_Count = 0
@@ -120,6 +125,16 @@ class MyDaemon(Daemon):
 				logger.error("Traceback: "+str(e))	
 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+				block to operate lights after dark 
+			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+			try:
+				logger.info("is it time for nightlight?")
+				self.nightlight()
+			except Exception, e:
+				logger.error("Failed to complete the nightlight block")
+				logger.error("Traceback: "+str(e))					
+
+			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 			blocks to check only if armageddion is at home
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 			owner = utilities.User()
@@ -137,7 +152,6 @@ class MyDaemon(Daemon):
 					logger.error("Failed to complete the quip block")
 					logger.error("Traceback: "+str(e))
 
-
 				"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 					Block to check unread emails (gMail)
 				"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -146,7 +160,7 @@ class MyDaemon(Daemon):
 					self.checkGmail()
 				except Exception, e:
 					logger.error("Failed to check Gmail")
-					logger.error("Traceback: "+str(e))	
+					logger.error("Traceback: "+str(e))				
 
 				"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 					Run morning alarm
@@ -225,6 +239,32 @@ class MyDaemon(Daemon):
 				pick a random song from current weather category and play it
 		"""
 		logger.info("playing a tune")
+
+	def nightlight(self):
+		"""
+			Description:
+				is anyone at home?
+				it it after dark? 
+				turn the lights on or off as needed. 
+		"""		
+client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
+client.Alfr3d_DB.authenticate(db_user,db_pass)
+db = client['Alfr3d_DB']	
+
+usersCollection = db['users']
+envCollection = db['environment']
+
+usercount = usersCollection.count({"$and":[
+										{"state":"online"},
+										{"location.name":socket.gethostname()}
+									]})
+if usercount < 2:  # note: alfr3d is a user
+	logger.info("no need to turn on the lights just for alfr3d")
+	return
+
+env = envCollection.find_one({"name":socket.gethostname()})
+sunset = env['weather']['sunset']
+print sunset
 
 def init_daemon():
 	utilities.speakString("Initializing systems check")

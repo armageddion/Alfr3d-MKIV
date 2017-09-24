@@ -192,7 +192,7 @@ def water_flowers(timeout):
 
 @route('/lights/<command>')
 def lights(command):
-	logger.info("Received request to command the lights"+str(command))
+	logger.info("Received request to command the lights "+str(command))
 	if command == "off":
 		utilities.lighting_off()
 		return "lighting command processed"
