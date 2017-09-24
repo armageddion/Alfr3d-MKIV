@@ -299,6 +299,22 @@ def nighttime_auto():
 		lighting_off()
 		return
 
+	lifx_token = config.get("Lifx", "token")
+
+	headers = {"Authorization": "Bearer %s" % lifx_token,}
+	response = requests.get('https://api.lifx.com/v1/lights/all', headers=headers)
+	if response.status_code != 200:
+		logger.error("failed to authenticate with Lifx subsystems")
+	else:
+		logger.info("successfully authenticated with Lifx subsystems")
+		for bulb in response.json():
+			bulb_label = bulb[u'label']
+			if bulb[u'connected'] != True:
+				logger.warn("bulb "+str(bulb_label)+" is not online")
+			else:
+				response = requests.put('https://api.lifx.com/v1/lights/label:'+bulb_label+'/state', data={"power": "on"}, headers=headers)
+				if response.json()[u'results'][0][u'status'] != u'ok':
+					logger.error("failed to turn on the bulb "+str(bulb_label))	
 
 # purely for testing purposes
 if __name__ == "__main__":	
