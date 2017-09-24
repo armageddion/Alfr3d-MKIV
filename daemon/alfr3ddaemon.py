@@ -247,24 +247,31 @@ class MyDaemon(Daemon):
 				it it after dark? 
 				turn the lights on or off as needed. 
 		"""		
-client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
-client.Alfr3d_DB.authenticate(db_user,db_pass)
-db = client['Alfr3d_DB']	
+		client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
+		client.Alfr3d_DB.authenticate(db_user,db_pass)
+		db = client['Alfr3d_DB']	
 
-usersCollection = db['users']
-envCollection = db['environment']
+		usersCollection = db['users']
+		envCollection = db['environment']
 
-usercount = usersCollection.count({"$and":[
-										{"state":"online"},
-										{"location.name":socket.gethostname()}
-									]})
-if usercount < 2:  # note: alfr3d is a user
-	logger.info("no need to turn on the lights just for alfr3d")
-	return
+		usercount = usersCollection.count({"$and":[
+												{"state":"online"},
+												{"location.name":socket.gethostname()}
+											]})
+		if usercount < 2:  # note: alfr3d is a user
+			logger.info("no need to turn on the lights just for alfr3d")
+			return
 
-env = envCollection.find_one({"name":socket.gethostname()})
-sunset = env['weather']['sunset']
-print sunset
+		env = envCollection.find_one({"name":socket.gethostname()})
+		try:
+			sunset = env['weather']['sunset']
+			print sunset
+			if time.time() < sunset:
+				logger.info("sun hasnt set yet")
+				return
+		except Exception, e:
+			logger.error("Failed to find out the time of sunset")
+			logger.error("Traceback: "+str(e))						
 
 def init_daemon():
 	utilities.speakString("Initializing systems check")

@@ -101,8 +101,8 @@ def getWeather(city="Toronto",country="CA"):
 	logger.info("Updating weather data in DB")
 	collection_env.update({"name":socket.gethostname()},{"$set":{
 						   "weather":{
-							   "sunrise":str(time.strftime('%H:%M', time.localtime(weatherData['sunrise']))),
-							   "sunset":str(time.strftime('%H:%M', time.localtime(weatherData['sunset']))),
+							   "sunrise":str(weatherData['sunrise']),
+							   "sunset":str(weatherData['sunset']),
 							   "todays_high":str(KtoC(weatherData['main']['temp_max'])),
 							   "todays_low":str(KtoC(weatherData['main']['temp_min']))}
 						   }})
