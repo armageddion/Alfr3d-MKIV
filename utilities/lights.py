@@ -33,6 +33,7 @@ This file is used for all lighting functions.
 import os
 import json
 import time
+import datetime
 import logging
 import socket
 import requests			
@@ -282,15 +283,16 @@ def nighttime_auto():
 	env = envCollection.find_one({"name":socket.gethostname()})
 	try:
 		sunset = env['weather']['sunset']
+		sunset_time = datetime.datetime.now().replace(hour=int(time.strftime('%H',time.localtime(sunset))), minute=int(time.strftime("%M",time.localtime(sunset))))
 	except Exception, e:
 		logger.error("Failed to find out the time of sunset")
 		logger.error("Traceback: "+str(e))						
 		return
 
-	if time.time() < sunset:
+	if datetime.datetime.now() < sunset:
 		logger.info("sun hasnt set yet")
 		return
-	if int(time.strftime("%H", time.localtime()))>22:
+	if datetime.datetime.now()>22:
 		logger.info("time for you to go to bed... turning off the lights")
 		lighting_off()
 		return
