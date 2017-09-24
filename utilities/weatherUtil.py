@@ -87,8 +87,8 @@ def getWeather(city="Toronto",country="CA"):
 	logger.info("Today's High:                   "+str(KtoC(weatherData['main']['temp_max'])))
 	logger.info("Description:                    "+str(weatherData['weather'][0]['description']))
 	logger.info("Current Temperature:            "+str(KtoC(weatherData['main']['temp'])))
-	logger.info("Sunrise:                        "+str(time.strftime('%H:%M', time.localtime(weatherData['sunrise']))))
-	logger.info("Sunset:                         "+str(time.strftime('%H:%M', time.localtime(weatherData['sunset']))))
+	logger.info("Sunrise:                        "+str(strftime('%H:%M', localtime(weatherData['sunrise']))))
+	logger.info("Sunset:                         "+str(strftime('%H:%M', localtime(weatherData['sunset']))))
 
 	logger.info("Parsed weather data\n")
 
