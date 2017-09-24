@@ -261,7 +261,11 @@ class User:
 				 	#speak welcome
 				 	speakWelcome(user['name'], time() - float(self.last_online))
 				 	for i in range(len(pb)):
-					 	pb[i].push_note("Alfr3d", user['name']+" just came online")
+				 		try:
+						 	pb[i].push_note("Alfr3d", user['name']+" just came online")
+						except Exception, e:
+							logger.error("Failed to send pushbullet")
+							logger.error("Traceback: "+str(e))							 
 				usersCollection.update({"name":user['name']},{"$set":{'state':'online',	"location":{
 																		   "name":cur_env['name'],
 																		   "city":cur_env['city'],
@@ -271,7 +275,11 @@ class User:
 				if self.state == "online":
 					logger.info(user['name']+" went offline")
 					for i in range(len(pb)):
-						pb[i].push_note("Alfr3d", user['name']+" went offline")
+						try:
+							pb[i].push_note("Alfr3d", user['name']+" went offline")
+						except Exception, e:
+							logger.error("Failed to send pushbullet")
+							logger.error("Traceback: "+str(e))	
 				usersCollection.update({"name":user['name']},{"$set":{'state':'offline'}})	
 
 		return True
