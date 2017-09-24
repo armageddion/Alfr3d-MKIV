@@ -258,7 +258,11 @@ def lighting_on():
 			headers = {"Authorization": "Bearer %s" % lifx_token,}
 			response = requests.put('https://api.lifx.com/v1/lights/label:'+bulb_label+'/state', data={"power": "on"}, headers=headers)
 			if response.json()[u'results'][0][u'status'] != u'ok':
-				logger.error("failed to turn off the bulb "+str(bulb_label))				
+				logger.error("failed to turn off the bulb "+str(bulb_label))
+
+
+def nighttime_auto():
+
 
 # purely for testing purposes
 if __name__ == "__main__":	
