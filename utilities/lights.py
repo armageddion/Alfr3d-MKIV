@@ -262,7 +262,7 @@ def lighting_on():
 
 
 def nighttime_auto():
-
+	logger.info("entering nightlight mode")
 
 # purely for testing purposes
 if __name__ == "__main__":	
