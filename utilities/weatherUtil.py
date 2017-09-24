@@ -35,7 +35,7 @@ import urllib										# used to make calls to www
 import os											# used to allow execution of system level commands
 import math											# used to round numbers
 import logging										# needed for useful logs
-import stocket
+import socket
 import ConfigParser
 from time import gmtime, strftime, localtime		# needed to obtain time
 from speak import speakString
