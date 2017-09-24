@@ -265,13 +265,20 @@ class MyDaemon(Daemon):
 		env = envCollection.find_one({"name":socket.gethostname()})
 		try:
 			sunset = env['weather']['sunset']
-			print sunset
-			if time.time() < sunset:
-				logger.info("sun hasnt set yet")
-				return
 		except Exception, e:
 			logger.error("Failed to find out the time of sunset")
 			logger.error("Traceback: "+str(e))						
+			return
+
+		if time.time() < sunset:
+			logger.info("sun hasnt set yet")
+			return
+		if int(time.strftime("%H", time.localtime()))>22:
+			logger.info("time for you to go to bed... turning off the lights")
+			utilities.lighting_off()
+			return
+
+		utilities.nighttime_auto()
 
 def init_daemon():
 	utilities.speakString("Initializing systems check")
