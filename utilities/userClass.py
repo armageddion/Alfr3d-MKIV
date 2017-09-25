@@ -265,7 +265,7 @@ class User:
 						 	pb[i].push_note("Alfr3d", user['name']+" just came online")
 						except Exception, e:
 							logger.error("Failed to send pushbullet")
-							logger.error("Traceback: "+str(e))							 
+							#logger.error("Traceback: "+str(e))							 
 				usersCollection.update({"name":user['name']},{"$set":{'state':'online',	"location":{
 																		   "name":cur_env['name'],
 																		   "city":cur_env['city'],
@@ -279,7 +279,7 @@ class User:
 							pb[i].push_note("Alfr3d", user['name']+" went offline")
 						except Exception, e:
 							logger.error("Failed to send pushbullet")
-							logger.error("Traceback: "+str(e))	
+							#logger.error("Traceback: "+str(e))	
 				usersCollection.update({"name":user['name']},{"$set":{'state':'offline'}})	
 
 		return True

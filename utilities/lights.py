@@ -278,6 +278,7 @@ def nighttime_auto():
 										]})
 	if usercount < 2:  # note: alfr3d is a user
 		logger.info("no need to turn on the lights just for alfr3d")
+		lighting_off()
 		return
 
 	env = envCollection.find_one({"name":socket.gethostname()})
@@ -291,7 +292,7 @@ def nighttime_auto():
 		logger.error("Traceback: "+str(e))						
 		return
 
-	if datetime.datetime.now() < sunset_time:
+	if datetime.datetime.now() < sunset_time.replace(minute=sunset_time.minute+30):
 		logger.info("sun hasnt set yet")
 		return
 	if datetime.datetime.now().hour > 22:
