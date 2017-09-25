@@ -295,7 +295,7 @@ def nighttime_auto():
 	if datetime.datetime.now() < sunset_time:
 		logger.info("sun hasnt set yet")
 		return
-	if datetime.datetime.now().hour > 22:
+	if datetime.datetime.now().hour >= 22:
 		logger.info("time for you to go to bed... turning off the lights")
 		lighting_off()
 		return
