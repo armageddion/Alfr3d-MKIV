@@ -292,7 +292,7 @@ def nighttime_auto():
 		logger.error("Traceback: "+str(e))						
 		return
 
-	if datetime.datetime.now() < sunset_time.replace(minute=sunset_time.minute+30):
+	if datetime.datetime.now() < sunset_time:
 		logger.info("sun hasnt set yet")
 		return
 	if datetime.datetime.now().hour > 22:
