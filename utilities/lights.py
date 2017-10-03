@@ -41,6 +41,8 @@ import ConfigParser
 from qhue import Bridge
 from pymongo import MongoClient
 
+import morningAlarm
+
 # current path from which python is executed
 CURRENT_PATH = os.path.dirname(__file__)
 
@@ -295,8 +297,9 @@ def nighttime_auto():
 	if datetime.datetime.now() < sunset_time:
 		logger.info("sun hasnt set yet")
 		return
-	if datetime.datetime.now().hour >= 22:
+	if datetime.datetime.now().hour >= 23:
 		logger.info("time for you to go to bed... turning off the lights")
+		morningAlarm.morningAlarm()
 		lighting_off()
 		return
 
