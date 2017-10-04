@@ -277,6 +277,7 @@ class User:
 			else:
 				if self.state == "online":
 					logger.info(user['name']+" went offline")
+					nighttime_auto()			# this is only useful when alfr3d is left all alone
 					for i in range(len(pb)):
 						try:
 							pb[i].push_note("Alfr3d", user['name']+" went offline")
