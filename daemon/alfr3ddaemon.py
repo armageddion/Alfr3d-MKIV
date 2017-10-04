@@ -84,9 +84,6 @@ handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/total.log"))
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-# schedule morning alarm
-schedule.every().day.at("8:30").do(morningRoutine)
-schedule.every().day.at("23:00").do(bedtimeRoutine)
 
 class MyDaemon(Daemon):		
 	def run(self):
@@ -349,6 +346,18 @@ def init_daemon():
 	except Exception, e:
 		utilities.speakString("Failed to find a source of coffee")
 		logger.error("Failed to complete coffee check")
+		logger.error("Traceback: "+str(e))
+		faults+=1												# bump up fault counter		
+
+	# set up some routine schedules
+	try: 
+		utilities.speakString("Setting up scheduled routines")
+		logger.info("Setting up scheduled routines")		
+		schedule.every().day.at("8:30").do(morningRoutine)
+		schedule.every().day.at("23:00").do(bedtimeRoutine)
+	except Exception, e:
+		utilities.speakString("Failed to set schedules")
+		logger.error("Failed to set schedules")
 		logger.error("Traceback: "+str(e))
 		faults+=1												# bump up fault counter		
 
