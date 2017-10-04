@@ -194,10 +194,10 @@ def water_flowers(timeout):
 def lights(command):
 	logger.info("Received request to command the lights "+str(command))
 	if command == "off":
-		utilities.lighting_off()
+		utilities.lightingOff()
 		return "lighting command processed"
 	elif command == "on":
-		utilities.lighting_on()
+		utilities.lightingOn()
 		return "lighting command processed"
 	else:
 		return "failed to process lighting command"

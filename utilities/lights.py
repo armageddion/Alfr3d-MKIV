@@ -280,7 +280,7 @@ def nighttime_auto():
 										]})
 	if usercount < 2:  # note: alfr3d is a user
 		logger.info("no need to turn on the lights just for alfr3d")
-		lighting_off()
+		lightingOff()
 		return
 
 	env = envCollection.find_one({"name":socket.gethostname()})

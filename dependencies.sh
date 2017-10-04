@@ -38,3 +38,6 @@ sudo pip install psutil
 
 #echo "installing Spotipy"
 #sudo pip install spotipy
+
+echo "installing pychromecast"
+sudo pip install pychromecast

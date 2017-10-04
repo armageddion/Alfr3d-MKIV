@@ -39,6 +39,7 @@ from random import randint
 import speak
 import location
 import weatherUtil
+import audio
 
 # current path from which python is executed
 CURRENT_PATH = os.path.dirname(__file__)
@@ -56,10 +57,11 @@ def morningAlarm():
 		Description:
 			morning alarm function.
 	"""
-	logger.info("Time to ring morning alarm")
+	logger.info("Time to ring alarm")
 	try:
 		speak.speakGreeting()
 		if (time.strftime("%p",time.localtime()) == "AM"):
+			logger.info("Good Morning!")
 			speak.speakString("your time to rest has come to an end")
 			speak.speakTime()
 			speak.speakDate()
@@ -70,9 +72,13 @@ def morningAlarm():
 			unread_count = speak.getUnreadCount()
 			if unread_count > 1:
 				speak.speakString("While you were sleeping "+str(unread_count)+" emails flooded your inbox")
+			
+			audio.playMorningMedia()
+
 			return
 
 		else:
+			logger.info("Bed time, maybe?")
 			speak.speakTime()
 
 			quips = [

@@ -3,7 +3,7 @@
 """
 This file is used for all lighting functions.
 """
-# Copyright (c) 2010-2016 LiTtl3.1 Industries (LiTtl3.1).
+# Copyright (c) 2010-2017 LiTtl3.1 Industries (LiTtl3.1).
 # All rights reserved.
 # This source code and any compilation or derivative thereof is the
 # proprietary information of LiTtl3.1 Industries and is
@@ -37,6 +37,7 @@ import logging
 import socket
 import ConfigParser
 import soundcloud					# soundcloud api
+import pychromecast					# cast music to chromecast
 from qhue import Bridge
 from pymongo import MongoClient
 
@@ -85,6 +86,15 @@ def sc_check():
 
 def play():
 	os.system('omxplayer -o local '+os.path.join(CURRENT_PATH,'../tmp/audio.mp3'))
+
+
+def playMorningMedia():
+	# time to make chromecast do some work
+	chromecasts = pychromecast.get_chromecasts()
+	cast = next(cc for cc in chromecasts if cc.device.friendly_name == "ArmageddionCast")
+	cast.wait()
+	media_controller = cast.media_controller
+	media_controller.play_media("""insert media here""", 'video/mp4')	
 
 # purely for testing purposes
 if __name__ == "__main__":	
