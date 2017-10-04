@@ -299,7 +299,7 @@ def nighttime_auto():
 		return
 	if datetime.datetime.now().hour >= 23:
 		logger.info("time for you to go to bed... turning off the lights")
-		morningAlarm.morningAlarm()
+		#morningAlarm.morningAlarm()
 		lighting_off()
 		return
 

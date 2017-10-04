@@ -82,6 +82,7 @@ logger.addHandler(handler)
 
 # schedule morning alarm
 schedule.every().day.at("8:30").do(utilities.morningAlarm)
+#schedule.every().day.at("23:00").do(utilities.nighttime_auto())
 
 class MyDaemon(Daemon):		
 	def run(self):
@@ -258,8 +259,8 @@ def init_daemon():
 		logger.info("Running a geoscan")
 		ret = utilities.getLocation("freegeoip")
 		if not ret[0]:
-			raise Exception("geoscan failed")
-		utilities.speakString("geo scan complete")
+			raise Exception("Geo scan failed")
+		utilities.speakString("Geo scan complete")
 	except Exception, e:
 		utilities.speakString("Failed to complete geo scan")
 		logger.error("Failed to complete geoscan scan")
