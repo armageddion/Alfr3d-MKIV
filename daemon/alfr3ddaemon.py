@@ -160,7 +160,7 @@ class MyDaemon(Daemon):
 				try:
 					schedule.run_pending()
 				except Exception, e:
-					logger.error("Failed to check the morning alarm schedule")
+					logger.error("Failed to check the scheduled jobs")
 					logger.error("Traceback: "+str(e))
 
 
@@ -274,7 +274,7 @@ def morningRoutine():
 		return
 
 	try:
-		schedule.every().day().at(str(sunset_time.hour)+":"+str(sunset_time.minute)).do(sunsetRoutine).tag("sunset-routine")
+		schedule.every().day.at(str(sunset_time.hour)+":"+str(sunset_time.minute)).do(sunsetRoutine).tag("sunset-routine")
 	except Exception, e:
 		logger.error("Failed to create sunset schedule")
 		logger.error("Traceback: "+str(e))						
