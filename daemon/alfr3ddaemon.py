@@ -138,7 +138,7 @@ class MyDaemon(Daemon):
 					block to blur out quips once in a while 
 				"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 				try:
-					logger.info("is it time for a smartass quip?")
+					logger.info("Is it time for a smartass quip?")
 					self.beSmart()
 				except Exception, e:
 					logger.error("Failed to complete the quip block")
@@ -158,6 +158,7 @@ class MyDaemon(Daemon):
 					Run morning alarm
 				"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""				
 				try:
+					logger.info("Checking on scheduled jobs")
 					schedule.run_pending()
 				except Exception, e:
 					logger.error("Failed to check the scheduled jobs")
