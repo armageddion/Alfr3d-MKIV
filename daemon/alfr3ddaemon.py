@@ -38,6 +38,7 @@ import re
 import sys
 import socket
 import schedule									# 3rd party lib used for alarm clock managment. 
+import datetime									
 import ConfigParser								# used to parse alfr3ddaemon.conf
 from pymongo import MongoClient					# database link 
 from threading import Thread
@@ -67,6 +68,9 @@ db_pass = config.get("Alfr3d DB", "password")
 unread_Count = 0
 unread_Count_new = 0
 
+# time of sunset
+sunset_time = datetime.datetime.now().replace(hour=19, minute=0)	
+
 # various counters to be used for pacing spreadout functions
 quipStartTime = time.time()
 waittime_quip = randint(5,10)
@@ -81,8 +85,8 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 # schedule morning alarm
-schedule.every().day.at("8:30").do(utilities.morningAlarm)
-#schedule.every().day.at("23:00").do(utilities.nighttime_auto())
+schedule.every().day.at("8:30").do(morningRoutine)
+schedule.every().day.at("23:00").do(bedtimeRoutine)
 
 class MyDaemon(Daemon):		
 	def run(self):
@@ -123,16 +127,6 @@ class MyDaemon(Daemon):
 				reporting.sendReport()
 			except Exception, e:
 				logger.error("Failed to send report")
-				logger.error("Traceback: "+str(e))	
-
-			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-				block to operate lights after dark 
-			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-			try:
-				logger.info("is it time for nightlight?")
-				self.nightlight()
-			except Exception, e:
-				logger.error("Failed to complete the nightlight block")
 				logger.error("Traceback: "+str(e))					
 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -250,8 +244,75 @@ class MyDaemon(Daemon):
 		"""		
 		utilities.nighttime_auto()
 
+def morningRoutine():
+	"""
+		Description:
+			perform morning routine - ring alarm, speak weather, check email, etc..
+	"""	
+	logger.info("Time for morning routine")
+
+	# ring morning alarm
+	logger.info("Morning Alarm")
+	utilities.morningAlarm()
+
+	# check time of sunset and schedule evening lighting
+	logger.info("Getting sunset data")
+	global sunset_time
+
+	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
+	client.Alfr3d_DB.authenticate(db_user,db_pass)
+	db = client['Alfr3d_DB']	
+
+	envCollection = db['environment']
+
+	env = envCollection.find_one({"name":socket.gethostname()})
+	try:
+		sunset = int(env['weather']['sunset'])
+		sunset_time = datetime.datetime.now().replace(hour=int(time.strftime('%H',time.localtime(sunset))), 
+													  minute=int(time.strftime("%M",time.localtime(sunset)))
+													  	)	
+	except Exception, e:
+		logger.error("Failed to find out the time of sunset")
+		logger.error("Traceback: "+str(e))						
+		return
+
+	try:
+		schedule.every().day().at(str(sunset_time.hour)+":"+str(sunset_time.minute)).do(sunsetRoutine).tag("sunset-routine")
+	except Exception, e:
+		logger.error("Failed to create sunset schedule")
+		logger.error("Traceback: "+str(e))						
+		return
+
+def sunsetRoutine():
+	"""
+		Description:
+			routine to perform at sunset - turn on ambient lights
+	"""
+	logger.info("Time for sunset routine")
+	utilities.nighttime_auto()
+
+	return schedule.CancelJob
+	# if above fails try:
+	#schedule.clear('sunset-routine')
+	#return
+
+def bedtimeRoutine():
+	"""
+		Description:
+			routine to perform at bedtime - turn on ambient lights
+	"""
+	logger.info("Bedtime")
+	utilities.lightingOff()
+	utilities.morningAlarm()
+
 def init_daemon():
+	"""
+		Description:
+			initialize alfr3d services 
+	"""
 	utilities.speakString("Initializing systems check")
+
+	faults = 0
 	
 	# initial geo check
 	try:
@@ -261,10 +322,11 @@ def init_daemon():
 		if not ret[0]:
 			raise Exception("Geo scan failed")
 		utilities.speakString("Geo scan complete")
-	except Exception, e:
+	except Exception, e:		
 		utilities.speakString("Failed to complete geo scan")
 		logger.error("Failed to complete geoscan scan")
 		logger.error("Traceback: "+str(e))			
+		faults+=1												# bump up fault counter
 	
 	#initial lighting check
 	try:
@@ -276,6 +338,7 @@ def init_daemon():
 		utilities.speakString("Failed to complete lighting check")
 		logger.error("Failed to complete lighting check")
 		logger.error("Traceback: "+str(e))
+		faults+=1												# bump up fault counter		
 
 	#initial coffee check
 	try:
@@ -287,8 +350,10 @@ def init_daemon():
 		utilities.speakString("Failed to find a source of coffee")
 		logger.error("Failed to complete coffee check")
 		logger.error("Traceback: "+str(e))
+		faults+=1												# bump up fault counter		
 
 	utilities.speakString("Systems check complete")
+	return faults
 
 if __name__ == "__main__":
 	daemon = MyDaemon('/var/run/alfr3ddaemon/alfr3ddaemon.pid',stderr='/dev/null')
@@ -296,9 +361,14 @@ if __name__ == "__main__":
 	if len(sys.argv) == 2:
 		if 'start' == sys.argv[1]:
 			logger.info("Alfr3d Daemon initializing")
-			init_daemon()
+			faults = init_daemon()
 			logger.info("Alfr3d Daemon starting...")
-			utilities.speakString("All systems are up and operational")
+			if faults != 0:
+				utilities.speakString("Some faults were detected but system started successfully")
+				utilities.speakString("Total number of faults is "+str(faults))
+			else:
+				utilities.speakString("All systems are up and operational")
+			morningRoutine()
 			daemon.start()
 		elif 'stop' == sys.argv[1]:
 			logger.info("Alfr3d Daemon stopping...")			

@@ -113,9 +113,9 @@ def arduino(command):
 	logger.info("Received request: /arduino/"+command)
 
 	if command == "LightsOn":
-		utilities.lighting_on()
+		utilities.lightingOn()
 	elif command == "LightsOff":
-		utilities.lighting_off()
+		utilities.lightingOff()
 	else:
 		arduino = utilities.Arduino()
 		logger.info("Connecting to Arduino")

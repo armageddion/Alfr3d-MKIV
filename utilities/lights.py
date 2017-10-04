@@ -176,7 +176,7 @@ def lightingInit():
 			### TODO
 
 # turns all hue lights off
-def lighting_off():
+def lightingOff():
 	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
 	client.Alfr3d_DB.authenticate(db_user,db_pass)
 	db = client['Alfr3d_DB']
@@ -220,7 +220,7 @@ def lighting_off():
 				logger.error("failed to turn off the bulb "+str(bulb_label))			
 
 # turns all hue lights off
-def lighting_on():
+def lightingOn():
 	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
 	client.Alfr3d_DB.authenticate(db_user,db_pass)
 	db = client['Alfr3d_DB']
@@ -296,11 +296,6 @@ def nighttime_auto():
 
 	if datetime.datetime.now() < sunset_time:
 		logger.info("sun hasnt set yet")
-		return
-	if datetime.datetime.now().hour >= 23:
-		logger.info("time for you to go to bed... turning off the lights")
-		#morningAlarm.morningAlarm()
-		lighting_off()
 		return
 
 	lifx_token = config.get("Lifx", "token")

@@ -48,6 +48,7 @@ from time import time
 
 from deviceClass import Device
 from speak import speakWelcome
+from lights import nighttime_auto
 
 # we'll want to send notifications to me
 from pushbullet import Pushbullet
@@ -258,7 +259,9 @@ class User:
 			if time() - float(last_online) < 300:	#10 minutes...
 				if self.state == "offline":
 					logger.info(user['name']+" just came online")
-				 	#speak welcome
+					# welcome the user
+					nighttime_auto()	# turn on the lights
+				 	# speak welcome
 				 	speakWelcome(user['name'], time() - float(self.last_online))
 				 	for i in range(len(pb)):
 				 		try:
