@@ -260,7 +260,6 @@ class User:
 				if self.state == "offline":
 					logger.info(user['name']+" just came online")
 					# welcome the user
-					nighttime_auto()	# turn on the lights
 				 	# speak welcome
 				 	speakWelcome(user['name'], time() - float(self.last_online))
 				 	for i in range(len(pb)):
@@ -274,10 +273,11 @@ class User:
 																		   "city":cur_env['city'],
 																		   "state":cur_env['state'],
 																		   "country":cur_env['country']}}})
+				nighttime_auto()	# turn on the lights
+				
 			else:
 				if self.state == "online":
 					logger.info(user['name']+" went offline")
-					nighttime_auto()			# this is only useful when alfr3d is left all alone
 					for i in range(len(pb)):
 						try:
 							pb[i].push_note("Alfr3d", user['name']+" went offline")
@@ -285,5 +285,6 @@ class User:
 							logger.error("Failed to send pushbullet")
 							#logger.error("Traceback: "+str(e))	
 				usersCollection.update({"name":user['name']},{"$set":{'state':'offline'}})	
+				nighttime_auto()			# this is only useful when alfr3d is left all alone
 
 		return True
