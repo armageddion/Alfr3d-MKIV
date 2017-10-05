@@ -260,6 +260,12 @@ class User:
 				if self.state == "offline":
 					logger.info(user['name']+" just came online")
 					# welcome the user
+					usersCollection.update({"name":user['name']},{"$set":{'state':'online',	"location":{
+																			   "name":cur_env['name'],
+																			   "city":cur_env['city'],
+																			   "state":cur_env['state'],
+																			   "country":cur_env['country']}}})
+					nighttime_auto()	# turn on the lights
 				 	# speak welcome
 				 	speakWelcome(user['name'], time() - float(self.last_online))
 				 	for i in range(len(pb)):
@@ -267,24 +273,26 @@ class User:
 						 	pb[i].push_note("Alfr3d", user['name']+" just came online")
 						except Exception, e:
 							logger.error("Failed to send pushbullet")
-							#logger.error("Traceback: "+str(e))							 
-				usersCollection.update({"name":user['name']},{"$set":{'state':'online',	"location":{
-																		   "name":cur_env['name'],
-																		   "city":cur_env['city'],
-																		   "state":cur_env['state'],
-																		   "country":cur_env['country']}}})
-				nighttime_auto()	# turn on the lights
+							#logger.error("Traceback: "+str(e))
+				else:
+					usersCollection.update({"name":user['name']},{"$set":{'state':'online',	"location":{
+																			   "name":cur_env['name'],
+																			   "city":cur_env['city'],
+																			   "state":cur_env['state'],
+																			   "country":cur_env['country']}}})					
 				
 			else:
 				if self.state == "online":
 					logger.info(user['name']+" went offline")
+					usersCollection.update({"name":user['name']},{"$set":{'state':'offline'}})	
+					nighttime_auto()			# this is only useful when alfr3d is left all alone
 					for i in range(len(pb)):
 						try:
 							pb[i].push_note("Alfr3d", user['name']+" went offline")
 						except Exception, e:
 							logger.error("Failed to send pushbullet")
 							#logger.error("Traceback: "+str(e))	
-				usersCollection.update({"name":user['name']},{"$set":{'state':'offline'}})	
-				nighttime_auto()			# this is only useful when alfr3d is left all alone
+				else:
+					usersCollection.update({"name":user['name']},{"$set":{'state':'offline'}})	
 
 		return True

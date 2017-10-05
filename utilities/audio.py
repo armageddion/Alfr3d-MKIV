@@ -94,7 +94,8 @@ def playMorningMedia():
 	cast = next(cc for cc in chromecasts if cc.device.friendly_name == "ArmageddionCast")
 	cast.wait()
 	media_controller = cast.media_controller
-	media_controller.play_media("""insert media here""", 'video/mp4')	
+	# stream comes from here http://www.181.fm/?p=mp3links
+	media_controller.play_media("http://listen.181fm.com/181-breeze_128k.mp3", 'audio/mp3')	
 
 # purely for testing purposes
 if __name__ == "__main__":	
