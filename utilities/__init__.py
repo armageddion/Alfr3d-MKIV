@@ -17,7 +17,7 @@ from speak import *
 from userClass import *
 from weatherUtil import *
 from lights import *
-from morningAlarm import *
+from alarm import *
 from music import *
 from coffee import *
 from audio import *

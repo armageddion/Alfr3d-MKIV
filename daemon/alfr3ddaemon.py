@@ -239,8 +239,23 @@ class MyDaemon(Daemon):
 				is anyone at home?
 				it it after dark? 
 				turn the lights on or off as needed. 
-		"""		
+		"""	
 		utilities.nighttime_auto()
+
+def sunriseRoutine():
+	"""
+		Description:
+			sunset routine - perform this routine 30 minutes before sunrise
+			giving the users time to go see sunrise
+			### TO DO - figure out scheduling
+	"""		
+	logger.info("Pre-sunrise routine")
+
+	try:
+		utilities.sunriseAlarm()
+	except Exception, e:
+		logger.error("Failed to complete pre-sunrise routine")
+		logger.error("Traceback: "+str(e))						
 
 def morningRoutine():
 	"""
@@ -251,7 +266,11 @@ def morningRoutine():
 
 	# ring morning alarm
 	logger.info("Morning Alarm")
-	utilities.morningAlarm()
+	try:
+		utilities.smartAlarm()
+	except Exception, e:
+		logger.error("Failed to run morning alarm")
+		logger.error("Traceback: "+str(e))			
 
 	# check time of sunset and schedule evening lighting
 	logger.info("Getting sunset data")
@@ -287,7 +306,11 @@ def sunsetRoutine():
 			routine to perform at sunset - turn on ambient lights
 	"""
 	logger.info("Time for sunset routine")
-	utilities.nighttime_auto()
+	try:
+		utilities.nighttime_auto()
+	except Exception, e:
+		logger.error("Failed to complete sunset routine")
+		logger.error("Traceback: "+str(e))			
 
 	return schedule.CancelJob
 	# if above fails try:
@@ -300,8 +323,12 @@ def bedtimeRoutine():
 			routine to perform at bedtime - turn on ambient lights
 	"""
 	logger.info("Bedtime")
-	utilities.lightingOff()
-	utilities.morningAlarm()
+	try:
+		utilities.lightingOff()
+		utilities.smartAlarm()
+	except Exception, e:
+		logger.error("Failed to complete bedtime routine")
+		logger.error("Traceback: "+str(e))			
 
 def init_daemon():
 	"""

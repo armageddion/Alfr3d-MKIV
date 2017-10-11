@@ -41,7 +41,7 @@ import ConfigParser
 from qhue import Bridge
 from pymongo import MongoClient
 
-import morningAlarm
+import alarm
 
 # current path from which python is executed
 CURRENT_PATH = os.path.dirname(__file__)
