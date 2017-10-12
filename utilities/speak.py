@@ -341,6 +341,27 @@ def speakWelcome_guest(user,time_away=0):
 		if ((int(strftime("%H", localtime()))>21) or (int(strftime("%H", localtime()))<5)):
 			speakString("You are just in time for a night cap. ")
 
+def speakError(msg):
+	"""
+		Description:
+			speak out error message
+	"""
+	logger.info("Speaking error message")
+	
+	strToSpeak = ""
+
+	quips = [
+		"Er, there has been a problem sir. ", 
+		"I ran into an issue sir. ",
+		"Forgive me, but."]
+
+	tempint = randint(1, len(quips))
+
+	strToSpeak += quips[tempint-1]
+
+	speakString(strToSpeak)	
+	speakString(msg)
+
 # Main - only really used for testing
 if __name__ == '__main__':
 	speakString()

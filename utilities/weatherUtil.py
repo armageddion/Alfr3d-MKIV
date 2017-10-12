@@ -160,10 +160,10 @@ def getWeather(city="Toronto",country="CA"):
 				greeting += "the wind will seriously ruin your hair"
 
 			if len(badDay[1])>=2 and i < (len(badDay[1])-1):
-				add = [' also ',' and if that isn\'t enough ', ' and to make matters worse ']
+				add = [' , also, ',' , and if that isn\'t enough, ', ' , and to make matters worse, ']
 				greeting += add[randint(0,len(add)-1)]
 			elif len(badDay[1])>2 and i == (len(badDay[1])-1):
-				greeting += " and on top of everything "
+				greeting += " , and on top of everything, "
 			else:
 				logger.info(greeting+"\n")
 		speakString(greeting)		

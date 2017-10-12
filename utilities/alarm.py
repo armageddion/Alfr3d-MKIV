@@ -95,10 +95,7 @@ def smartAlarm():
 
 	else:
 		logger.info("Afternoon Alarm... evening perhaps?")
-		### TO DO
-		# decide when to speak good-night quips and
-		# what to do before it is time to start pushing owner to bed.. 
-		# also probably a good idea to check if owner is at home for this section
+
 		speak.speakTime()
 		if (int(time.strftime("%I", time.localtime()))) > 9:
 			owner = utilities.User()

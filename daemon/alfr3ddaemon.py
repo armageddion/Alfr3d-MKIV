@@ -68,8 +68,9 @@ db_pass = config.get("Alfr3d DB", "password")
 unread_Count = 0
 unread_Count_new = 0
 
-# time of sunset
-sunset_time = datetime.datetime.now().replace(hour=19, minute=0)	
+# time of sunset/sunrise - defaults
+sunset_time = datetime.datetime.now().replace(hour=19, minute=0)
+sunrise_time = datetime.datetime.now().replace(hour=6, minute=30)
 
 # various counters to be used for pacing spreadout functions
 quipStartTime = time.time()
@@ -114,6 +115,7 @@ class MyDaemon(Daemon):
 				utilities.checkLANMembers()
 			except Exception, e:
 				logger.error("Failed to complete network scan")
+				utilities.speakError("I failed to complete the network scan")
 				logger.error("Traceback: "+str(e))			
 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -124,6 +126,7 @@ class MyDaemon(Daemon):
 				reporting.sendReport()
 			except Exception, e:
 				logger.error("Failed to send report")
+				utilities.speakError("I failed to send out status report")
 				logger.error("Traceback: "+str(e))					
 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -142,6 +145,7 @@ class MyDaemon(Daemon):
 					self.beSmart()
 				except Exception, e:
 					logger.error("Failed to complete the quip block")
+					utilities.speakError("I failed in being a smart arse")
 					logger.error("Traceback: "+str(e))
 
 				"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -152,6 +156,7 @@ class MyDaemon(Daemon):
 					self.checkGmail()
 				except Exception, e:
 					logger.error("Failed to check Gmail")
+					utilities.speakError("I have been unable to check your mail")
 					logger.error("Traceback: "+str(e))				
 
 				"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -162,6 +167,7 @@ class MyDaemon(Daemon):
 					schedule.run_pending()
 				except Exception, e:
 					logger.error("Failed to check the scheduled jobs")
+					utilities.speakError("I failed to check your schedule")
 					logger.error("Traceback: "+str(e))
 
 
@@ -176,12 +182,7 @@ class MyDaemon(Daemon):
 		global unread_Count
 		global unread_Count_new
 
-		try:
-			unread_Count_new = utilities.getUnreadCount()
-			logger.info("Gmail check successful")
-		except Exception, e:
-			logger.error("Gmail check failed")
-			logger.error("Traceback "+str(e))
+		unread_Count_new = utilities.getUnreadCount()
 
 		if (unread_Count < unread_Count_new):
 			logger.info("a new email has arrived")
@@ -255,7 +256,12 @@ def sunriseRoutine():
 		utilities.sunriseAlarm()
 	except Exception, e:
 		logger.error("Failed to complete pre-sunrise routine")
-		logger.error("Traceback: "+str(e))						
+		logger.error("Traceback: "+str(e))	
+
+	return schedule.CancelJob
+	# if above fails try:
+	#schedule.clear('sunrise-routine')
+	#return							
 
 def morningRoutine():
 	"""
@@ -328,7 +334,36 @@ def bedtimeRoutine():
 		utilities.smartAlarm()
 	except Exception, e:
 		logger.error("Failed to complete bedtime routine")
-		logger.error("Traceback: "+str(e))			
+		logger.error("Traceback: "+str(e))
+
+	# get sunrise info 
+	# and create a schedule for sunrise activities.. 
+	logger.info("Getting sunrise data")
+	global sunrise_time
+
+	client = MongoClient('mongodb://ec2-52-89-213-104.us-west-2.compute.amazonaws.com:27017/')
+	client.Alfr3d_DB.authenticate(db_user,db_pass)
+	db = client['Alfr3d_DB']	
+
+	envCollection = db['environment']
+
+	env = envCollection.find_one({"name":socket.gethostname()})
+	try:
+		sunrise = int(env['weather']['sunrise'])-30*60 ## sunrise time minus 30 minutes
+		sunrise_time = datetime.datetime.now().replace(hour=int(time.strftime('%H',time.localtime(sunrise))), 
+													  minute=int(time.strftime("%M",time.localtime(sunrise)))
+													  	)	
+	except Exception, e:
+		logger.error("Failed to find out the time of sunrise")
+		logger.error("Traceback: "+str(e))						
+		return
+
+	try:
+		schedule.every().day.at(str(sunrise_time.hour)+":"+str(sunrise_time.minute)).do(sunriseRoutine).tag("sunrise-routine")
+	except Exception, e:
+		logger.error("Failed to create sunrise schedule")
+		logger.error("Traceback: "+str(e))						
+		return					
 
 def init_daemon():
 	"""
