@@ -11,6 +11,7 @@
 from arduinoUtil import *
 from deviceClass import *
 from gmail import *
+from calendar import *
 from guestDetect import *
 from location import *
 from speak import *
