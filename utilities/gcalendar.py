@@ -40,6 +40,7 @@ from oauth2client import tools
 from oauth2client.file import Storage
 
 import datetime
+import time
 
 try:
     import argparse
@@ -53,7 +54,7 @@ SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
 CLIENT_SECRET_FILE = os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),'../conf/client_secret_calendar.json')
 APPLICATION_NAME = 'Alfr3d'
 
-timezone_offset = "-05:00"
+timezone_offset =  str(int(time.strftime('%H',time.localtime()))-int(time.strftime('%H',time.gmtime())))+":00"
 
 def get_credentials():
     """Gets valid user credentials from storage.
