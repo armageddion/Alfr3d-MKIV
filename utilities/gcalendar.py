@@ -106,6 +106,52 @@ def main():
         start = event['start'].get('dateTime', event['start'].get('date'))
         print(start, event['summary'])
 
+def calendar_today():
+    """Shows basic usage of the Google Calendar API.
+
+    Creates a Google Calendar API service object and outputs a list of the next
+    10 events on the user's calendar.
+    """
+    credentials = get_credentials()
+    http = credentials.authorize(httplib2.Http())
+    service = discovery.build('calendar', 'v3', http=http)
+
+    now = datetime.datetime.now().isoformat()
+    midnight = datetime.datetime.now().replace(hour=23,minute=59).isoformat()
+    print('Getting the all remaining events of today')
+    eventsResult = service.events().list(
+        calendarId='primary', timeMin=now, timeMax=midnight, singleEvents=True,
+        orderBy='startTime').execute()
+    events = eventsResult.get('items', [])
+
+    if not events:
+        print('No upcoming events found.')
+    for event in events:
+        start = event['start'].get('dateTime', event['start'].get('date'))
+        print(start, event['summary']) 
+
+def calendar_tomorrow():   
+    credentials = get_credentials()
+    http = credentials.authorize(httplib2.Http())
+    service = discovery.build('calendar', 'v3', http=http)
+
+    tomorrow = datetime.datetime.now().replace(hour=0,minute=0) + datetime.timedelta(days=1)
+    tomorrow_night = tomorrow + datetime.timedelta(hours=23, minutes=59)
+    print('Getting the first event of tomorrow')
+    eventsResult = service.events().list(
+        calendarId='primary', timeMin=tomorrow, maxResults=1, timeMax=tomorrow_night, singleEvents=True,
+        orderBy='startTime').execute()
+    events = eventsResult.get('items', [])
+
+    if not events:
+        print('No upcoming events found.')
+    for event in events:
+        start = event['start'].get('dateTime', event['start'].get('date'))
+        print(start, event['summary']) 
 
 if __name__ == '__main__':
     main()
+    print("\n")
+    calendar_today()
+    print("\n")
+    calendar_tomorrow()
