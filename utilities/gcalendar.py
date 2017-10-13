@@ -53,6 +53,7 @@ SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
 CLIENT_SECRET_FILE = os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),'../conf/client_secret_calendar.json')
 APPLICATION_NAME = 'Alfr3d'
 
+timezone_offset = "-05:00"
 
 def get_credentials():
     """Gets valid user credentials from storage.
@@ -116,8 +117,8 @@ def calendar_today():
     http = credentials.authorize(httplib2.Http())
     service = discovery.build('calendar', 'v3', http=http)
 
-    now = datetime.datetime.now().isoformat()
-    midnight = datetime.datetime.now().replace(hour=23,minute=59).isoformat()
+    now = datetime.datetime.now().isoformat()+timezone_offset
+    midnight = datetime.datetime.now().replace(hour=23,minute=59).isoformat()+timezone_offset
     print('Getting the all remaining events of today')
     eventsResult = service.events().list(
         calendarId='primary', timeMin=now, timeMax=midnight, singleEvents=True,
@@ -137,6 +138,8 @@ def calendar_tomorrow():
 
     tomorrow = datetime.datetime.now().replace(hour=0,minute=0) + datetime.timedelta(days=1)
     tomorrow_night = tomorrow + datetime.timedelta(hours=23, minutes=59)
+    tomorrow = tomorrow.isoformat()+timezone_offset
+    tomorrow_night = tomorrow_night.isoformat()+timezone_offset
     print('Getting the first event of tomorrow')
     eventsResult = service.events().list(
         calendarId='primary', timeMin=tomorrow, maxResults=1, timeMax=tomorrow_night, singleEvents=True,
