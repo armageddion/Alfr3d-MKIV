@@ -50,7 +50,7 @@ except ImportError:
 # If modifying these scopes, delete your previously saved credentials
 # at ~/.credentials/calendar-python-quickstart.json
 SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
-CLIENT_SECRET_FILE = os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),'../conf/client_secret.json')
+CLIENT_SECRET_FILE = os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),'../conf/client_secret_calendar.json')
 APPLICATION_NAME = 'Alfr3d'
 
 
@@ -64,11 +64,12 @@ def get_credentials():
         Credentials, the obtained credential.
     """
     home_dir = os.path.expanduser('~')
-    credential_dir = os.path.join(home_dir, '.credentials')
+    # credential_dir = os.path.join(home_dir, '.credentials')
+    credential_dir = os.path.join(os.path.dirname(__file__),'../conf')
     if not os.path.exists(credential_dir):
         os.makedirs(credential_dir)
     credential_path = os.path.join(credential_dir,
-                                   'calendar-python-quickstart.json')
+                                   'calendar.storage')
 
     store = Storage(credential_path)
     credentials = store.get()
