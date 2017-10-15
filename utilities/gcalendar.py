@@ -80,7 +80,6 @@ def get_credentials():
         os.makedirs(credential_dir)
     credential_path = os.path.join(credential_dir,
                                    'calendar.storage')
-
     store = Storage(credential_path)
     credentials = store.get()
     if not credentials or credentials.invalid:
@@ -149,6 +148,7 @@ def calendar_tomorrow():
     tomorrow_night = tomorrow + datetime.timedelta(hours=23, minutes=59)
     tomorrow = tomorrow.isoformat()+timezone_offset
     tomorrow_night = tomorrow_night.isoformat()+timezone_offset
+    
     print('Getting the first event of tomorrow')
     eventsResult = service.events().list(
         calendarId='primary', timeMin=tomorrow, maxResults=1, timeMax=tomorrow_night, singleEvents=True,
@@ -158,8 +158,12 @@ def calendar_tomorrow():
     if not events:
         print('No upcoming events found.')
     for event in events:
+        print event
         start = event['start'].get('dateTime', event['start'].get('date'))
         print(start, event['summary']) 
+
+        # since there is only one event, we're ok to do this
+        return event
 
 if __name__ == '__main__':
     main()
