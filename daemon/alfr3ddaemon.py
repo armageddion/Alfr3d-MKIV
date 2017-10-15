@@ -59,7 +59,7 @@ os.system('sudo mkdir -p /var/run/alfr3ddaemon')
 
 # load up all the configs
 config = ConfigParser.RawConfigParser()
-config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
+config.read(os.path.join(CURRENT_PATH,'../conf/apikeys.conf'))
 # get main DB credentials
 db_user = config.get("Alfr3d DB", "user")
 db_pass = config.get("Alfr3d DB", "password")
