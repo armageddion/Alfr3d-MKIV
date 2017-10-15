@@ -71,6 +71,7 @@ unread_Count_new = 0
 # time of sunset/sunrise - defaults
 sunset_time = datetime.datetime.now().replace(hour=19, minute=0)
 sunrise_time = datetime.datetime.now().replace(hour=6, minute=30)
+bed_time = datetime.datetime.now().replace(hour=23, minute=00)
 
 # various counters to be used for pacing spreadout functions
 quipStartTime = time.time()
@@ -276,6 +277,7 @@ def morningRoutine():
 		utilities.smartAlarm()
 	except Exception, e:
 		logger.error("Failed to run morning alarm")
+		utilities.speakError("Morning Alarm didn't work too well")
 		logger.error("Traceback: "+str(e))			
 
 	# check time of sunset and schedule evening lighting
@@ -296,15 +298,32 @@ def morningRoutine():
 													  	)	
 	except Exception, e:
 		logger.error("Failed to find out the time of sunset")
+		utilities.speakError("I have no idea when the sun will set")
 		logger.error("Traceback: "+str(e))						
-		return
 
 	try:
 		schedule.every().day.at(str(sunset_time.hour)+":"+str(sunset_time.minute)).do(sunsetRoutine).tag("sunset-routine")
 	except Exception, e:
 		logger.error("Failed to create sunset schedule")
+		utilities.speakError("I haven't been able to create sunset schedule")
 		logger.error("Traceback: "+str(e))						
-		return
+
+	# find out first calendar event tomorrow and schedule bedime
+	logger.info("Getting calendar data for tomorrow")
+	global bed_time
+
+	event_tomorrow = utilities.calendar_tomorrow()
+	event_tomorrow_title = event_tomorrow['summary']
+	event_tomottow_time = datetime.datetime.strptime( ret['start'].get('dateTime').split("T")[1][:-6][:5], '%H:%M') 	# really complicated way to strip the returned date/time into just time and convert into datetime object..
+	
+	bed_time = event_tomottow_timen - datetime.timedelta(hours=9, minutes=0)
+
+	try:
+		schedule.every().day.at(str(bed_time.hour)+":"+str(bed_time.minute)).do(bedtimeRoutine).tag("bedtime-routine")
+	except Exception, e:
+		logger.error("Failed to create bedtime schedule")
+		utilities.speakError("I have been unable to create bedtime schedule")
+		logger.error("Traceback: "+str(e))
 
 def sunsetRoutine():
 	"""
@@ -316,6 +335,7 @@ def sunsetRoutine():
 		utilities.nighttime_auto()
 	except Exception, e:
 		logger.error("Failed to complete sunset routine")
+		utilities.speakError("Sunset routine failed somewhere")
 		logger.error("Traceback: "+str(e))			
 
 	return schedule.CancelJob
@@ -334,6 +354,7 @@ def bedtimeRoutine():
 		utilities.smartAlarm()
 	except Exception, e:
 		logger.error("Failed to complete bedtime routine")
+		utilities.speakError("Bedtime routine didn't complete successfully")
 		logger.error("Traceback: "+str(e))
 
 	# get sunrise info 
@@ -355,6 +376,7 @@ def bedtimeRoutine():
 													  	)	
 	except Exception, e:
 		logger.error("Failed to find out the time of sunrise")
+		utilities.speakError("I have no idea when the sun will rise")
 		logger.error("Traceback: "+str(e))						
 		return
 
@@ -363,7 +385,11 @@ def bedtimeRoutine():
 	except Exception, e:
 		logger.error("Failed to create sunrise schedule")
 		logger.error("Traceback: "+str(e))						
-		return					
+
+	return schedule.CancelJob
+	# if above fails try:
+	#schedule.clear('bedtime-routine')
+	#return				
 
 def init_daemon():
 	"""
@@ -417,7 +443,7 @@ def init_daemon():
 		utilities.speakString("Setting up scheduled routines")
 		logger.info("Setting up scheduled routines")		
 		schedule.every().day.at("8:30").do(morningRoutine)
-		schedule.every().day.at("23:00").do(bedtimeRoutine)
+		#schedule.every().day.at(str(bed_time.hour)+":"+str(bed_time.minute)).do(bedtimeRoutine)
 	except Exception, e:
 		utilities.speakString("Failed to set schedules")
 		logger.error("Failed to set schedules")
