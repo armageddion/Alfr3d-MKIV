@@ -12,7 +12,7 @@ from arduinoUtil import *
 from deviceClass import *
 #from gmail import *
 #from gcalendar import *
-from google import *
+from googleUtil import *
 from guestDetect import *
 from location import *
 from speak import *
