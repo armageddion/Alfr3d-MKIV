@@ -135,7 +135,7 @@ def getUnreadCount():
 
 	return unread_msgs
 
-def calendar_tomorrow():   
+def calendarTomorrow():   
 	credentials = get_credentials_cal()
 	http = credentials.authorize(httplib2.Http())
 	service = discovery.build('calendar', 'v3', http=http)

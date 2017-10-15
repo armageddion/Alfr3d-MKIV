@@ -312,7 +312,7 @@ def morningRoutine():
 	logger.info("Getting calendar data for tomorrow")
 	global bed_time
 
-	event_tomorrow = utilities.calendar_tomorrow()
+	event_tomorrow = utilities.calendarTomorrow()
 	event_tomorrow_title = event_tomorrow['summary']
 	event_tomottow_time = datetime.datetime.strptime( ret['start'].get('dateTime').split("T")[1][:-6][:5], '%H:%M') 	# really complicated way to strip the returned date/time into just time and convert into datetime object..
 	
