@@ -162,4 +162,5 @@ def calendar_tomorrow():
 
 # Main
 if __name__ == '__main__':
-	print "this is alfr3ds google utility"
+	print("this is alfr3ds google utility")
+
