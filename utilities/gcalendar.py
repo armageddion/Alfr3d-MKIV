@@ -158,7 +158,6 @@ def calendar_tomorrow():
     if not events:
         print('No upcoming events found.')
     for event in events:
-        print event
         start = event['start'].get('dateTime', event['start'].get('date'))
         print(start, event['summary']) 
 
