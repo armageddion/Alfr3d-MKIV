@@ -52,68 +52,68 @@ APPLICATION_NAME = 'Alfr3d'
 # calculate offset to UTC
 timezone_offset_int = int(time.strftime('%H',time.localtime()))-int(time.strftime('%H',time.gmtime()))
 if abs(timezone_offset_int) < 10:
-    if timezone_offset_int < 0:
-        timezone_offset = "-0"+str(abs(timezone_offset_int))+":00"
-    else:
-        timezone_offset = "+0"+str(abs(timezone_offset_int))+":00"
+	if timezone_offset_int < 0:
+		timezone_offset = "-0"+str(abs(timezone_offset_int))+":00"
+	else:
+		timezone_offset = "+0"+str(abs(timezone_offset_int))+":00"
 else:
-    timezone_offset = str(timezone_offset_int)+":00"
+	timezone_offset = str(timezone_offset_int)+":00"
 
 def get_credentials_gmail():
-    """Gets valid user credentials from storage.
+	"""Gets valid user credentials from storage.
 
-    If nothing has been stored, or if the stored credentials are invalid,
-    the OAuth2 flow is completed to obtain the new credentials.
+	If nothing has been stored, or if the stored credentials are invalid,
+	the OAuth2 flow is completed to obtain the new credentials.
 
-    Returns:
-        Credentials, the obtained credential.
-    """
-    home_dir = os.path.expanduser('~')
-    # credential_dir = os.path.join(home_dir, '.credentials')
-    credential_dir = os.path.join(os.path.dirname(__file__),'../conf')
-    if not os.path.exists(credential_dir):
-        os.makedirs(credential_dir)
-    credential_path = os.path.join(credential_dir,
-                                   'gmail.storage')
-    store = Storage(credential_path)
-    credentials = store.get()
-    if not credentials or credentials.invalid:
-        flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE_GMAIL, SCOPES_GMAIL)
-        flow.user_agent = APPLICATION_NAME
-        if flags:
-            credentials = tools.run_flow(flow, store, flags)
-        else: # Needed only for compatibility with Python 2.6
-            credentials = tools.run(flow, store)
-        print('Storing credentials to ' + credential_path)
-    return credentials
+	Returns:
+		Credentials, the obtained credential.
+	"""
+	home_dir = os.path.expanduser('~')
+	# credential_dir = os.path.join(home_dir, '.credentials')
+	credential_dir = os.path.join(os.path.dirname(__file__),'../conf')
+	if not os.path.exists(credential_dir):
+		os.makedirs(credential_dir)
+	credential_path = os.path.join(credential_dir,
+								   'gmail.storage')
+	store = Storage(credential_path)
+	credentials = store.get()
+	if not credentials or credentials.invalid:
+		flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE_GMAIL, SCOPES_GMAIL)
+		flow.user_agent = APPLICATION_NAME
+		if flags:
+			credentials = tools.run_flow(flow, store, flags)
+		else: # Needed only for compatibility with Python 2.6
+			credentials = tools.run(flow, store)
+		print('Storing credentials to ' + credential_path)
+	return credentials
 
 def get_credentials_cal():
-    """Gets valid user credentials from storage.
+	"""Gets valid user credentials from storage.
 
-    If nothing has been stored, or if the stored credentials are invalid,
-    the OAuth2 flow is completed to obtain the new credentials.
+	If nothing has been stored, or if the stored credentials are invalid,
+	the OAuth2 flow is completed to obtain the new credentials.
 
-    Returns:
-        Credentials, the obtained credential.
-    """
-    home_dir = os.path.expanduser('~')
-    # credential_dir = os.path.join(home_dir, '.credentials')
-    credential_dir = os.path.join(os.path.dirname(__file__),'../conf')
-    if not os.path.exists(credential_dir):
-        os.makedirs(credential_dir)
-    credential_path = os.path.join(credential_dir,
-                                   'calendar.storage')
-    store = Storage(credential_path)
-    credentials = store.get()
-    if not credentials or credentials.invalid:
-        flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE_CAL, SCOPES_CAL)
-        flow.user_agent = APPLICATION_NAME
-        if flags:
-            credentials = tools.run_flow(flow, store, flags)
-        else: # Needed only for compatibility with Python 2.6
-            credentials = tools.run(flow, store)
-        print('Storing credentials to ' + credential_path)
-    return credentials    
+	Returns:
+		Credentials, the obtained credential.
+	"""
+	home_dir = os.path.expanduser('~')
+	# credential_dir = os.path.join(home_dir, '.credentials')
+	credential_dir = os.path.join(os.path.dirname(__file__),'../conf')
+	if not os.path.exists(credential_dir):
+		os.makedirs(credential_dir)
+	credential_path = os.path.join(credential_dir,
+								   'calendar.storage')
+	store = Storage(credential_path)
+	credentials = store.get()
+	if not credentials or credentials.invalid:
+		flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE_CAL, SCOPES_CAL)
+		flow.user_agent = APPLICATION_NAME
+		if flags:
+			credentials = tools.run_flow(flow, store, flags)
+		else: # Needed only for compatibility with Python 2.6
+			credentials = tools.run(flow, store)
+		print('Storing credentials to ' + credential_path)
+	return credentials    
 
 def getUnreadCount():
 	"""
@@ -136,31 +136,30 @@ def getUnreadCount():
 	return unread_msgs
 
 def calendar_tomorrow():   
-    credentials = get_credentials_cal()
-    http = credentials.authorize(httplib2.Http())
-    service = discovery.build('calendar', 'v3', http=http)
+	credentials = get_credentials_cal()
+	http = credentials.authorize(httplib2.Http())
+	service = discovery.build('calendar', 'v3', http=http)
 
-    tomorrow = datetime.datetime.now().replace(hour=0,minute=0) + datetime.timedelta(days=1)
-    tomorrow_night = tomorrow + datetime.timedelta(hours=23, minutes=59)
-    tomorrow = tomorrow.isoformat()+timezone_offset
-    tomorrow_night = tomorrow_night.isoformat()+timezone_offset
-    
-    print('Getting the first event of tomorrow')
-    eventsResult = service.events().list(
-        calendarId='primary', timeMin=tomorrow, maxResults=1, timeMax=tomorrow_night, singleEvents=True,
-        orderBy='startTime').execute()
-    events = eventsResult.get('items', [])
+	tomorrow = datetime.datetime.now().replace(hour=0,minute=0) + datetime.timedelta(days=1)
+	tomorrow_night = tomorrow + datetime.timedelta(hours=23, minutes=59)
+	tomorrow = tomorrow.isoformat()+timezone_offset
+	tomorrow_night = tomorrow_night.isoformat()+timezone_offset
+	
+	print('Getting the first event of tomorrow')
+	eventsResult = service.events().list(
+		calendarId='primary', timeMin=tomorrow, maxResults=1, timeMax=tomorrow_night, singleEvents=True,
+		orderBy='startTime').execute()
+	events = eventsResult.get('items', [])
 
-    if not events:
-        print('No upcoming events found.')
-    for event in events:
-        start = event['start'].get('dateTime', event['start'].get('date'))
-        print(start, event['summary']) 
+	if not events:
+		print('No upcoming events found.')
+	for event in events:
+		start = event['start'].get('dateTime', event['start'].get('date'))
+		print(start, event['summary']) 
 
-        # since there is only one event, we're ok to do this
-        return event	
+		# since there is only one event, we're ok to do this
+		return event	
 
 # Main
 if __name__ == '__main__':
-	ret = getUnreadCount()
-	print "unread count: ",ret
+	print "this is alfr3ds google utility"
