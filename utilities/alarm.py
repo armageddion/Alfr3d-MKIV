@@ -98,7 +98,7 @@ def smartAlarm():
 
 		speak.speakTime()
 		if (int(time.strftime("%I", time.localtime()))) > 9:
-			owner = utilities.User()
+			owner = userClass.User()
 			owner.getDetails("armageddion")
 			ishome = owner.state
 			if (ishome == 'online'):
