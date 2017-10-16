@@ -314,7 +314,7 @@ def morningRoutine():
 
 	event_tomorrow = utilities.calendarTomorrow()
 	event_tomorrow_title = event_tomorrow['summary']
-	event_tomottow_time = datetime.datetime.strptime( ret['start'].get('dateTime').split("T")[1][:-6][:5], '%H:%M') 	# really complicated way to strip the returned date/time into just time and convert into datetime object..
+	event_tomottow_time = datetime.datetime.strptime( event_tomorrow['start'].get('dateTime').split("T")[1][:-6][:5], '%H:%M') 	# really complicated way to strip the returned date/time into just time and convert into datetime object..
 	
 	bed_time = event_tomottow_timen - datetime.timedelta(hours=9, minutes=0)
 
