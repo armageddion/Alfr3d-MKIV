@@ -55,14 +55,16 @@ CLIENT_SECRET_FILE_CAL = os.path.join(os.path.join(os.getcwd(),os.path.dirname(_
 APPLICATION_NAME = 'Alfr3d'
 
 # calculate offset to UTC
-timezone_offset_int = int(time.strftime('%H',time.localtime()))-int(time.strftime('%H',time.gmtime()))
-if abs(timezone_offset_int) < 10:
-    if timezone_offset_int < 0:
-        timezone_offset = "-0"+str(abs(timezone_offset_int))+":00"
-    else:
-        timezone_offset = "+0"+str(abs(timezone_offset_int))+":00"
-else:
-    timezone_offset = str(timezone_offset_int)+":00"
+# TODO... find a way to determine the detla correctly
+# timezone_offset_int = int(time.strftime('%H',time.localtime()))-int(time.strftime('%H',time.gmtime()))
+# if abs(timezone_offset_int) < 10:
+#     if timezone_offset_int < 0:
+#         timezone_offset = "-0"+str(abs(timezone_offset_int))+":00"
+#     else:
+#         timezone_offset = "+0"+str(abs(timezone_offset_int))+":00"
+# else:
+#     timezone_offset = str(timezone_offset_int)+":00"
+timezone_offset = "-04:00"
 
 def get_credentials_cal():
     """Gets valid user credentials from storage.
