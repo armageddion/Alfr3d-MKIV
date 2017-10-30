@@ -44,7 +44,7 @@ import location
 import weatherUtil
 import audio
 import userClass
-import gcalendar
+import googleUtil
 
 # current path from which python is executed
 CURRENT_PATH = os.path.dirname(__file__)
@@ -117,7 +117,7 @@ def smartAlarm():
 
 			speak.speakString(greeting)		
 
-			event_tomorrow = gcalendar.calendarTomorrow()
+			event_tomorrow = googleUtil.calendarTomorrow()
 			event_tomorrow_title = event_tomorrow['summary']
 			event_tomottow_time = datetime.datetime.strptime( event_tomorrow['start'].get('dateTime').split("T")[1][:-6][:5], '%H:%M')
 
