@@ -34,8 +34,9 @@ import os
 import sys
 import logging
 import time
-from random import randint
 import ConfigParser								# used to parse alfr3ddaemon.conf
+import datetime
+from random import randint
 from pymongo import MongoClient					# database link 
 
 import speak
@@ -43,6 +44,7 @@ import location
 import weatherUtil
 import audio
 import userClass
+import gcalendar
 
 # current path from which python is executed
 CURRENT_PATH = os.path.dirname(__file__)
@@ -72,7 +74,7 @@ def smartAlarm():
 	"""
 	logger.info("Time to ring alarm")
 	speak.speakGreeting()
-	if (time.strftime("%p",time.localtime()) == "AM"):
+	if (datetime.datetime.now().hour > 5) and (datetime.datetime.now().hour <= 12):
 		logger.info("Good Morning!")
 		speak.speakString("your time to rest has come to an end")
 		speak.speakTime()
@@ -93,29 +95,35 @@ def smartAlarm():
 
 		return
 
-	else:
-		logger.info("Afternoon Alarm... evening perhaps?")
-
+	elif (datetime.datetime.now().hour >= 21):
+		logger.info("Evening alarm perhaps? night even?")
 		speak.speakTime()
-		if (int(time.strftime("%I", time.localtime()))) > 9:
-			owner = userClass.User()
-			owner.getDetails("armageddion")
-			ishome = owner.state
-			if (ishome == 'online'):
-				logger.info("Bed time, maybe?")
 
-				quips = [
-					"Unless we are burning the midnight oil, ",
-					"If you are going to invent something new tomorrow, ",
-					"If you intend on being charming tomorrow, "]
+		owner = userClass.User()
+		owner.getDetails("armageddion")
+		ishome = owner.state
+		if (ishome == 'online'):
+			logger.info("Bed time, maybe?")
 
-				tempint = randint(1,len(quips))
+			quips = [
+				"Unless we are burning the midnight oil, ",
+				"If you are going to invent something new tomorrow, ",
+				"If you intend on being charming tomorrow, "]
 
-				greeting = quips[tempint-1]
-				greeting += "perhaps you should consider getting some rest."
+			tempint = randint(1,len(quips))
 
-				speak.speakString(greeting)		
-				return
+			greeting = quips[tempint-1]
+			greeting += "perhaps you should consider getting some rest."
+
+			speak.speakString(greeting)		
+
+			event_tomorrow = gcalendar.calendarTomorrow()
+			event_tomorrow_title = event_tomorrow['summary']
+			event_tomottow_time = datetime.datetime.strptime( event_tomorrow['start'].get('dateTime').split("T")[1][:-6][:5], '%H:%M')
+
+			speak.speakString("Your first event tomorrow is "+event_tomorrow_title+" at "+str(event_tomottow_time.hour))
+
+			return
 
 def sunriseAlarm():
 	"""

@@ -131,13 +131,27 @@ class MyDaemon(Daemon):
 				logger.error("Traceback: "+str(e))					
 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-			blocks to check only if armageddion is at home
+				Run morning alarm
+			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""				
+			try:
+				logger.info("Checking on scheduled jobs")
+				schedule.run_pending()
+			except Exception, e:
+				logger.error("Failed to check the scheduled jobs")
+				utilities.speakError("I failed to check your schedule")
+				logger.error("Traceback: "+str(e))
+
+			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+			blocks to check only during waking hours 
+			and only if armageddion is at home
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 			owner = utilities.User()
 			owner.getDetails("armageddion")
 			ishome = owner.state
 
-			if (ishome == 'online'):
+			if (ishome == 'online') and \
+				((datetime.datetime.now().hour < bed_time.hour) or \
+				(datetime.datetime.now().hour > sunrise_time.hour)):
 				"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 					block to blur out quips once in a while 
 				"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -159,17 +173,6 @@ class MyDaemon(Daemon):
 					logger.error("Failed to check Gmail")
 					utilities.speakError("I have been unable to check your mail")
 					logger.error("Traceback: "+str(e))				
-
-				"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-					Run morning alarm
-				"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""				
-				try:
-					logger.info("Checking on scheduled jobs")
-					schedule.run_pending()
-				except Exception, e:
-					logger.error("Failed to check the scheduled jobs")
-					utilities.speakError("I failed to check your schedule")
-					logger.error("Traceback: "+str(e))
 
 
 			# OK Take a break 
