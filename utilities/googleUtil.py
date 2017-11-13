@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 """
-This is a gmail API utility
+This is a utility for all Google APIs - gmail, calendar..
 """
 # Copyright (c) 2010-2017 LiTtl3.1 Industries (LiTtl3.1).
 # All rights reserved.

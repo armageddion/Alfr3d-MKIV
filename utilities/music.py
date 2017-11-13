@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 """
-	This is the main Alfr3d daemon running most standard services
+	This is a utility for music playback
 """
 # Copyright (c) 2010-2016 LiTtl3.1 Industries (LiTtl3.1).
 # All rights reserved.
@@ -44,7 +44,7 @@ sys.path.append(os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__))
 CURRENT_PATH = os.path.dirname(__file__)
 
 # set up logging 
-logger = logging.getLogger("SpeakLog")
+logger = logging.getLogger("MusicLog")
 logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 #handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/speak.log"))

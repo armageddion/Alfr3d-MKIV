@@ -2,6 +2,7 @@
 
 """
 	This is my morning alarm and briefing
+	and various greetings throughout the day
 """
 # Copyright (c) 2010-2017 LiTtl3.1 Industries (LiTtl3.1).
 # All rights reserved.

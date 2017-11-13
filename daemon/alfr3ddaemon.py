@@ -3,7 +3,7 @@
 """
 	This is the main Alfr3d daemon running most standard services
 """
-# Copyright (c) 2010-2016 LiTtl3.1 Industries (LiTtl3.1).
+# Copyright (c) 2010-2017 LiTtl3.1 Industries (LiTtl3.1).
 # All rights reserved.
 # This source code and any compilation or derivative thereof is the
 # proprietary information of LiTtl3.1 Industries and is

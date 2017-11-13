@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 """
-This file is used for all lighting functions.
+	This file is used for music playback
 """
 # Copyright (c) 2010-2017 LiTtl3.1 Industries (LiTtl3.1).
 # All rights reserved.
@@ -38,8 +38,6 @@ import socket
 import ConfigParser
 import soundcloud					# soundcloud api
 import pychromecast					# cast music to chromecast
-from qhue import Bridge
-from pymongo import MongoClient
 
 # current path from which python is executed
 CURRENT_PATH = os.path.dirname(__file__)

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 """
-This file is used for all lighting functions.
+This file is used for brewing a pot of gold
 """
 # Copyright (c) 2010-2017 LiTtl3.1 Industries (LiTtl3.1).
 # All rights reserved.
