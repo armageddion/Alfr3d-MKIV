@@ -84,10 +84,35 @@ def smartAlarm():
 		loc = location.getLocation()
 		weatherUtil.getWeather(loc[1],loc[2])
 
+		# gmail
+		logger.info("Gmail check")
 		unread_count = speak.getUnreadCount()	# not sure why i did this 
 		if unread_count > 1:
 			speak.speakString("While you were sleeping "+str(unread_count)+" emails flooded your inbox")
 		
+		# check calendar
+		logger.info("Calendar check")
+		events = googleUtil.calendarTotday()
+		if events:
+			if len(events) == 1:
+				logger.info("you have only one event today")
+				event_title = events[0]['summary'] 
+				event_time = datetime.datetime.strptime(events[0]['start'].get('dateTime').split("T")[1][:-6][:5], '%H:%M')				
+				speak.speakString("Today you have " + event_title + "at" + str(event_time.hour))
+			else: 	
+				logger.info("you have several events today")
+				speak.speakString("Don't make many plans. You have several events scheduled for today")
+				for i in range(len(events)):
+					if i == 0:
+						speak.speakString("Your first event of the day is ")
+					if i = len(events)-1:
+						speak.speakString("and your last event of the day is ")
+					else:
+						speak.speakString("then you have ")
+					event_title = event[i]['summary'] 
+					event_time = datetime.datetime.strptime(event[i]['start'].get('dateTime').split("T")[1][:-6][:5], '%H:%M')
+					speak.speakString(event_title + "at" + str(event_time.hour))
+
 		try:	
 			audio.playMorningMedia()
 		except Exception, e:

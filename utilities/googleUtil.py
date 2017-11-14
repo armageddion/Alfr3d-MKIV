@@ -155,12 +155,41 @@ def calendarTomorrow():
 
 	if not events:
 		print('No upcoming events found.')
-	for event in events:
-		start = event['start'].get('dateTime', event['start'].get('date'))
-		print(start, event['summary']) 
+	else:
+		return events[0]
 
-		# since there is only one event, we're ok to do this
-		return event	
+	# for event in events:
+	# 	start = event['start'].get('dateTime', event['start'].get('date'))
+	# 	print(start, event['summary']) 
+
+	# 	# since there is only one event, we're ok to do this
+	# 	return event
+
+def calendarToday():
+	credentials = get_credentials_cal()
+	http = credentials.authorize(httplib2.Http())
+	service = discovery.build('calendar', 'v3', http=http)
+
+	today = datetime.datetime.now()
+	tonight = datetime.datetime.now().replace(hour=23,minute=59)
+	today = today.isoformat()+timezone_offset
+	tonight = tonight.isoformat()+timezone_offset
+	
+	print('Getting todays events')
+	eventsResult = service.events().list(
+		calendarId='primary', timeMin=today, maxResults=10, timeMax=tonight, singleEvents=True,
+		orderBy='startTime').execute()
+	events = eventsResult.get('items', [])
+
+	if not events:
+		print('No upcoming events found.')
+		return None
+
+	# for event in events:
+	# 	start = event['start'].get('dateTime', event['start'].get('date'))
+	# 	print(start, event['summary']) 
+
+	return events
 
 # Main
 if __name__ == '__main__':
