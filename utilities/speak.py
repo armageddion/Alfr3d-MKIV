@@ -282,7 +282,10 @@ def speakRandom():
 		"Together, we can do the work of one.",
 		"Just because you've always done it that way doesn't mean it's not incredibly stupid.",
 		"Looking sharp is easy when you haven't done any work.",
-		"Remember, you are only as deep as your most recent inspirational quote"]
+		"Remember, you are only as deep as your most recent inspirational quote",
+		"If you can't convince them, confuse them.",
+		"I don't have time or the crayons to explain this to you.",
+		"I'd kill for a Nobel peace prize."]
 
 	tempint = randint(1, len(quips))
 
