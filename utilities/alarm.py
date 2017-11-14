@@ -105,7 +105,7 @@ def smartAlarm():
 				for i in range(len(events)):
 					if i == 0:
 						speak.speakString("Your first event of the day is ")
-					if i = len(events)-1:
+					if i == len(events)-1:
 						speak.speakString("and your last event of the day is ")
 					else:
 						speak.speakString("then you have ")
