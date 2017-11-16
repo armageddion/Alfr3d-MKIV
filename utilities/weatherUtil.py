@@ -61,6 +61,7 @@ def getWeather(city="Toronto",country="CA"):
             Boolean; True if successful, False if not.
     """
 	# get API key for openWeather 
+	logger.info("Getting weather data for "+city+", "+country)
 	config = ConfigParser.RawConfigParser()
 	config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
 	apikey = config.get("API KEY", "openWeather")
@@ -77,7 +78,8 @@ def getWeather(city="Toronto",country="CA"):
 		logger.error("Failed to get weather data\n")	
 		return False, weatherData
 
-	logger.info("got weather data for "+city+","+country)
+	logger.info("got weather data for "+city+", "+country)
+	logger.info(weatherData)		# DEBUG
 
 	#log current conditions
 	logger.info("City:                           "+str(weatherData['name']))
