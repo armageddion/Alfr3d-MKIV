@@ -92,7 +92,7 @@ def smartAlarm():
 		
 		# check calendar
 		logger.info("Calendar check")
-		events = googleUtil.calendarTotday()
+		events = googleUtil.calendarToday()
 		if events:
 			if len(events) == 1:
 				logger.info("you have only one event today")
