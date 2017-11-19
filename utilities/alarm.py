@@ -82,7 +82,11 @@ def smartAlarm():
 		speak.speakDate()
 
 		loc = location.getLocation()
-		weatherUtil.getWeather(loc[1],loc[2])
+		try:
+			weatherUtil.getWeather(loc[1],loc[2])
+		except Exception, e:
+			logger.error("Failed to get weather info")
+			logger.error("Traceback: "+str(e))			
 
 		# gmail
 		logger.info("Gmail check")
