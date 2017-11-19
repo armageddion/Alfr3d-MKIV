@@ -102,7 +102,7 @@ def smartAlarm():
 				logger.info("you have only one event today")
 				event_title = events[0]['summary'] 
 				event_time = datetime.datetime.strptime(events[0]['start'].get('dateTime').split("T")[1][:-6][:5], '%H:%M')				
-				speak.speakString("Today you have " + event_title + "at" + str(event_time.hour))
+				speak.speakString("Today you have " + event_title + " at " + str(event_time.hour))
 			else: 	
 				logger.info("you have several events today")
 				speak.speakString("Don't make many plans. You have several events scheduled for today")
