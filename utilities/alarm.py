@@ -115,7 +115,7 @@ def smartAlarm():
 						speak.speakString("then you have ")
 					event_title = event[i]['summary'] 
 					event_time = datetime.datetime.strptime(event[i]['start'].get('dateTime').split("T")[1][:-6][:5], '%H:%M')
-					speak.speakString(event_title + "at" + str(event_time.hour))
+					speak.speakString(event_title + " at " + str(event_time.hour))
 
 		try:	
 			audio.playMorningMedia()
