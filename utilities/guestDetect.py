@@ -128,7 +128,7 @@ def checkLANMembers():
 			device.update()
 
 			# if user is gone for more than 5 minutes... 
-			if time_away > (10*60):
+			if time_away > (15*60):
 				speakWelcome(device.user, time_away)
 
 		#otherwise, create and add it. 
