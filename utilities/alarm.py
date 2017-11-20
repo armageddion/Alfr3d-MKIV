@@ -113,8 +113,8 @@ def smartAlarm():
 						speak.speakString("and your last event of the day is ")
 					else:
 						speak.speakString("then you have ")
-					event_title = event[i]['summary'] 
-					event_time = datetime.datetime.strptime(event[i]['start'].get('dateTime').split("T")[1][:-6][:5], '%H:%M')
+					event_title = events[i]['summary'] 
+					event_time = datetime.datetime.strptime(events[i]['start'].get('dateTime').split("T")[1][:-6][:5], '%H:%M')
 					speak.speakString(event_title + " at " + str(event_time.hour))
 
 		try:	
