@@ -81,8 +81,12 @@ def smartAlarm():
 		speak.speakTime()
 		speak.speakDate()
 
-		loc = location.getLocation()
-		weatherUtil.getWeather(loc[1],loc[2])
+		try:
+			loc = location.getLocation()
+			weatherUtil.getWeather(loc[1],loc[2])
+		except Exception, e:
+			logger.error("Failed to get weather info")
+			logger.error("Traceback: "+str(e))			
 
 		# gmail
 		logger.info("Gmail check")
@@ -98,7 +102,7 @@ def smartAlarm():
 				logger.info("you have only one event today")
 				event_title = events[0]['summary'] 
 				event_time = datetime.datetime.strptime(events[0]['start'].get('dateTime').split("T")[1][:-6][:5], '%H:%M')				
-				speak.speakString("Today you have " + event_title + "at" + str(event_time.hour))
+				speak.speakString("Today you have " + event_title + " at " + str(event_time.hour))
 			else: 	
 				logger.info("you have several events today")
 				speak.speakString("Don't make many plans. You have several events scheduled for today")
@@ -109,9 +113,9 @@ def smartAlarm():
 						speak.speakString("and your last event of the day is ")
 					else:
 						speak.speakString("then you have ")
-					event_title = event[i]['summary'] 
-					event_time = datetime.datetime.strptime(event[i]['start'].get('dateTime').split("T")[1][:-6][:5], '%H:%M')
-					speak.speakString(event_title + "at" + str(event_time.hour))
+					event_title = events[i]['summary'] 
+					event_time = datetime.datetime.strptime(events[i]['start'].get('dateTime').split("T")[1][:-6][:5], '%H:%M')
+					speak.speakString(event_title + " at " + str(event_time.hour))
 
 		try:	
 			audio.playMorningMedia()
