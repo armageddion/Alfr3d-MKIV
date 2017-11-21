@@ -285,7 +285,8 @@ def speakRandom():
 		"Remember, you are only as deep as your most recent inspirational quote",
 		"If you can't convince them, confuse them.",
 		"I don't have time or the crayons to explain this to you.",
-		"I'd kill for a Nobel peace prize."]
+		"I'd kill for a Nobel peace prize.",
+		"Life would be much easier if you had the source code"]
 
 	tempint = randint(1, len(quips))
 
