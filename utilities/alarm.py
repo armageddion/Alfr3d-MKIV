@@ -82,7 +82,7 @@ def smartAlarm():
 		speak.speakDate()
 
 		try:
-			loc = location.getLocation()
+			loc = location.getLocation("freegeoip")
 			weatherUtil.getWeather(loc[1],loc[2])
 		except Exception, e:
 			logger.error("Failed to get weather info")
