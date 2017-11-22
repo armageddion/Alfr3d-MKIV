@@ -230,7 +230,7 @@ class Device:
 
 		# get all devices for that user
 		for device in devicesCollection.find():
-			if time.time() - float(device['last_online']) < 300: # 5 minutes
+			if time.time() - float(device['last_online']) < 900: # 15 minutes in sync with value in userClass
 				# set online
 				devicesCollection.update({"MAC":device['MAC']},{"$set":{'state':'online'}})	
 			else:
