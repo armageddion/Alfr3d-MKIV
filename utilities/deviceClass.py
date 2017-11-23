@@ -230,7 +230,11 @@ class Device:
 
 		# get all devices for that user
 		for device in devicesCollection.find():
-			if time.time() - float(device['last_online']) < 900: # 15 minutes in sync with value in userClass
+			# for my devices 5 minute timeout here is more than enough
+			# for most devices 15 minutes is fine
+			# however, some (brand new) tech is being clever about power saving and if unused will
+			# be dormant and, from my observations, only connect once every 20 minutes or so. 
+			if time.time() - float(device['last_online']) < 1800: # 30 minutes 
 				# set online
 				devicesCollection.update({"MAC":device['MAC']},{"$set":{'state':'online'}})	
 			else:
