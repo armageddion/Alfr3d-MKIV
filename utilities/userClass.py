@@ -256,8 +256,9 @@ class User:
 					usersCollection.update({"name":user['name']},{"$set":{'last_online':device['last_online']}})
 					last_online = device['last_online']
 
-			# this time only needs to account of one cycle of alfr3d's standard loop
-			if time() - float(last_online) < 300:	# 5 minutes 	
+			# this time only needs to account for one cycle of alfr3d's standard loop
+			# or a few... in case one of them misses it :) 
+			if time() - float(last_online) < 1800:	# 30 minutes
 				if self.state == "offline":
 					logger.info(user['name']+" just came online")
 					# welcome the user
