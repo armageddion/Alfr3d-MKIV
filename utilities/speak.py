@@ -286,7 +286,8 @@ def speakRandom():
 		"If you can't convince them, confuse them.",
 		"I don't have time or the crayons to explain this to you.",
 		"I'd kill for a Nobel peace prize.",
-		"Life would be much easier if you had the source code"]
+		"Life would be much easier if you had the source code",
+		"All I ever wanted is everything"]
 
 	tempint = randint(1, len(quips))
 
