@@ -79,6 +79,16 @@ def water_flowers(timeout=10):
 			logger.info("successfully turned off the irrigation system")
 		else:
 			logger.error("something went wrong. unable to turn off the irrigation system")
+
+		# backup request to turn off
+		# it has happened a few times that wemo failed to shut down
+		# and it flooded my neighbors.
+		flower_off_request = requests.post("https://maker.ifttt.com/trigger/water_flowers_end/with/key/"+str(secret))
+		if flower_off_request.status_code == 200:
+			logger.info("successfully turned off the irrigation system")
+		else:
+			logger.error("something went wrong. unable to turn off the irrigation system")
+					
 	else:
 		logger.error("something went wrong. unable to turn off the irrigation system")
 
