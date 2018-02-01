@@ -65,6 +65,10 @@ canvas{
 	position: relative;
 	left: 5%;
 }
+.window4 {
+	position: relative;
+	left: 5%;
+}
 
 footer{
   position:absolute;
@@ -92,7 +96,11 @@ footer{
 	.window3 {
 		width: 50px;
 		position: relative;
-	}				
+	}	
+	.window4 {
+		width: 50px;
+		position: relative;
+	}		
 }
 
 @media (min-width: 320px) and (max-width: 767px) {
@@ -113,7 +121,11 @@ footer{
 	.window3 {
 		width: 100px;
 		position: relative;
-	}				
+	}
+	.window4 {
+		width: 150px;
+		position: relative;
+	}	
 }
 
 @media (min-width: 768px) and (max-width: 1440px) {
@@ -135,5 +147,9 @@ footer{
 	.window3 {
 		width: 150px;
 		position: relative;
-	}			
+	}
+	.window4 {
+		width: 150px;
+		position: relative;
+	}
 }
