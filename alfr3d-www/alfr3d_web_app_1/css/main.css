@@ -20,23 +20,6 @@ body{
   background-repeat: no-repeat
 }
 
-canvas{
-  width:auto;
-  float:none;
-  display:block;
-  margin-right:auto;
-  margin-left:auto;
-  padding-left:0;
-  padding-right:0;
-  position:absolute;
-  -webkit-transform-style:preserve-3d;
-          transform-style:preserve-3d;
-  top:50%;left:50%;
-  -webkit-transform:translate(-50%,-50%);
-      -ms-transform:translate(-50%,-50%);
-          transform:translate(-50%,-50%)
-}
-
 .alfr3d_url {
 	position: relative;
 	margin-top: 5px;
@@ -123,7 +106,7 @@ footer{
 		position: relative;
 	}
 	.window4 {
-		width: 150px;
+		width: 200px;
 		position: relative;
 	}	
 }
@@ -141,7 +124,7 @@ footer{
 		width: 300px;
 	}
 	.window2 {
-		width: 600px;
+		width: 500px;
 		position: relative;
 	}		
 	.window3 {
@@ -149,7 +132,7 @@ footer{
 		position: relative;
 	}
 	.window4 {
-		width: 150px;
+		width: 300px;
 		position: relative;
 	}
 }
