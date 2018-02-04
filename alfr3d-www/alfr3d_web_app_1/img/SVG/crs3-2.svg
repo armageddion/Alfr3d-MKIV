@@ -1,0 +1,16 @@
+<svg width="111" height="59" viewBox="0 0 111 59" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>crs3</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(-454 689)">
+<g id="crs3">
+<g id="align-grid">
+</g>
+<g id="Vector">
+<use xlink:href="#path0_fill" transform="matrix(-1 -8.74228e-08 8.74228e-08 -1 565 -630)" fill="#33B5E5"/>
+</g>
+</g>
+</g>
+<defs>
+<path id="path0_fill" d="M 81 41L 93 29L 93 0L 97 4L 97 15L 102 20L 102 42L 92 52L 29 52L 22 45L 3.93402e-06 45L 4 41L 81 41Z"/>
+</defs>
+</svg>

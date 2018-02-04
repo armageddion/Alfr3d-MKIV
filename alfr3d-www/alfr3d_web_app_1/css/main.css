@@ -32,25 +32,43 @@ body{
 	margin-right: 5px;
 	top:0%;
 	right:0%;
+	max-height: 100px;
+	max-width: 100px;
 }
 
-.window1 {
-	position:relative;
-	top: 10%;
-	left: 5%;
-}
-.window2 {
+.window {
+	margin: auto;
+	border: 3px solid red;
 	position: relative;
-	left: 5%;
+	width: 50%;
 }
 
-.window3 {
-	position: relative;
-	left: 5%;
+.1top_left {
+	position: absolute;
+	
+} 
+.1top_edge {
+	position: absolute;
 }
-.window4 {
-	position: relative;
-	left: 5%;
+.1top_right {
+	position: absolute;
+	margin-right: 5px;
+	right: 0%;
+	max-height: 100px;
+	max-width: 100px;	
+}
+.1left_wall {
+	position: absolute;
+	left: 0%;
+}
+.1center {
+	position: absolute;
+	border: 3ps solid red;
+	background: #00FD0D;
+}
+.1right_wall {
+	position: absolute;
+	right: 0%;
 }
 
 footer{

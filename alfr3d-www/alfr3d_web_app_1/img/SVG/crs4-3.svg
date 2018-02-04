@@ -1,0 +1,40 @@
+<svg width="108" height="32" viewBox="0 0 108 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>crs4</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(-794 894)">
+<g id="crs4">
+<g id="align-grid">
+</g>
+<g id="Vector">
+<use xlink:href="#path0_fill" transform="matrix(1 0 0 -1 808 -862)" fill="#33B5E5"/>
+<use xlink:href="#path1_fill" transform="matrix(1 0 0 -1 808 -862)" fill="#33B5E5"/>
+<use xlink:href="#path2_fill" transform="matrix(1 0 0 -1 808 -862)" fill="#33B5E5"/>
+<use xlink:href="#path3_fill" transform="matrix(1 0 0 -1 808 -862)" fill="#33B5E5"/>
+<use xlink:href="#path4_fill" transform="matrix(1 0 0 -1 808 -862)" fill="#33B5E5"/>
+<use xlink:href="#path5_fill" transform="matrix(1 0 0 -1 808 -862)" fill="#33B5E5"/>
+<use xlink:href="#path6_fill" transform="matrix(1 0 0 -1 808 -862)" fill="#33B5E5"/>
+<use xlink:href="#path7_fill" transform="matrix(1 0 0 -1 808 -862)" fill="#33B5E5"/>
+<use xlink:href="#path8_fill" transform="matrix(1 0 0 -1 808 -862)" fill="#33B5E5"/>
+<use xlink:href="#path9_fill" transform="matrix(1 0 0 -1 808 -862)" fill="#33B5E5"/>
+<use xlink:href="#path10_fill" transform="matrix(1 0 0 -1 808 -862)" fill="#33B5E5"/>
+<use xlink:href="#path11_fill" transform="matrix(1 0 0 -1 808 -862)" fill="#33B5E5"/>
+<use xlink:href="#path12_fill" transform="matrix(1 0 0 -1 808 -862)" fill="#33B5E5"/>
+</g>
+</g>
+</g>
+<defs>
+<path id="path0_fill" d="M 52 18L 56 18L 60 14L 56 14L 52 18Z"/>
+<path id="path1_fill" d="M 46 18L 50 18L 54 14L 50 14L 46 18Z"/>
+<path id="path2_fill" d="M 40 18L 44 18L 48 14L 44 14L 40 18Z"/>
+<path id="path3_fill" d="M 34 18L 38 18L 42 14L 38 14L 34 18Z"/>
+<path id="path4_fill" d="M 28 18L 32 18L 36 14L 32 14L 28 18Z"/>
+<path id="path5_fill" d="M 22 18L 26 18L 30 14L 26 14L 22 18Z"/>
+<path id="path6_fill" d="M 16 18L 20 18L 24 14L 20 14L 16 18Z"/>
+<path id="path7_fill" d="M 10 18L 14 18L 18 14L 14 14L 10 18Z"/>
+<path id="path8_fill" d="M 4 18L 8 18L 12 14L 8 14L 4 18Z"/>
+<path id="path9_fill" d="M 4 12L 0.5 15.5L 2.5 17.5L 6 14L 4 12Z"/>
+<path id="path10_fill" d="M 0 10L 0 14L 4 10L 4 6L 0 10Z"/>
+<path id="path11_fill" d="M 0 4L 0 8L 4 4L 4 0L 0 4Z"/>
+<path id="path12_fill" d="M 58 18L 62 14L 94 14L 90 18L 78 18L 72 24L 36 24L 32 20L 70 20L 72 18L 58 18Z"/>
+</defs>
+</svg>

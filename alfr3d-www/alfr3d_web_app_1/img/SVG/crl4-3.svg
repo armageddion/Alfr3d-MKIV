@@ -1,0 +1,16 @@
+<svg width="183" height="103" viewBox="0 0 183 103" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>crl4</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(-756 171)">
+<g id="crl4">
+<g id="align-grid">
+</g>
+<g id="Vector">
+<use xlink:href="#path0_fill" transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 939 -68)" fill="#33B5E5"/>
+</g>
+</g>
+</g>
+<defs>
+<path id="path0_fill" d="M 92 20L 89 17L 89 0L 85 3.99998L 85 146L 66 165L 0 165L 3.99999 169L 15 169L 23 178L 70 178L 98 150L 98 87L 92 80L 92 20Z"/>
+</defs>
+</svg>

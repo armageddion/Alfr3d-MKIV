@@ -1,0 +1,14 @@
+<svg width="180" height="100" viewBox="0 0 180 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>cbl3</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(-2251 1238)">
+<g id="cbl3">
+<g id="Vector">
+<use xlink:href="#path0_fill" transform="translate(2257 -1237)" fill="#33B5E5"/>
+</g>
+</g>
+</g>
+<defs>
+<path id="path0_fill" d="M 9 65L 26 82L 111 82L 107 86L 95 86L 91 90L 20 90L 0 70L 0 20L 5 15L 5 4L 9 0L 9 65Z"/>
+</defs>
+</svg>

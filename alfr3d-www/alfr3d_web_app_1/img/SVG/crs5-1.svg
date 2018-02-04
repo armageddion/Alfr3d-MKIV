@@ -1,0 +1,20 @@
+<svg width="228" height="35" viewBox="0 0 228 35" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>crs5</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(-1052 841)">
+<g id="crs5">
+<g id="align-grid">
+</g>
+<g id="Vector">
+<use xlink:href="#path0_fill" transform="matrix(1 -8.74228e-08 -8.74228e-08 -1 1066 -807)" fill="#33B5E5"/>
+</g>
+<g id="Vector">
+<use xlink:href="#path1_fill" transform="matrix(1 -8.74228e-08 -8.74228e-08 -1 1258 -823)" fill="#33B5E5"/>
+</g>
+</g>
+</g>
+<defs>
+<path id="path0_fill" d="M 4 10L 8 14L 134 14L 136 16L 193 16L 189 20L 7 20L 0 13L 0 0L 4 4L 4 10Z"/>
+<path id="path1_fill" d="M 4.00002 -1.01726e-05L 0 4.00011L 18 4.00011L 22 -1.01726e-05L 4.00002 -1.01726e-05Z"/>
+</defs>
+</svg>

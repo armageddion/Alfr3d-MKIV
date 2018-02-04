@@ -1,0 +1,14 @@
+<svg width="180" height="100" viewBox="0 0 180 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>ctr3</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(-2521 1401)">
+<g id="ctr3">
+<g id="Subtract">
+<use xlink:href="#path0_fill" transform="matrix(-1 0 0 1 2699 -1394)" fill="#33B5E5"/>
+</g>
+</g>
+</g>
+<defs>
+<path id="path0_fill" fill-rule="evenodd" d="M 14 66L 0 52L 0 12L 12 0L 122 0L 126 4L 137 4L 141 8L 116 8L 110 14L 30 14L 24 20L 24 34L 18 40L 18 93L 14 93L 14 66ZM 14 58L 4 48L 4 43L 14 53L 14 58Z"/>
+</defs>
+</svg>

@@ -1,0 +1,16 @@
+<svg width="67" height="55" viewBox="0 0 67 55" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>crs1</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(204 782)">
+<g id="crs1">
+<g id="align-grid">
+</g>
+<g id="Subtract">
+<use xlink:href="#path0_fill" transform="translate(-195 -773)" fill="#33B5E5"/>
+</g>
+</g>
+</g>
+<defs>
+<path id="path0_fill" fill-rule="evenodd" d="M 5 28L 5 42L 9 46L 9 20L 20 9L 58 9L 54 5L 38 5L 33 0L 9 0L 0 9L 0 23L 5 28ZM 2.01739 11L 8 5L 10 5L 2.01739 13L 2.01739 11Z"/>
+</defs>
+</svg>

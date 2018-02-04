@@ -36,6 +36,7 @@ import time
 import os										# used to allow execution of system level commands
 import sys
 import socket
+import json
 import requests	
 import ConfigParser
 from bottle import route, run, template
@@ -138,7 +139,7 @@ def whosthere():
 	usersCollection = db['users']
 
 	count = 0
-	users = ""
+	users = []
 
 	# cycle through all users
 	#for user in usersCollection.find():
@@ -147,9 +148,18 @@ def whosthere():
 											{"location.name":socket.gethostname()}
 										]}):
 			count +=1
-			users += user['name']+'\n'
+			users.append(user['name'])
 
-	return 'online users '+str(count)+' :\n'+users
+	result = {}
+	result['location'] = socket.gethostname()
+	if count > 0:
+		result['users']=[]
+		for i in range(len(users)):
+			result['users'][i].append(users[i])
+	else:
+		result['users']=0
+
+	return json.dumps(result)
 
 @route('/make_coffee')
 def make_coffee():
