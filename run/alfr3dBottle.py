@@ -153,6 +153,7 @@ def whosthere():
 	result = {}
 	result['location'] = socket.gethostname()
 	if count > 0:
+		print users
 		result['users']=[]
 		for i in range(len(users)):
 			result['users'][i].append(users[i])
