@@ -156,7 +156,7 @@ def whosthere():
 		print users
 		result['users']=[]
 		for i in range(len(users)):
-			result['users'][i].append(users[i])
+			result['users'][i]=(users[i])
 	else:
 		result['users']=0
 
