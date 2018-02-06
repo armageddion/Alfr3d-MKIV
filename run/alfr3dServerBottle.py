@@ -34,7 +34,8 @@ import os
 import sys
 import socket
 import logging
-from bottle import route, run, template, request, redirect
+import bottle
+from bottle import route, run, template, request, redirect, response
 from time import gmtime, strftime, localtime, sleep, time		# needed to obtain time
 from pymongo import MongoClient
 
@@ -59,38 +60,104 @@ try:
 	s.connect(("gmail.com",80))
 	my_ip = s.getsockname()[0]
 	s.close()
-	print "Obtained my IP"
-except:
-	print "Error: Failed to get my IP"
+	logger.info("Obtained host IP")
+except Exception, e:
+	log.write(strftime("%H:%M:%S: ")+"Error: Failed to get my IP")
+	logger.error("Failed to get host IP")
+	logger.error("Traceback "+str(e))
 
+class EnableCors(object):
+	name = 'enable_cors'
+	api = 2
 
-@route('/')
+	def apply(self, fn, context):
+		def _enable_cors(*args, **kwargs):
+			# set CORS headers
+			response.headers['Access-Control-Allow-Origin'] = '*'
+			response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, OPTIONS'
+			response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
+
+			if bottle.request.method != 'OPTIONS':
+				# actual request; reply with the actual response
+				return fn(*args, **kwargs)
+
+		return _enable_cors
+
+app = bottle.app()
+
+@app.route('/')
 def index(name="guest"):
 	logger.info("Received request:/hello/"+name)
 	return template('<b>Hello {{name}}</b>!', name=name)
 
-@route('/whosthere')
+# http://www.littl31.com:8080/whosthere?host=<hostname>
+@app.route('/whosthere')
 def whosthere():
-	logger.info("Received a 'whosthere' requet")
+	if len(request.query)==0:
+		logger.info("Received a 'whosthere' requet")
+		client = MongoClient('mongodb://localhost:27017/')
+		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
+		db = client['Alfr3d_DB']
+		usersCollection = db['users']
 
-	client = MongoClient('mongodb://localhost:27017/')
-	client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
-	db = client['Alfr3d_DB']
-	usersCollection = db['users']
+		count = 0
+		users = []
 
-	count = 0
-	users = ""
+		# cycle through all users
+		#for user in usersCollection.find():
+		for user in usersCollection.find({"state":'online'}):
+				count +=1
+				users.append(user['name'])
 
-	# cycle through all users
-	for user in usersCollection.find():
-		if user['state'] == 'online':
-			count +=1
-			users += user['name']+'\n'
+		response.headers['Content-type'] = 'application/json'
+		result = {}
+		result['location'] = socket.gethostname()
+		if count > 0:
+			result['users']=[]
+			for i in range(len(users)):
+				result['users'].append(users[i])
+		else:
+			result['users']=0
 
-	return 'online users '+str(count)+' :\n '+users
+		return json.dumps(result)		
+
+	elif request.query.host:
+		logger.info("Received a 'whosthere' requet for host "+str(request.query.host))
+		client = MongoClient('mongodb://localhost:27017/')
+		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
+		db = client['Alfr3d_DB']
+		usersCollection = db['users']
+
+		count = 0
+		users = []
+
+		# cycle through all users
+		#for user in usersCollection.find():
+		for user in usersCollection.find({"$and":[
+												{"state":'online'},
+												{"location.name":request.query.host}
+											]}):
+				count +=1
+				users.append(user['name'])
+
+		response.headers['Content-type'] = 'application/json'
+		result = {}
+		result['location'] = socket.gethostname()
+		if count > 0:
+			result['users']=[]
+			for i in range(len(users)):
+				result['users'].append(users[i])
+		else:
+			result['users']=0
+
+		return json.dumps(result)		
+	else:
+		logger.info("Received a 'whosthere' requet: "+str(request.query_string))
+		logger.warn("and I dont know what to do wit hthat...")
+		return template('<b>There is a problem between the keyboard and the chair. Fix your query {{name}}</b>!', name=request.query_string)
 
 # /user/get?name=<name>
-@route('/user/<command>')
+@app.route('/user/<command>')
 def user(command):
 	print "WIP"
 
@@ -123,7 +190,7 @@ def user(command):
 		print "updating user "+ name
 
 # /device/get?MAC=<mac>
-@route('/device/<command>')
+@app.route('/device/<command>')
 def device(command):
 	print "WIP"
 	print request
@@ -203,7 +270,7 @@ def device(command):
 
 		redirect('/device/get?MAC='+mac)		
 			
-@route ('/instance/<command>')
+@app.route ('/instance/<command>')
 def instance(command):
 	print "TODO"
 
@@ -218,4 +285,5 @@ def txt2HTML(txt):
 	result += "</HTML></BODY>\n"
 	return result
 
-run(host=my_ip,port=8080)
+app.install(EnableCors())	
+app.run(host=my_ip,port=8080)

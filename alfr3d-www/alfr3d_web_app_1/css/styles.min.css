@@ -21,6 +21,22 @@ body{
 	background-repeat: no-repeat
 }
 
+.logo {
+	position:absolute;
+	float:none;
+	display:block;
+	margin-right:auto;
+	margin-left:auto;
+	height: 100px;
+	bottom:20px;left:50%;
+	-webkit-transform-style:preserve-3d;
+	transform-style:preserve-3d;	
+	-webkit-transform:translate(-50%,-50%);
+	-ms-transform:translate(-50%,-50%);
+	transform:translate(-50%,-50%);
+	width:auto;	
+}
+
 canvas{
 	width:auto;
 	max-width:960px;
