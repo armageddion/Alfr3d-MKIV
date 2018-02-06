@@ -112,7 +112,7 @@ def whosthere():
 
 		response.headers['Content-type'] = 'application/json'
 		result = {}
-		result['location'] = socket.gethostname()
+		result['location'] = "all locations"
 		if count > 0:
 			result['users']=[]
 			for i in range(len(users)):
@@ -141,9 +141,10 @@ def whosthere():
 				count +=1
 				users.append(user['name'])
 
+
 		response.headers['Content-type'] = 'application/json'
 		result = {}
-		result['location'] = socket.gethostname()
+		result['location'] = request.query.host
 		if count > 0:
 			result['users']=[]
 			for i in range(len(users)):
