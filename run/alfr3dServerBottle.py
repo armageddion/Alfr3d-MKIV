@@ -191,7 +191,7 @@ def user(command):
 			client.Alfr3d_DB.authenticate(db_user,db_pass)
 			db = client['Alfr3d_DB']
 			usersCollection = db['users']
-			userDetails = usersCollection.find_one({"name":name})
+			userDetails = usersCollection.find_one({"name":str(name)})
 		except Exception, e:
 			logger.error("failed to find user "+name)
 			logger.error("traceback: "+str(e))
