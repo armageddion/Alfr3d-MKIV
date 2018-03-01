@@ -44,9 +44,8 @@ from pymongo import MongoClient
 CURRENT_PATH = os.path.dirname(__file__)
 
 # Import my own utilities - not needed for API server
-sys.path.append(os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../utilities/"))
-from userClass import User
-from deviceClass import Device
+sys.path.append(os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../"))
+import utilities
 
 # set up logging 
 logger = logging.getLogger("ServerBottleLog")
@@ -170,7 +169,7 @@ def user(command):
 		name = request.query.get('name')
 		print "name: "+name
 
-		user = User()
+		user = utilities.User()
 		try:
 			user.getDetails(name)
 		except Exception, e:
@@ -211,7 +210,7 @@ def device(command):
 	if command == 'get':
 		print "getting device details for device with MAC "+mac
 		
-		device = Device()
+		device = utilities.Device()
 		try:
 			device.getDetails(mac)
 		except Exception, e:
@@ -227,7 +226,7 @@ def device(command):
 	elif command == 'set':
 		print "updating device with MAC "+ mac
 		updateList = {}
-		device = Device()
+		device = utilities.Device()
 		try:
 			device.getDetails(mac)
 		except Exception, e:
@@ -263,7 +262,7 @@ def device(command):
 
 		# update last_online time for the corresponding user
 		try:
-			user = User()
+			user = utilities.User()
 			user.getDetails(device.user)
 			user.setDetails({'last_online':updateList['last_online']})
 		except Exception, e:
