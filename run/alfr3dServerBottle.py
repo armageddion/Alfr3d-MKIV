@@ -44,8 +44,8 @@ from pymongo import MongoClient
 CURRENT_PATH = os.path.dirname(__file__)
 
 # Import my own utilities - not needed for API server
-# sys.path.append(os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../"))
-# import utilities
+sys.path.append(os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../"))
+import utilities
 
 # set up logging 
 logger = logging.getLogger("ServerBottleLog")
