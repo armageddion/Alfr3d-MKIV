@@ -185,7 +185,6 @@ def user(command):
 	# getUser
 	if command == 'get':
 		logger.info("getting user details for user "+name)
-
 		try:
 			client = MongoClient('mongodb://localhost:27017/')
 			client.Alfr3d_DB.authenticate(db_user,db_pass)
@@ -196,12 +195,13 @@ def user(command):
 			logger.error("failed to find user "+name)
 			logger.error("traceback: "+str(e))
 
+		logger.info("preparing response user "+name)
 		try:
 			result['username'] = request.query.name
-			result['username']['state'] = userDetails['state']
-			result['username']['last_online'] = userDetails['last_online']
-			result['username']['location'] = userDetails['location']
-			result['username']['userType'] = userDetails['type']		
+			result['state'] = userDetails['state']
+			result['last_online'] = userDetails['last_online']
+			result['location'] = userDetails['location']
+			result['userType'] = userDetails['type']		
 			return json.dumps(result)
 		except Exception, e:
 			logger.error("failed to find user "+name)
