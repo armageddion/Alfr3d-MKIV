@@ -44,8 +44,8 @@ from pymongo import MongoClient
 CURRENT_PATH = os.path.dirname(__file__)
 
 # Import my own utilities - not needed for API server
-sys.path.append(os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../"))
-import utilities
+#sys.path.append(os.path.join(os.path.join(os.getcwd(),os.path.dirname(__file__)),"../"))
+#import utilities
 
 # set up logging 
 logger = logging.getLogger("ServerBottleLog")
@@ -54,6 +54,14 @@ formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(messag
 handler = logging.FileHandler(os.path.join(CURRENT_PATH,"../log/total.log"))
 handler.setFormatter(formatter)
 logger.addHandler(handler)
+
+# get API key for pushbullet
+config = ConfigParser.RawConfigParser()
+config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
+# get main DB credentials
+db_user = config.get("Alfr3d DB", "user")
+db_pass = config.get("Alfr3d DB", "password")
+
 
 # get our own IP
 try:
@@ -97,7 +105,7 @@ def whosthere():
 	if len(request.query)==0:
 		logger.info("Received a 'whosthere' requet")
 		client = MongoClient('mongodb://localhost:27017/')
-		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
+		client.Alfr3d_DB.authenticate(db_user,db_pass)
 		db = client['Alfr3d_DB']
 		usersCollection = db['users']
 
@@ -125,7 +133,7 @@ def whosthere():
 	elif request.query.host:
 		logger.info("Received a 'whosthere' requet for host "+str(request.query.host))
 		client = MongoClient('mongodb://localhost:27017/')
-		client.Alfr3d_DB.authenticate("alfr3d","qweQWE123123")
+		client.Alfr3d_DB.authenticate(db_user,db_pass)
 		db = client['Alfr3d_DB']
 		usersCollection = db['users']
 
@@ -155,7 +163,7 @@ def whosthere():
 		return json.dumps(result)		
 	else:
 		logger.info("Received a 'whosthere' requet: "+str(request.query_string))
-		logger.warn("and I dont know what to do wit hthat...")
+		logger.warn("and I dont know what to do with that...")
 		return template('<b>There is a problem between the keyboard and the chair. Fix your query {{name}}</b>!', name=request.query_string)
 
 # /user/get?name=<name>
@@ -163,33 +171,50 @@ def whosthere():
 def user(command):
 	print "WIP"
 
-	result = ""
+	result = {}
 
 	if request.query.get('name'):
 		name = request.query.get('name')
 		print "name: "+name
-
-		user = utilities.User()
-		try:
-			user.getDetails(name)
-		except Exception, e:
-			print "failed to find user "+name
-			print "traceback: "+str(e)		
 	else:
 		print "please provide user name"
-		return
+		result['error']="please provide user name"
+		return json.dumps(result)
 
 	# getUser
 	if command == 'get':
-		print "getting user details for user "+name
-		result += user.display()
-		result += user.displayDevices()
+		logger.info("getting user details for user "+name)
 
-		return template(txt2HTML(result))
+		try:
+			client = MongoClient('mongodb://localhost:27017/')
+			client.Alfr3d_DB.authenticate(db_user,db_pass)
+			db = client['Alfr3d_DB']
+			usersCollection = db['users']
+			userDetails = usersCollection.find_one({"name":name})
+		except Exception, e:
+			logger.error("failed to find user "+name)
+			logger.error("traceback: "+str(e))
+
+		try:
+			result['username'] = request.query.name
+			result['username']['state'] = userDetails['state']
+			result['username']['last_online'] = userDetails['last_online']
+			result['username']['location'] = userDetails['location']
+			result['username']['userType'] = userDetails['type']		
+			return json.dumps(result)
+		except Exception, e:
+			logger.error("failed to find user "+name)
+			logger.error("traceback: "+str(e))			
 
 	# TODO
 	elif command == 'set':
 		print "updating user "+ name
+		resut['error']="user update feature is not yet implemented"
+		return json.dumps(result)		
+
+	logger.info("Received a 'user' requet: "+str(request.query_string))
+	logger.warn("and I dont know what to do with that...")
+	return template('<b>There is a problem between the keyboard and the chair. Fix your query {{name}}</b>!', name=request.query_string)
 
 # /device/get?MAC=<mac>
 @app.route('/device/<command>')
