@@ -325,7 +325,7 @@ def user(command):
 			client.Alfr3d_DB.authenticate(db_user,db_pass)
 			db = client['Alfr3d_DB']
 			envCollection = db['environment']
-			envDetails = usersCollection.find_one({"name":str(name)})
+			envDetails = envCollection.find_one({"name":str(name)})
 		except Exception, e:
 			logger.error("failed to find environment "+name)
 			logger.error("traceback: "+str(e))
