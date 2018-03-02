@@ -332,21 +332,23 @@ def user(command):
 
 		logger.info("preparing response environment "+name)
 		try:
-			# result['environment'] = request.query.name
-			# result['city'] = envDetails['city']
-			# result['country'] = envDetails['country']
-			# result['state'] = envDetails['state']
-			# result['IP'] = envDetails['IP']	
-			# result['longitude'] = envDetails['longitude']
-			# result['latitude'] = envDetails['latitude']	
-			# result['weather'] = envDetails['weather']	
-			result = envDetails
+			result['environment'] = request.query.name
+			result['city'] = envDetails['city']
+			result['country'] = envDetails['country']
+			result['state'] = envDetails['state']
+			result['IP'] = envDetails['IP']	
+			result['longitude'] = envDetails['longitude']
+			result['latitude'] = envDetails['latitude']	
+			result['weather'] = envDetails['weather']	
+
+			# note:
+			# result = envDetails doesn't work because envDetails isn't JSON serializable
 			return json.dumps(result)
 		except Exception, e:
 			logger.error("failed to find environment "+name)
 			logger.error("traceback: "+str(e))			
 
-	logger.info("Received a 'user' requet: "+str(request.query_string))
+	logger.info("Received a 'environment' requet: "+str(request.query_string))
 	logger.warn("and I dont know what to do with that...")
 	return template('<b>There is a problem between the keyboard and the chair. Fix your query {{name}}</b>!', name=request.query_string)
 
