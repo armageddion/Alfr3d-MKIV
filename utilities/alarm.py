@@ -126,7 +126,8 @@ def smartAlarm():
 						speak.speakString(event_title)
 
 		try:	
-			audio.playMorningMedia()
+			# audio.playMorningMedia()
+			logger.info("morning aduio playback is disabled for the moment")
 		except Exception, e:
 			logger.error("Failed to play alarm music")
 			logger.error("Traceback: "+str(e))

@@ -170,6 +170,7 @@ def whosthere():
 # /user/get?name=<name>
 @app.route('/user/<command>')
 def user(command):
+	logger.info("Received a 'user' request: "+str(request.query_string))
 	print "WIP"
 
 	result = {}
@@ -213,7 +214,6 @@ def user(command):
 		resut['error']="user update feature is not yet implemented"
 		return json.dumps(result)		
 
-	logger.info("Received a 'user' requet: "+str(request.query_string))
 	logger.warn("and I dont know what to do with that...")
 	return template('<b>There is a problem between the keyboard and the chair. Fix your query {{name}}</b>!', name=request.query_string)
 
@@ -305,6 +305,7 @@ def instance(command):
 # /environment/get?name=<name>
 @app.route('/environment/<command>')
 def user(command):
+	logger.info("Received a 'environment' request: "+str(request.query_string))
 	print "WIP"
 
 	result = {}
@@ -348,7 +349,6 @@ def user(command):
 			logger.error("failed to find environment "+name)
 			logger.error("traceback: "+str(e))			
 
-	logger.info("Received a 'environment' requet: "+str(request.query_string))
 	logger.warn("and I dont know what to do with that...")
 	return template('<b>There is a problem between the keyboard and the chair. Fix your query {{name}}</b>!', name=request.query_string)
 
