@@ -7,7 +7,7 @@
 		"state: 		"
 		"last online:	"
 		"location: 	"				
-		"	latitue:	"
+		"	latitude:	"
 		"	longitude:	"
 		"type: 		"
 		"====================================

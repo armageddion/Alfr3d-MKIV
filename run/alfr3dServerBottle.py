@@ -302,6 +302,55 @@ def device(command):
 def instance(command):
 	print "TODO"
 
+# /environment/get?name=<name>
+@app.route('/environment/<command>')
+def user(command):
+	print "WIP"
+
+	result = {}
+
+	if request.query.get('name'):
+		name = request.query.get('name')
+		print "name: "+name
+	else:
+		print "please provide environment name"
+		result['error']="please provide environment name"
+		return json.dumps(result)
+
+	# getUser
+	if command == 'get':
+		logger.info("getting environment details for environment "+name)
+		try:
+			client = MongoClient('mongodb://localhost:27017/')
+			client.Alfr3d_DB.authenticate(db_user,db_pass)
+			db = client['Alfr3d_DB']
+			envCollection = db['environment']
+			envDetails = usersCollection.find_one({"name":str(name)})
+		except Exception, e:
+			logger.error("failed to find environment "+name)
+			logger.error("traceback: "+str(e))
+
+		logger.info("preparing response environment "+name)
+		try:
+			# result['environment'] = request.query.name
+			# result['city'] = envDetails['city']
+			# result['country'] = envDetails['country']
+			# result['state'] = envDetails['state']
+			# result['IP'] = envDetails['IP']	
+			# result['longitude'] = envDetails['longitude']
+			# result['latitude'] = envDetails['latitude']	
+			# result['weather'] = envDetails['weather']	
+			result = envDetails
+			return json.dumps(result)
+		except Exception, e:
+			logger.error("failed to find environment "+name)
+			logger.error("traceback: "+str(e))			
+
+	logger.info("Received a 'user' requet: "+str(request.query_string))
+	logger.warn("and I dont know what to do with that...")
+	return template('<b>There is a problem between the keyboard and the chair. Fix your query {{name}}</b>!', name=request.query_string)
+
+
 def txt2HTML(txt):
 	result = "<HTML><HEAD><TITLE>Alfr3d:Results</TITLE></HEAD><BODY>\n"
 	arr = txt.split('\n')
