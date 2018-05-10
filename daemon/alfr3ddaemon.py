@@ -127,7 +127,7 @@ class MyDaemon(Daemon):
 				reporting.sendReport()
 			except Exception, e:
 				logger.error("Failed to send report")
-				utilities.speakError("I failed to send out status report")
+				#utilities.speakError("I failed to send out status report")
 				logger.error("Traceback: "+str(e))					
 
 			"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
