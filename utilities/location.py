@@ -127,6 +127,8 @@ def getLocation(method="dbip"):
 		if not myipv6 and not myipv4:
 			return [False,0,0]
 
+	logger.info("IP info obtained")
+
 	country_new = country
 	state_new = state
 	city_new = city
