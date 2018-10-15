@@ -180,8 +180,14 @@ def getLocation(method="dbip"):
 			return [False,0,0]
 
 	elif method == "freegeoip":
+		# get API key for db-ip.com
+		config = ConfigParser.RawConfigParser()
+		config.read(os.path.join(os.path.dirname(__file__),'../conf/apikeys.conf'))
+		apikey = config.get("API KEY", "ipstack")
+
 		if myipv4:			
-			url4 = "http://freegeoip.net/json/"+myipv4
+			#url4 = "http://freegeoip.net/json/"+myipv4
+			url4 = "http://api.ipstack.com/"+myipv4+"?access_key="+apikey
 
 			logger.info("Getting my location")
 
