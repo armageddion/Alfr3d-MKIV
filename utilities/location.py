@@ -136,6 +136,7 @@ def getLocation(method="dbip"):
 	lat_new = "n/a"
 	long_new = "n/a"
 
+	logger.info("Getting geo info from "+method)
 	if method == "dbip":
 		# get API key for db-ip.com
 		config = ConfigParser.RawConfigParser()
@@ -182,10 +183,12 @@ def getLocation(method="dbip"):
 		if myipv4:			
 			url4 = "http://freegeoip.net/json/"+myipv4
 
+			logger.info("Getting my location")
+
 			try:
 				# try to get our info based on IPV4
 				info4 = json.loads(urllib.urlopen(url4).read().decode('utf-8'))
-				#print info4
+				print info4	# DEBUG
 
 				if info4['city']:
 					country_new = info4['country_name']
