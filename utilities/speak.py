@@ -101,6 +101,7 @@ class Speaker:
 			    'ssml': 'false',
 			    'b64': 'false'
 			})
+			print voice
 		except Exception, e:
 			logger.error("Failed to get TTS sound file")
 			logger.error("Traceback: "+str(e))

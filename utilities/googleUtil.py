@@ -59,6 +59,11 @@ APPLICATION_NAME = 'Alfr3d'
 #         timezone_offset = "+0"+str(abs(timezone_offset_int))+":00"
 # else:
 #     timezone_offset = str(timezone_offset_int)+":00"
+tz_off = datetime.datetime.now().hour-datetime.datetime.utcnow().hour
+if tz_off < 0:
+	timezone_offset = str(tz_off).zfill(3)+":00"
+else:
+	timezone_offset = str(tz_off).zfill(2)+":00"
 timezone_offset = "-04:00"
 
 def get_credentials_gmail():
